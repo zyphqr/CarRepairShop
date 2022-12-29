@@ -27,25 +27,20 @@ public class MEchanicDataContext : IdentityDbContext<Mechanic>
             .WithOne(c => c.Car)
             .HasForeignKey(c => c.RepairCardId);
 
-        builder.Entity<Brand>()
-            .HasMany<Car>(b => b.Cars)
-            .WithOne(c => c.Brand)
-            .HasForeignKey(c => c.BrandId);
+        builder.Entity<TypeOfRepair>()
+            .HasOne<RepairCard>(t => t.RepairCard)
+            .WithOne(r => r.TypeOfRepair)
+            .HasForeignKey<RepairCard>(t => t.RepairId);
 
-        builder.Entity<Brand>()
-            .HasMany<Part>(b => b.Parts)
-            .WithOne(p => p.Brand)
-            .HasForeignKey(p => p.BrandId);
-
-        builder.Entity<RepairCard>()
-            .HasOne<TypeOfRepair>(rc => rc.TypeOfRepair)
-            .WithOne(t => t.RepairCard)
-            .HasForeignKey<RepairCard>(t => t.RepairCardId);
-
-        builder.Entity<RepairCard>()
+        builder.Entity<TypeOfRepair>()
             .HasMany<Part>(rc => rc.Parts)
-            .WithOne(p => p.RepairCard)
-            .HasForeignKey(p => p.RepairCardId);
+            .WithOne(p => p.TypeOfRepair)
+            .HasForeignKey(p => p.RepairId);
 
     }
+    public DbSet<Mechanic> Mechanics { get; set; }
+    public DbSet<RepairCard> RepairCards { get; set; }
+    public DbSet<Car> Cars { get; set; }
+    public DbSet<TypeOfRepair> TypeOfRepairs { get; set; }
+    public DbSet<Part> Parts { get; set; }
 }

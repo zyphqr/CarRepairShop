@@ -1,26 +1,44 @@
 ﻿using CarRepairShop.Common;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace CarRepairShop.Models
+namespace CarRepairShop.ViewModels
 {
-    [Table("Cars")]
-    public class Car
+    public class CreateCarVM
     {
-        [Key]
+        [Required]
         public int CarId { get; set; }
-        public string CarRegistration { get; set; }
-        public string CarBrand { get; set; }
-        public string CarModel { get; set; }
-        public YearsOfManifacture YearOfManifacture { get; set; }
-        public string EngineNum { get; set; }
-        public string FrameNum { get; set; }
-        public Colors Color { get; set; }
-        public double WorkingVolume { get; set; }
-        public string Description { get; set; }
-        public string Owner { get; set; }
-        public string OwnerPhoneNum { get; set; }
 
-        public ICollection<RepairCard> RepairCards { get; set; }
+        [Required]
+        public string CarRegistration { get; set; }
+
+        [Required]
+        public string Brand { get; set; }
+
+        [Required]
+        public string Model { get; set; }
+
+        [Required]
+        public YearsOfManifacture YearOfManifacture { get; set; }
+
+        [Required]
+        public string EngineNum { get; set; }
+
+        [Required]
+        public string FrameNum { get; set; }
+
+        [Required]
+        public Colors Color { get; set; }
+
+        [Required]
+        public double WorkingVolume { get; set; }
+
+        [Required]
+        public string Description { get; set; }
+
+        [Required]
+        public string OwnerName { get; set; }
+
+        [Required]
+        public string OwnerPhoneNum { get; set; }
     }
 }

@@ -1,17 +1,20 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using CarRepairShop.Areas.Identity.Data;
+using CarRepairShop.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("EmployeeDataContextConnection") ?? throw new InvalidOperationException("Connection string 'EmployeeDataContextConnection' not found.");
 
 builder.Services.AddDbContext<MEchanicDataContext>(options =>
     options.UseSqlServer(connectionString));
 
-builder.Services.AddDefaultIdentity<Mechanic>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddDefaultIdentity<Mechanic>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<MEchanicDataContext>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<ShopService>();
 
 var app = builder.Build();
 

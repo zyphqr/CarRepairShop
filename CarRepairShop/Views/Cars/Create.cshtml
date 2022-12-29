@@ -1,0 +1,87 @@
+﻿@using CarRepairShop.Common;
+@using CarRepairShop.ViewModels;
+@model CreateCarVM;
+
+@{
+    ViewData["Title"] = "Add";
+}
+
+<h3>Add new car</h3>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="CarRegistration" class="control-label">Car registration</label>
+                <input asp-for="CarRegistration" class="form-control" />
+                <span asp-validation-for="CarRegistration" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Brand" class="control-label">Car brand</label>
+                <input asp-for="Brand" class="form-control" />
+                <span asp-validation-for="Brand" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Model" class="control-label">Car model</label>
+                <input asp-for="Model" class="form-control" />
+                <span asp-validation-for="Model" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="YearOfManifacture">Year of manifacture</label>
+                <select asp-for="YearOfManifacture" class="form-select" asp-items="@Html.GetEnumSelectList(typeof(YearsOfManifacture))">
+                    <option value="Select year of manifacture">Select year of manifacture</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="EngineNum" class="control-label">Engine number</label>
+                <input asp-for="EngineNum" class="form-control" />
+                <span asp-validation-for="EngineNum" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FrameNum" class="control-label">Frame number</label>
+                <input asp-for="FrameNum" class="form-control" />
+                <span asp-validation-for="FrameNum" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Color">Color of the car</label>
+                <select asp-for="Color" class="form-select" asp-items="@Html.GetEnumSelectList(typeof(Colors))">
+                    <option value="Select color">Select color</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="WorkingVolume" class="control-label">Working volume</label>
+                <input asp-for="WorkingVolume" class="form-control" />
+                <span asp-validation-for="WorkingVolume" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label">Description</label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OwnerName" class="control-label">Owner's name</label>
+                <input asp-for="OwnerName" class="form-control" />
+                <span asp-validation-for="OwnerName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OwnerPhoneNum" class="control-label">Owner's phone number</label>
+                <input asp-for="OwnerPhoneNum" class="form-control" />
+                <span asp-validation-for="OwnerPhoneNum" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Add" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to all cars.</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

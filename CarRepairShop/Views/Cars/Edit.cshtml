@@ -1,0 +1,85 @@
+﻿@using CarRepairShop.Common;
+@model CarRepairShop.Models.Car
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h3>Edit car @Model.CarId</h3>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="CarId" />
+            <div class="form-group">
+                <label asp-for="CarRegistration" class="control-label">Car registration</label>
+                <input asp-for="CarRegistration" class="form-control" />
+                <span asp-validation-for="CarRegistration" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CarBrand" class="control-label">Car brand</label>
+                <input asp-for="CarBrand" class="form-control" />
+                <span asp-validation-for="CarBrand" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CarModel" class="control-label">Car model</label>
+                <input asp-for="CarModel" class="form-control" />
+                <span asp-validation-for="CarModel" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="YearOfManifacture">Year of manifacture</label>
+                <select asp-for="YearOfManifacture" class="form-select" asp-items="@Html.GetEnumSelectList(typeof(YearsOfManifacture))">
+                    <option value="Select year of manifacture">Select year of manifacture</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="EngineNum" class="control-label">Engine number</label>
+                <input asp-for="EngineNum" class="form-control" />
+                <span asp-validation-for="EngineNum" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FrameNum" class="control-label">Frame number</label>
+                <input asp-for="FrameNum" class="form-control" />
+                <span asp-validation-for="FrameNum" class="text-danger"></span>
+            </div>
+            <div class="form-floating">
+                <label asp-for="Color">Color of the car</label>
+                <select asp-for="Color" class="form-select" asp-items="@Html.GetEnumSelectList(typeof(Colors))">
+                    <option value="Select color">Select color</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="WorkingVolume" class="control-label">Working volume</label>
+                <input asp-for="WorkingVolume" class="form-control" />
+                <span asp-validation-for="WorkingVolume" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label">Description</label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Owner" class="control-label">Owner's name</label>
+                <input asp-for="Owner" class="form-control" />
+                <span asp-validation-for="Owner" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OwnerPhoneNum" class="control-label">Owner's phone number</label>
+                <input asp-for="OwnerPhoneNum" class="form-control" />
+                <span asp-validation-for="OwnerPhoneNum" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to all cars.</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

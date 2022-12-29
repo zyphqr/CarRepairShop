@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CarRepairShop.Models
 {
-    [Table("Replacement Parts")]
+    [Table("Parts")]
     public class Part
     {
         [Key]
@@ -13,10 +13,9 @@ namespace CarRepairShop.Models
 
         [Column(TypeName = "decimal(6,2)")]
         public decimal Price { get; set; }
+        public int WorkingHours { get; set; }
 
-        public int BrandId { get; set; }
-        public Brand Brand { get; set; }
-        public int RepairCardId { get; set; } 
-        public RepairCard RepairCard { get; set; }
+        public int RepairId { get; set; }
+        public TypeOfRepair TypeOfRepair { get; set; }
     }
 }

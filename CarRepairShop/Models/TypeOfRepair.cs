@@ -3,14 +3,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CarRepairShop.Models
 {
-    [Table("Type Of Repairs")]
+    [Table("Type_Of_Repairs")]
     public class TypeOfRepair
     {
         [Key]
         public int RepairId { get; set; }
         public string RepairName { get; set; }
 
-        public int RepairCardId { get; set; }
         public RepairCard RepairCard { get; set; }
+        public ICollection<Part> Parts { get; set; }
     }
 }
