@@ -1,11 +1,12 @@
 ﻿@using CarRepairShop.Common;
-@model CarRepairShop.Models.Car
+@using CarRepairShop.ViewModels;
+@model CreateEditCarVM;
 
 @{
     ViewData["Title"] = "Edit";
 }
 
-<h3>Edit car @Model.CarId</h3>
+<h3>Editing car @Model.CarRegistration</h3>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -18,14 +19,14 @@
                 <span asp-validation-for="CarRegistration" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="CarBrand" class="control-label">Car brand</label>
-                <input asp-for="CarBrand" class="form-control" />
-                <span asp-validation-for="CarBrand" class="text-danger"></span>
+                <label asp-for="Brand" class="control-label">Car brand</label>
+                <input asp-for="Brand" class="form-control" />
+                <span asp-validation-for="Brand" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="CarModel" class="control-label">Car model</label>
-                <input asp-for="CarModel" class="form-control" />
-                <span asp-validation-for="CarModel" class="text-danger"></span>
+                <label asp-for="Model" class="control-label">Car model</label>
+                <input asp-for="Model" class="form-control" />
+                <span asp-validation-for="Model" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="YearOfManifacture">Year of manifacture</label>
@@ -43,7 +44,7 @@
                 <input asp-for="FrameNum" class="form-control" />
                 <span asp-validation-for="FrameNum" class="text-danger"></span>
             </div>
-            <div class="form-floating">
+            <div class="form-group">
                 <label asp-for="Color">Color of the car</label>
                 <select asp-for="Color" class="form-select" asp-items="@Html.GetEnumSelectList(typeof(Colors))">
                     <option value="Select color">Select color</option>
@@ -60,9 +61,9 @@
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Owner" class="control-label">Owner's name</label>
-                <input asp-for="Owner" class="form-control" />
-                <span asp-validation-for="Owner" class="text-danger"></span>
+                <label asp-for="OwnerName" class="control-label">Owner's name</label>
+                <input asp-for="OwnerName" class="form-control" />
+                <span asp-validation-for="OwnerName" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="OwnerPhoneNum" class="control-label">Owner's phone number</label>

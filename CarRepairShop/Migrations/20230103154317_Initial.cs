@@ -74,16 +74,20 @@ namespace CarRepairShop.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Type_Of_Repairs",
+                name: "Parts",
                 columns: table => new
                 {
-                    RepairId = table.Column<int>(type: "int", nullable: false)
+                    PartId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    RepairName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    PartName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(6,2)", nullable: false),
+                    WorkingHours = table.Column<int>(type: "int", nullable: false),
+                    TypeOfRepair = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Type_Of_Repairs", x => x.RepairId);
+                    table.PrimaryKey("PK_Parts", x => x.PartId);
                 });
 
             migrationBuilder.CreateTable(
@@ -193,29 +197,6 @@ namespace CarRepairShop.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Parts",
-                columns: table => new
-                {
-                    PartId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    PartName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(6,2)", nullable: false),
-                    WorkingHours = table.Column<int>(type: "int", nullable: false),
-                    RepairId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Parts", x => x.PartId);
-                    table.ForeignKey(
-                        name: "FK_Parts_Type_Of_Repairs_RepairId",
-                        column: x => x.RepairId,
-                        principalTable: "Type_Of_Repairs",
-                        principalColumn: "RepairId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Repair_Cards",
                 columns: table => new
                 {
@@ -225,8 +206,8 @@ namespace CarRepairShop.Migrations
                     CarRegistration = table.Column<int>(type: "int", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(8,2)", nullable: false),
+                    TypeOfRepair = table.Column<int>(type: "int", nullable: false),
                     Parts = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    RepairId = table.Column<int>(type: "int", nullable: false),
                     MechanicId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
@@ -243,12 +224,6 @@ namespace CarRepairShop.Migrations
                         column: x => x.RepairCardId,
                         principalTable: "Cars",
                         principalColumn: "CarId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Repair_Cards_Type_Of_Repairs_RepairId",
-                        column: x => x.RepairId,
-                        principalTable: "Type_Of_Repairs",
-                        principalColumn: "RepairId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -292,20 +267,9 @@ namespace CarRepairShop.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Parts_RepairId",
-                table: "Parts",
-                column: "RepairId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Repair_Cards_MechanicId",
                 table: "Repair_Cards",
                 column: "MechanicId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Repair_Cards_RepairId",
-                table: "Repair_Cards",
-                column: "RepairId",
-                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -339,9 +303,6 @@ namespace CarRepairShop.Migrations
 
             migrationBuilder.DropTable(
                 name: "Cars");
-
-            migrationBuilder.DropTable(
-                name: "Type_Of_Repairs");
         }
     }
 }

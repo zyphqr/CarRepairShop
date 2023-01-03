@@ -11,6 +11,7 @@ using CarRepairShop.Common;
 using CarRepairShop.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using CarRepairShop.Services;
+using System.Net;
 
 namespace CarRepairShop.Controllers
 {
@@ -47,7 +48,7 @@ namespace CarRepairShop.Controllers
                                     string ownerName,
                                     string ownerPhoneNum)
         {
-            return View("Views/Cars/Create.cshtml", new CreateCarVM
+            return View("Views/Cars/Create.cshtml", new CreateEditCarVM
             {
                 CarId = carId,
                 CarRegistration = carRegistation,
@@ -66,7 +67,7 @@ namespace CarRepairShop.Controllers
 
         [HttpPost]
         [Authorize]
-        public IActionResult Create(CreateCarVM createCar)
+        public IActionResult Create(CreateEditCarVM createCar)
         {
             if (ModelState.IsValid)
             {
@@ -89,57 +90,58 @@ namespace CarRepairShop.Controllers
             return View("Views/Cars/Create.cshtml", createCar);
         }
 
-        public async Task<IActionResult> Edit(int? id)
+        [Authorize]
+        public IActionResult Edit(int? id)
         {
             if (id == null || _context.Cars == null)
             {
                 return NotFound();
             }
-
-            var car = await _context.Cars.FindAsync(id);
-            if (car == null)
+            var car = _context.Cars.Find(id);
+            CreateEditCarVM editCar = new()
             {
-                return NotFound();
-            }
-            return View(car);
+                CarId = car.CarId,
+                CarRegistration = car.CarRegistration,
+                Brand = car.CarBrand,
+                Model = car.CarModel,
+                YearOfManifacture = car.YearOfManifacture,
+                EngineNum = car.EngineNum,
+                FrameNum = car.FrameNum,
+                Color = car.Color,
+                WorkingVolume = car.WorkingVolume,
+                Description = car.Description,
+                OwnerName = car.Owner,
+                OwnerPhoneNum = car.OwnerPhoneNum,
+            };
+            return View(editCar);
         }
 
-        // POST: Cars/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CarId,CarRegistration,CarBrand,CarModel,YearOfManifacture,EngineNum,FrameNum,Color,WorkingVolume,Description,Owner,OwnerPhoneNum")] Car car)
+        [Authorize]
+        public IActionResult Edit(CreateEditCarVM editCar)
         {
-            if (id != car.CarId)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(car);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!CarExists(car.CarId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                _shopService.EditCarCheck(editCar.CarId,
+                    editCar.CarRegistration,
+                    editCar.Brand,
+                    editCar.Model,
+                    editCar.YearOfManifacture,
+                    editCar.EngineNum,
+                    editCar.FrameNum,
+                    editCar.Color,
+                    editCar.WorkingVolume,
+                    editCar.Description,
+                    editCar.OwnerName,
+                    editCar.OwnerPhoneNum
+                    );
+                
                 return RedirectToAction(nameof(Index));
             }
-            return View(car);
+            return View("Views/Cars/Edit.cshtml", editCar);
         }
 
-        // GET: Cars/Delete/5
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Cars == null)
@@ -157,7 +159,7 @@ namespace CarRepairShop.Controllers
             return View(car);
         }
 
-        // POST: Cars/Delete/5
+        [Authorize]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -174,11 +176,6 @@ namespace CarRepairShop.Controllers
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool CarExists(int id)
-        {
-            return _context.Cars.Any(e => e.CarId == id);
         }
     }
 }

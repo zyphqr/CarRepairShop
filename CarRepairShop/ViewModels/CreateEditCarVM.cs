@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CarRepairShop.ViewModels
 {
-    public class CreateCarVM
+    public class CreateEditCarVM
     {
         [Required]
         public int CarId { get; set; }

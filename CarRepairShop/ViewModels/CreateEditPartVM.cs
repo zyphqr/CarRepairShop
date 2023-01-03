@@ -1,20 +1,26 @@
 ﻿using CarRepairShop.Common;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace CarRepairShop.Models
+namespace CarRepairShop.ViewModels
 {
-    [Table("Parts")]
-    public class Part
+    public class CreateEditPartVM
     {
-        [Key]
+        [Required]
         public int PartId { get; set; }
+
+        [Required]
         public string PartName { get; set; }
+
+        [Required]
         public int Quantity { get; set; }
 
-        [Column(TypeName = "decimal(6,2)")]
+        [Required]
         public decimal Price { get; set; }
+
+        [Required]
         public int WorkingHours { get; set; }
+
+        [Required]
         public TypeOfRepairs TypeOfRepair { get; set; }
     }
 }

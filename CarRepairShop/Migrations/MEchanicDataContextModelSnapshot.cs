@@ -167,15 +167,13 @@ namespace CarRepairShop.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<int>("RepairId")
+                    b.Property<int>("TypeOfRepair")
                         .HasColumnType("int");
 
                     b.Property<int>("WorkingHours")
                         .HasColumnType("int");
 
                     b.HasKey("PartId");
-
-                    b.HasIndex("RepairId");
 
                     b.ToTable("Parts");
                 });
@@ -206,37 +204,17 @@ namespace CarRepairShop.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(8,2)");
 
-                    b.Property<int>("RepairId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("TypeOfRepair")
+                        .HasColumnType("int");
 
                     b.HasKey("RepairCardId");
 
                     b.HasIndex("MechanicId");
 
-                    b.HasIndex("RepairId")
-                        .IsUnique();
-
                     b.ToTable("Repair_Cards");
-                });
-
-            modelBuilder.Entity("CarRepairShop.Models.TypeOfRepair", b =>
-                {
-                    b.Property<int>("RepairId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RepairId"), 1L, 1);
-
-                    b.Property<string>("RepairName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("RepairId");
-
-                    b.ToTable("Type_Of_Repairs");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -376,17 +354,6 @@ namespace CarRepairShop.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("CarRepairShop.Models.Part", b =>
-                {
-                    b.HasOne("CarRepairShop.Models.TypeOfRepair", "TypeOfRepair")
-                        .WithMany("Parts")
-                        .HasForeignKey("RepairId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("TypeOfRepair");
-                });
-
             modelBuilder.Entity("CarRepairShop.Models.RepairCard", b =>
                 {
                     b.HasOne("CarRepairShop.Areas.Identity.Data.Mechanic", "Mechanic")
@@ -401,17 +368,9 @@ namespace CarRepairShop.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CarRepairShop.Models.TypeOfRepair", "TypeOfRepair")
-                        .WithOne("RepairCard")
-                        .HasForeignKey("CarRepairShop.Models.RepairCard", "RepairId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Car");
 
                     b.Navigation("Mechanic");
-
-                    b.Navigation("TypeOfRepair");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -473,14 +432,6 @@ namespace CarRepairShop.Migrations
             modelBuilder.Entity("CarRepairShop.Models.Car", b =>
                 {
                     b.Navigation("RepairCards");
-                });
-
-            modelBuilder.Entity("CarRepairShop.Models.TypeOfRepair", b =>
-                {
-                    b.Navigation("Parts");
-
-                    b.Navigation("RepairCard")
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

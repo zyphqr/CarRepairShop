@@ -26,21 +26,9 @@ public class MEchanicDataContext : IdentityDbContext<Mechanic>
             .HasMany<RepairCard>(rc => rc.RepairCards)
             .WithOne(c => c.Car)
             .HasForeignKey(c => c.RepairCardId);
-
-        builder.Entity<TypeOfRepair>()
-            .HasOne<RepairCard>(t => t.RepairCard)
-            .WithOne(r => r.TypeOfRepair)
-            .HasForeignKey<RepairCard>(t => t.RepairId);
-
-        builder.Entity<TypeOfRepair>()
-            .HasMany<Part>(rc => rc.Parts)
-            .WithOne(p => p.TypeOfRepair)
-            .HasForeignKey(p => p.RepairId);
-
     }
     public DbSet<Mechanic> Mechanics { get; set; }
     public DbSet<RepairCard> RepairCards { get; set; }
     public DbSet<Car> Cars { get; set; }
-    public DbSet<TypeOfRepair> TypeOfRepairs { get; set; }
     public DbSet<Part> Parts { get; set; }
 }
