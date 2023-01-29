@@ -56,17 +56,17 @@ namespace CarRepairShop.Migrations
                 {
                     CarId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CarRegistration = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CarBrand = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CarModel = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CarRegistration = table.Column<string>(type: "nvarchar(16)", maxLength: 16, nullable: false),
+                    CarBrand = table.Column<int>(type: "int", nullable: false),
+                    CarModel = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     YearOfManifacture = table.Column<int>(type: "int", nullable: false),
-                    EngineNum = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    FrameNum = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    EngineNum = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
+                    FrameNum = table.Column<string>(type: "nvarchar(17)", maxLength: 17, nullable: false),
                     Color = table.Column<int>(type: "int", nullable: false),
                     WorkingVolume = table.Column<double>(type: "float", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Owner = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    OwnerPhoneNum = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    OwnerPhoneNum = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -200,14 +200,14 @@ namespace CarRepairShop.Migrations
                 name: "Repair_Cards",
                 columns: table => new
                 {
-                    RepairCardId = table.Column<int>(type: "int", nullable: false),
+                    RepairCardId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CarRegistration = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Price = table.Column<decimal>(type: "decimal(8,2)", nullable: false),
                     TypeOfRepair = table.Column<int>(type: "int", nullable: false),
-                    Parts = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CarId = table.Column<int>(type: "int", nullable: false),
                     MechanicId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
@@ -220,10 +220,34 @@ namespace CarRepairShop.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Repair_Cards_Cars_RepairCardId",
-                        column: x => x.RepairCardId,
+                        name: "FK_Repair_Cards_Cars_CarId",
+                        column: x => x.CarId,
                         principalTable: "Cars",
                         principalColumn: "CarId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RepairCardParts",
+                columns: table => new
+                {
+                    RepairCardId = table.Column<int>(type: "int", nullable: false),
+                    PartId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RepairCardParts", x => new { x.RepairCardId, x.PartId });
+                    table.ForeignKey(
+                        name: "FK_RepairCardParts_Parts_PartId",
+                        column: x => x.PartId,
+                        principalTable: "Parts",
+                        principalColumn: "PartId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_RepairCardParts_Repair_Cards_RepairCardId",
+                        column: x => x.RepairCardId,
+                        principalTable: "Repair_Cards",
+                        principalColumn: "RepairCardId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -267,9 +291,19 @@ namespace CarRepairShop.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Repair_Cards_CarId",
+                table: "Repair_Cards",
+                column: "CarId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Repair_Cards_MechanicId",
                 table: "Repair_Cards",
                 column: "MechanicId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RepairCardParts_PartId",
+                table: "RepairCardParts",
+                column: "PartId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -290,13 +324,16 @@ namespace CarRepairShop.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "RepairCardParts");
+
+            migrationBuilder.DropTable(
+                name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
                 name: "Parts");
 
             migrationBuilder.DropTable(
                 name: "Repair_Cards");
-
-            migrationBuilder.DropTable(
-                name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

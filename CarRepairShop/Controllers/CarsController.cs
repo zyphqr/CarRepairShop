@@ -37,7 +37,7 @@ namespace CarRepairShop.Controllers
         [Authorize]
         public IActionResult Create(int carId,
                                     string carRegistation,
-                                    string brand,
+                                    CarBrands brand,
                                     string model,
                                     YearsOfManifacture yearOfManifacture,
                                     string engineNum,

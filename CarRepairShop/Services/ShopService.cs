@@ -10,15 +10,40 @@ namespace CarRepairShop.Services
         private const int registrationMaxLength = 8;
         private const int engineNumMaxLength = 10;
         private const int frameNumMaxLength = 17;
-        //private string[] registrationArray = new string[] {"a","b","e","k", "m", "h", "o", "p", "c", "t", "y", "x"};
+        private const int workHourPrice = 2;
+
         private readonly MEchanicDataContext _context;
         public ShopService(MEchanicDataContext context)
         {
             _context = context;
         }
+
+        public List<Mechanic> GetMechanics()
+        {
+            return _context.Mechanics.ToList();
+        }
+
+        public List<Part> GetParts()
+        {
+            return _context.Parts.ToList();
+        }
+
+        public List<Car> GetCars()
+        {
+            return _context.Cars.ToList();
+        }
+
+        public decimal CalculatePrice(int partId)
+        {
+            var part = _context.Set<Part>().FirstOrDefault(p => p.PartId == partId);
+            var hours = part.WorkingHours;
+            decimal price = hours * workHourPrice;
+            return price;
+        }
+
         public void CreateCarCheck(int carId,
                                    string carRegistration,
-                                   string brand,
+                                   CarBrands brand,
                                    string model,
                                    YearsOfManifacture yearOfManifacture,
                                    string engineNum,
@@ -63,7 +88,7 @@ namespace CarRepairShop.Services
             {
                 CarId = carId,
                 CarRegistration = carRegistration.ToUpper(),
-                CarBrand = brand.ToUpper(),
+                CarBrand = brand,
                 CarModel = model.ToUpper(),
                 YearOfManifacture = yearOfManifacture,
                 EngineNum = engineNum,
@@ -82,7 +107,7 @@ namespace CarRepairShop.Services
 
         public void EditCarCheck(int carId,
                                    string carRegistration,
-                                   string brand,
+                                   CarBrands brand,
                                    string model,
                                    YearsOfManifacture yearOfManifacture,
                                    string engineNum,
@@ -115,7 +140,7 @@ namespace CarRepairShop.Services
             {
                 CarId = carId,
                 CarRegistration = carRegistration.ToUpper(),
-                CarBrand = brand.ToUpper(),
+                CarBrand = brand,
                 CarModel = model.ToUpper(),
                 YearOfManifacture = yearOfManifacture,
                 EngineNum = engineNum,
@@ -130,7 +155,7 @@ namespace CarRepairShop.Services
             _context.SaveChanges();
         }
 
-        public void CreatePartCheck(int partId, string partName, int quantity, decimal price, TypeOfRepairs typeOfRepair)
+        public void CreatePartCheck(int partId, string partName, int quantity, decimal price, int workingHours, TypeOfRepairs typeOfRepair)
         {
             foreach (Part part in _context.Parts)
             {
@@ -146,6 +171,7 @@ namespace CarRepairShop.Services
                 PartName = partName,
                 Quantity = quantity,
                 Price = price,
+                WorkingHours = workingHours,
                 TypeOfRepair = typeOfRepair
             };
 

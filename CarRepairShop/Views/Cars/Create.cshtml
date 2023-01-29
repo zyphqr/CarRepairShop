@@ -18,9 +18,10 @@
                 <span asp-validation-for="CarRegistration" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Brand" class="control-label">Car brand</label>
-                <input asp-for="Brand" class="form-control" />
-                <span asp-validation-for="Brand" class="text-danger"></span>
+                <label asp-for="Brand">Brand</label>
+                <select asp-for="Brand" class="form-select" asp-items="@Html.GetEnumSelectList(typeof(CarBrands))">
+                    <option value="Select brand">Select brand</option>
+                </select>
             </div>
             <div class="form-group">
                 <label asp-for="Model" class="control-label">Car model</label>

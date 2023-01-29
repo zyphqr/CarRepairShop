@@ -59,6 +59,7 @@ namespace CarRepairShop.Controllers
                                              createPart.PartName,
                                              createPart.Quantity,
                                              createPart.Price,
+                                             createPart.WorkingHours,
                                              createPart.TypeOfRepair);
 
                 return RedirectToAction(nameof(Index));
@@ -91,7 +92,7 @@ namespace CarRepairShop.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(CreateEditPartVM editPart)
+        public IActionResult Edit(CreateEditPartVM editPart)
         {
             if (ModelState.IsValid)
             {

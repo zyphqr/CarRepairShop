@@ -12,14 +12,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarRepairShop.Migrations
 {
     [DbContext(typeof(MEchanicDataContext))]
-    [Migration("20230103154317_Initial")]
+    [Migration("20230129131323_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.12")
+                .HasAnnotation("ProductVersion", "6.0.13")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -105,32 +105,35 @@ namespace CarRepairShop.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CarId"), 1L, 1);
 
-                    b.Property<string>("CarBrand")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("CarBrand")
+                        .HasColumnType("int");
 
                     b.Property<string>("CarModel")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("CarRegistration")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(16)
+                        .HasColumnType("nvarchar(16)");
 
                     b.Property<int>("Color")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("EngineNum")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("FrameNum")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(17)
+                        .HasColumnType("nvarchar(17)");
 
                     b.Property<string>("Owner")
                         .IsRequired()
@@ -138,7 +141,8 @@ namespace CarRepairShop.Migrations
 
                     b.Property<string>("OwnerPhoneNum")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<double>("WorkingVolume")
                         .HasColumnType("float");
@@ -183,25 +187,24 @@ namespace CarRepairShop.Migrations
             modelBuilder.Entity("CarRepairShop.Models.RepairCard", b =>
                 {
                     b.Property<int>("RepairCardId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("CarRegistration")
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RepairCardId"), 1L, 1);
+
+                    b.Property<int>("CarId")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
-                    b.Property<DateTime>("EndDate")
+                    b.Property<DateTime?>("EndDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("MechanicId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Parts")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(8,2)");
@@ -214,9 +217,26 @@ namespace CarRepairShop.Migrations
 
                     b.HasKey("RepairCardId");
 
+                    b.HasIndex("CarId");
+
                     b.HasIndex("MechanicId");
 
                     b.ToTable("Repair_Cards");
+                });
+
+            modelBuilder.Entity("CarRepairShop.Models.RepairCardPart", b =>
+                {
+                    b.Property<int>("RepairCardId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PartId")
+                        .HasColumnType("int");
+
+                    b.HasKey("RepairCardId", "PartId");
+
+                    b.HasIndex("PartId");
+
+                    b.ToTable("RepairCardParts");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -358,21 +378,40 @@ namespace CarRepairShop.Migrations
 
             modelBuilder.Entity("CarRepairShop.Models.RepairCard", b =>
                 {
+                    b.HasOne("CarRepairShop.Models.Car", "Car")
+                        .WithMany("RepairCards")
+                        .HasForeignKey("CarId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("CarRepairShop.Areas.Identity.Data.Mechanic", "Mechanic")
                         .WithMany("RepairCards")
                         .HasForeignKey("MechanicId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CarRepairShop.Models.Car", "Car")
-                        .WithMany("RepairCards")
+                    b.Navigation("Car");
+
+                    b.Navigation("Mechanic");
+                });
+
+            modelBuilder.Entity("CarRepairShop.Models.RepairCardPart", b =>
+                {
+                    b.HasOne("CarRepairShop.Models.Part", "Part")
+                        .WithMany("RepairCardParts")
+                        .HasForeignKey("PartId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CarRepairShop.Models.RepairCard", "RepairCard")
+                        .WithMany("RepairCardParts")
                         .HasForeignKey("RepairCardId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Car");
+                    b.Navigation("Part");
 
-                    b.Navigation("Mechanic");
+                    b.Navigation("RepairCard");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -434,6 +473,16 @@ namespace CarRepairShop.Migrations
             modelBuilder.Entity("CarRepairShop.Models.Car", b =>
                 {
                     b.Navigation("RepairCards");
+                });
+
+            modelBuilder.Entity("CarRepairShop.Models.Part", b =>
+                {
+                    b.Navigation("RepairCardParts");
+                });
+
+            modelBuilder.Entity("CarRepairShop.Models.RepairCard", b =>
+                {
+                    b.Navigation("RepairCardParts");
                 });
 #pragma warning restore 612, 618
         }
