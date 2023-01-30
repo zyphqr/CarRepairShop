@@ -13,6 +13,11 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
+                <label asp-for="Town">Town codes</label>
+                <select asp-for="Town" class="form-select" asp-items="@Html.GetEnumSelectList(typeof(Towns))">
+                    <option value="Select town code">Select town code</option>
+                </select>
+
                 <label asp-for="CarRegistration" class="control-label">Car registration</label>
                 <input asp-for="CarRegistration" class="form-control" />
                 <span asp-validation-for="CarRegistration" class="text-danger"></span>

@@ -9,7 +9,10 @@ namespace CarRepairShop.ViewModels
         public int CarId { get; set; }
 
         [Required]
-        public string CarRegistration { get; set; }
+        public Towns Town { get; set; }
+
+        [Required]
+        public string CarRegistration{ get; set; }
 
         [Required]
         public CarBrands Brand { get; set; }

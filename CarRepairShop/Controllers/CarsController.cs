@@ -36,7 +36,8 @@ namespace CarRepairShop.Controllers
         [HttpGet]
         [Authorize]
         public IActionResult Create(int carId,
-                                    string carRegistation,
+                                    Towns town,
+                                    string carRegistationNumbers,
                                     CarBrands brand,
                                     string model,
                                     YearsOfManifacture yearOfManifacture,
@@ -51,7 +52,7 @@ namespace CarRepairShop.Controllers
             return View("Views/Cars/Create.cshtml", new CreateEditCarVM
             {
                 CarId = carId,
-                CarRegistration = carRegistation,
+                CarRegistration = town + carRegistationNumbers,
                 Brand = brand,
                 Model = model,
                 YearOfManifacture = yearOfManifacture,
