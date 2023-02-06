@@ -33,15 +33,23 @@ namespace CarRepairShop.Services
             return _context.Cars.ToList();
         }
 
-        public decimal CalculatePrice(int partId)
+        public List<Town> GetTowns()
         {
-            var part = _context.Set<Part>().FirstOrDefault(p => p.PartId == partId);
+            return _context.Towns.ToList();
+        }
+
+        public decimal CalculatePrice(Part selectedPart)
+        {
+            var part = _context.Set<Part>().FirstOrDefault(p => p.PartId == selectedPart.PartId);
             var hours = part.WorkingHours;
             decimal price = hours * workHourPrice;
             return price;
         }
 
         public void CreateCarCheck(int carId,
+                                   //int selectedTown,
+                                   //string carRegistrationNumbers,
+                                   //string carRegistrationCode,
                                    string carRegistration,
                                    CarBrands brand,
                                    string model,
@@ -54,18 +62,14 @@ namespace CarRepairShop.Services
                                    string ownerName,
                                    string ownerPhoneNum)
         {
-            if (carRegistration.Length == registrationMaxLength)
-            {
-                if (Char.IsDigit(carRegistration, 0) || Char.IsDigit(carRegistration, 1) || Char.IsDigit(carRegistration, 6) || Char.IsDigit(carRegistration, 7))
-                {
-                    throw new Exception("The entered car registration is not valid.");
-                }
-                //if (registrationArray.Any(x => carRegistration.ToUpper().Contains(x.ToUpper())))
-                //{
-                    
-                //}
-            }
-            else throw new Exception("The entered car registration length is less or more than 8.");
+            //if (carRegistration.Length == registrationMaxLength)
+            //{
+            //    if (Char.IsDigit(carRegistration, 0) || Char.IsDigit(carRegistration, 1) || Char.IsDigit(carRegistration, 6) || Char.IsDigit(carRegistration, 7))
+            //    {
+            //        throw new Exception("The entered car registration is not valid.");
+            //    }
+            //}
+            //else throw new Exception("The entered car registration length is less or more than 8.");
 
             if (engineNum.Length != engineNumMaxLength)
             {
@@ -76,17 +80,18 @@ namespace CarRepairShop.Services
                 throw new Exception("The entered frame number is not valid.");
             }
 
-            foreach (Car car in _context.Cars)
-            {
-                if (car.CarRegistration == carRegistration || car.EngineNum == engineNum || car.FrameNum == frameNum)
-                {
-                    throw new Exception("This car already exists.");
-                }
-            }
+            //foreach (Car car in _context.Cars)
+            //{
+            //    if (car.CarRegistration == carRegistration || car.EngineNum == engineNum || car.FrameNum == frameNum)
+            //    {
+            //        throw new Exception("This car already exists.");
+            //    }
+            //}
 
             Car newCar = new()
             {
                 CarId = carId,
+                //CarRegistration = (selectedTown + carRegistrationNumbers + carRegistrationCode).ToString(),
                 CarRegistration = carRegistration.ToUpper(),
                 CarBrand = brand,
                 CarModel = model.ToUpper(),
@@ -118,14 +123,14 @@ namespace CarRepairShop.Services
                                    string ownerName,
                                    string ownerPhoneNum)
         {
-            if (carRegistration.Length == registrationMaxLength)
-            {
-                if (Char.IsDigit(carRegistration, 0) || Char.IsDigit(carRegistration, 1) || Char.IsDigit(carRegistration, 6) || Char.IsDigit(carRegistration, 7))
-                {
-                    throw new Exception("The entered car registration is not valid.");
-                }
-            }
-            else throw new Exception("The entered car registration length is less or more than 8.");
+            //if (carRegistration.Length == registrationMaxLength)
+            //{
+            //    if (Char.IsDigit(carRegistration, 0) || Char.IsDigit(carRegistration, 1) || Char.IsDigit(carRegistration, 6) || Char.IsDigit(carRegistration, 7))
+            //    {
+            //        throw new Exception("The entered car registration is not valid.");
+            //    }
+            //}
+            //else throw new Exception("The entered car registration length is less or more than 8.");
 
             if (engineNum.Length != engineNumMaxLength)
             {
@@ -193,6 +198,42 @@ namespace CarRepairShop.Services
             };
 
             _context.Update(partToBeUpdated);
+            _context.SaveChanges();
+        }
+
+
+        public void CreateRepairCard(int repairCardId,
+                                    DateTime startDate,
+                                    DateTime endDate,
+                                    Car selectedCar,
+                                    string descpription,
+                                    TypeOfRepairs typeOfRepair,
+                                    Part selectedPart,
+                                    Mechanic selectedMechanic)
+        {
+
+            var newRepairCard = new RepairCard()
+            {
+                RepairCardId = repairCardId,
+                StartDate = startDate,
+                EndDate = endDate,
+                Car = selectedCar,
+                Description = descpription,
+                TypeOfRepair = typeOfRepair,
+                Price = CalculatePrice(selectedPart),
+                Mechanic = selectedMechanic,
+                RepairCardParts = newRepairCardPart
+            };
+
+            RepairCardPart newRepairCardPart = new()
+            {
+                RepairCard = newRepairCard,
+                Part = selectedPart,
+               
+            };
+
+            _context.Add(newRepairCard);
+            _context.Add(newRepairCardPart);
             _context.SaveChanges();
         }
     }

@@ -12,12 +12,18 @@
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @*<div class="form-floating">
+                <select asp-items="Model.Towns" asp-for="SelectedTownId">Town codes</select>
+            </div>*@
+            @*<div class="form-group">
+                <label asp-for="CarRegistrationNumbers" class="control-label">Car registration</label>
+                <input asp-for="CarRegistrationNumbers" class="form-control" />
+                <span asp-validation-for="CarRegistrationNumbers" class="text-danger"></span>
+                <label asp-for="CarRegistrationCode" class="control-label">Car registration code</label>
+                <input asp-for="CarRegistrationCode" class="form-control" />
+                <span asp-validation-for="CarRegistrationCode" class="text-danger"></span>
+            </div>*@
             <div class="form-group">
-                <label asp-for="Town">Town codes</label>
-                <select asp-for="Town" class="form-select" asp-items="@Html.GetEnumSelectList(typeof(Towns))">
-                    <option value="Select town code">Select town code</option>
-                </select>
-
                 <label asp-for="CarRegistration" class="control-label">Car registration</label>
                 <input asp-for="CarRegistration" class="form-control" />
                 <span asp-validation-for="CarRegistration" class="text-danger"></span>

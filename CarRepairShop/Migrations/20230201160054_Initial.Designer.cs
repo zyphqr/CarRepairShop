@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarRepairShop.Migrations
 {
     [DbContext(typeof(MEchanicDataContext))]
-    [Migration("20230129131323_Initial")]
+    [Migration("20230201160054_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -110,13 +110,11 @@ namespace CarRepairShop.Migrations
 
                     b.Property<string>("CarModel")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CarRegistration")
                         .IsRequired()
-                        .HasMaxLength(16)
-                        .HasColumnType("nvarchar(16)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Color")
                         .HasColumnType("int");
@@ -127,13 +125,11 @@ namespace CarRepairShop.Migrations
 
                     b.Property<string>("EngineNum")
                         .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FrameNum")
                         .IsRequired()
-                        .HasMaxLength(17)
-                        .HasColumnType("nvarchar(17)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Owner")
                         .IsRequired()
@@ -237,6 +233,23 @@ namespace CarRepairShop.Migrations
                     b.HasIndex("PartId");
 
                     b.ToTable("RepairCardParts");
+                });
+
+            modelBuilder.Entity("CarRepairShop.Models.Town", b =>
+                {
+                    b.Property<int>("TownId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TownId"), 1L, 1);
+
+                    b.Property<string>("TownCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("TownId");
+
+                    b.ToTable("Towns");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

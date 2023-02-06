@@ -56,12 +56,12 @@ namespace CarRepairShop.Migrations
                 {
                     CarId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CarRegistration = table.Column<string>(type: "nvarchar(16)", maxLength: 16, nullable: false),
+                    CarRegistration = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CarBrand = table.Column<int>(type: "int", nullable: false),
-                    CarModel = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    CarModel = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     YearOfManifacture = table.Column<int>(type: "int", nullable: false),
-                    EngineNum = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
-                    FrameNum = table.Column<string>(type: "nvarchar(17)", maxLength: 17, nullable: false),
+                    EngineNum = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FrameNum = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Color = table.Column<int>(type: "int", nullable: false),
                     WorkingVolume = table.Column<double>(type: "float", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -88,6 +88,19 @@ namespace CarRepairShop.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Parts", x => x.PartId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Towns",
+                columns: table => new
+                {
+                    TownId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TownCode = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Towns", x => x.TownId);
                 });
 
             migrationBuilder.CreateTable(
@@ -325,6 +338,9 @@ namespace CarRepairShop.Migrations
 
             migrationBuilder.DropTable(
                 name: "RepairCardParts");
+
+            migrationBuilder.DropTable(
+                name: "Towns");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

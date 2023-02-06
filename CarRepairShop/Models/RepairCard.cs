@@ -11,15 +11,21 @@ namespace CarRepairShop.Models
     {
         [Key]
         public int RepairCardId { get; set; }
+
+        [Required]
         public DateTime StartDate { get; set; }
         public DateTime? EndDate { get; set; }
 
         [MaxLength(256)]
         public string? Description { get; set; }
 
+        [Required]
         [Column(TypeName = "decimal(8,2)")]
         public decimal Price { get; set; }
+
+        [Required]
         public TypeOfRepairs TypeOfRepair { get; set; }
+
 
         public ICollection<RepairCardPart> RepairCardParts { get; set; }
         public int CarId { get; set; }

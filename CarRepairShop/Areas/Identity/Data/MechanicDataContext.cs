@@ -44,4 +44,6 @@ public class MEchanicDataContext : IdentityDbContext<Mechanic>
     public DbSet<Car> Cars { get; set; }
     public DbSet<Part> Parts { get; set; }
     public DbSet<RepairCardPart> RepairCardParts { get; set; }
+
+    public DbSet<Town> Towns { get; set; }
 }

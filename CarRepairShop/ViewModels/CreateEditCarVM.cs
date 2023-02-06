@@ -1,47 +1,40 @@
 ﻿using CarRepairShop.Common;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
 
 namespace CarRepairShop.ViewModels
 {
     public class CreateEditCarVM
     {
-        [Required]
         public int CarId { get; set; }
 
-        [Required]
-        public Towns Town { get; set; }
+        //public int SelectedTownId{ get; set; }
+        //public IEnumerable<SelectListItem> Towns { get; set; }
 
-        [Required]
-        public string CarRegistration{ get; set; }
+        //public string CarRegistrationNumbers{ get; set; }
 
-        [Required]
+        //public string CarRegistrationCode { get; set; }
+
+        public string CarRegistration { get; set; }
+
         public CarBrands Brand { get; set; }
 
-        [Required]
         public string Model { get; set; }
 
-        [Required]
         public YearsOfManifacture YearOfManifacture { get; set; }
 
-        [Required]
         public string EngineNum { get; set; }
 
-        [Required]
         public string FrameNum { get; set; }
 
-        [Required]
         public Colors Color { get; set; }
 
-        [Required]
         public double WorkingVolume { get; set; }
 
-        [Required]
         public string Description { get; set; }
 
-        [Required]
         public string OwnerName { get; set; }
 
-        [Required]
         public string OwnerPhoneNum { get; set; }
     }
 }

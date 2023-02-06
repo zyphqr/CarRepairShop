@@ -36,8 +36,9 @@ namespace CarRepairShop.Controllers
         [HttpGet]
         [Authorize]
         public IActionResult Create(int carId,
-                                    Towns town,
-                                    string carRegistationNumbers,
+                                    //string carRegistationNumbers,
+                                    //string carRegistrationCode,
+                                    string carRegistration,
                                     CarBrands brand,
                                     string model,
                                     YearsOfManifacture yearOfManifacture,
@@ -49,10 +50,20 @@ namespace CarRepairShop.Controllers
                                     string ownerName,
                                     string ownerPhoneNum)
         {
+            //var towns = _shopService.GetTowns();
+            //var selectListTowns = towns
+            //    .Select(towns => new SelectListItem(
+            //        towns.TownCode,
+            //        towns.TownId.ToString()));
+
             return View("Views/Cars/Create.cshtml", new CreateEditCarVM
             {
                 CarId = carId,
-                CarRegistration = town + carRegistationNumbers,
+                //Towns = selectListTowns,
+                //SelectedTownId = towns.ToList()[0].TownId,
+                //CarRegistrationNumbers = carRegistationNumbers,
+                //CarRegistrationCode = carRegistrationCode,
+                CarRegistration = carRegistration,
                 Brand = brand,
                 Model = model,
                 YearOfManifacture = yearOfManifacture,
@@ -74,6 +85,9 @@ namespace CarRepairShop.Controllers
             {
                 _shopService.CreateCarCheck(
                     createCar.CarId,
+                    //createCar.SelectedTownId,
+                    //createCar.CarRegistrationNumbers,
+                    //createCar.CarRegistrationCode,
                     createCar.CarRegistration,
                     createCar.Brand,
                     createCar.Model,
@@ -136,7 +150,7 @@ namespace CarRepairShop.Controllers
                     editCar.OwnerName,
                     editCar.OwnerPhoneNum
                     );
-                
+
                 return RedirectToAction(nameof(Index));
             }
             return View("Views/Cars/Edit.cshtml", editCar);

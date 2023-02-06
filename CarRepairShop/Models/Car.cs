@@ -10,33 +10,44 @@ namespace CarRepairShop.Models
         [Key]
         public int CarId { get; set; }
 
-        [MaxLength(16)]
+        [Required]
         public string CarRegistration { get; set; }
+
+        [Required]
         public CarBrands CarBrand { get; set; }
 
-        [MaxLength(20)]
+        [Required]
         public string CarModel { get; set; }
+
+        [Required]
         public YearsOfManifacture YearOfManifacture { get; set; }
 
         //TODO: [RegularExpression("/^\\+?[1-9][0-9]{7,14}$/")]
         //public int YearOfManifacture { get; set; } 
 
-        [MaxLength(10)]
+        [Required]
         public string EngineNum { get; set; }
 
-        [MaxLength(17)]
+        [Required]
         public string FrameNum { get; set; }
+
+        [Required]
         public Colors Color { get; set; }
+
+        [Required]
         public double WorkingVolume { get; set; }
 
         [MaxLength(256)]
         public string? Description { get; set; }
+
+        [Required]
         public string Owner { get; set; }
 
+        [Required]
         [MaxLength(10)]
-        [RegularExpression("/^\\+?[1-9][0-9]{7,14}$/")]
+        [RegularExpression("/^\\+?[1-9][0-9]{10,13}$/")]
         public string OwnerPhoneNum { get; set; }
 
-        public ICollection<RepairCard> RepairCards { get; set; }
+        public ICollection<RepairCard>? RepairCards { get; set; }
     }
 }

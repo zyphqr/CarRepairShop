@@ -10,12 +10,12 @@ namespace CarRepairShop.ViewModels
         public int RepairCardId { get; set; }
 
         [Required]
-        public DateTime StartDate { get; set; }
+        public DateTime StartDate { get; set; } = DateTime.Today;
 
         [Required]
-        public DateTime EndDate { get; set; }
+        public DateTime EndDate { get; set; } = DateTime.Today;
 
-        public string SelectedRegistration { get; set; }
+        public int SelectedCarId { get; set; }
         public IEnumerable<SelectListItem> CarRegistrations { get; set; }
 
         [Required]
