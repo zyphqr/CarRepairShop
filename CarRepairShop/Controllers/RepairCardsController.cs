@@ -81,8 +81,7 @@ namespace CarRepairShop.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(CreateEditRepairCardVM createRepairCard)
         {
-            if (ModelState.IsValid)
-            {
+            
                 Car selectedCarReg = _shopService.GetCars().Single(c => c.CarId == createRepairCard.SelectedCarId);
                 Part selectedPartId = _shopService.GetParts().Single(p => p.PartId == createRepairCard.SelectedPartId);
                 Mechanic selectedMechanicId = _shopService.GetMechanics().Single(m => m.Id == createRepairCard.SelectedMechanicId);
@@ -98,9 +97,9 @@ namespace CarRepairShop.Controllers
                     selectedMechanicId
                     );
                 return RedirectToAction(nameof(Index));
-            }
 
-            return View("Views/RepairCards/Create.cshtml", createRepairCard);
+
+            //return View("Views/RepairCards/Create.cshtml", createRepairCard);
         }
 
         //// GET: RepairCards/Edit/5

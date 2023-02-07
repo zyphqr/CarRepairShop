@@ -27,7 +27,7 @@ namespace CarRepairShop.Models
         public TypeOfRepairs TypeOfRepair { get; set; }
 
 
-        public ICollection<RepairCardPart> RepairCardParts { get; set; }
+        public ICollection<Part>? Parts { get; set; } 
         public int CarId { get; set; }
         public Car Car { get; set; }
         public string MechanicId { get; set; }

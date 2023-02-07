@@ -2,6 +2,7 @@
 using CarRepairShop.Common;
 using CarRepairShop.Models;
 using System;
+using System.IO;
 
 namespace CarRepairShop.Services
 {
@@ -41,8 +42,7 @@ namespace CarRepairShop.Services
         public decimal CalculatePrice(Part selectedPart)
         {
             var part = _context.Set<Part>().FirstOrDefault(p => p.PartId == selectedPart.PartId);
-            var hours = part.WorkingHours;
-            decimal price = hours * workHourPrice;
+            decimal price = part.WorkingHours * workHourPrice + part.Price;
             return price;
         }
 
@@ -212,7 +212,7 @@ namespace CarRepairShop.Services
                                     Mechanic selectedMechanic)
         {
 
-            var newRepairCard = new RepairCard()
+            RepairCard newRepairCard = new()
             {
                 RepairCardId = repairCardId,
                 StartDate = startDate,
@@ -222,18 +222,10 @@ namespace CarRepairShop.Services
                 TypeOfRepair = typeOfRepair,
                 Price = CalculatePrice(selectedPart),
                 Mechanic = selectedMechanic,
-                RepairCardParts = newRepairCardPart
             };
-
-            RepairCardPart newRepairCardPart = new()
-            {
-                RepairCard = newRepairCard,
-                Part = selectedPart,
-               
-            };
+            selectedPart.RepairCard = newRepairCard;
 
             _context.Add(newRepairCard);
-            _context.Add(newRepairCardPart);
             _context.SaveChanges();
         }
     }

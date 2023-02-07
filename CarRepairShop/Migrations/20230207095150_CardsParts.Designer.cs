@@ -4,6 +4,7 @@ using CarRepairShop.Areas.Identity.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarRepairShop.Migrations
 {
     [DbContext(typeof(MEchanicDataContext))]
-    partial class MEchanicDataContextModelSnapshot : ModelSnapshot
+    [Migration("20230207095150_CardsParts")]
+    partial class CardsParts
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -167,7 +169,7 @@ namespace CarRepairShop.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<int?>("RepairCardId")
+                    b.Property<int>("RepairCardId")
                         .HasColumnType("int");
 
                     b.Property<int>("TypeOfRepair")
@@ -381,7 +383,9 @@ namespace CarRepairShop.Migrations
                 {
                     b.HasOne("CarRepairShop.Models.RepairCard", "RepairCard")
                         .WithMany("Parts")
-                        .HasForeignKey("RepairCardId");
+                        .HasForeignKey("RepairCardId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("RepairCard");
                 });
