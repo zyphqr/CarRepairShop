@@ -26,10 +26,28 @@ namespace CarRepairShop.Controllers
         }
 
         // GET: RepairCards
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var repairCards = _context.RepairCards.Include(r => r.Car).Include(r => r.Mechanic);
-            return View(await repairCards.ToListAsync());
+            var repairCards = _context.RepairCards
+                            .Include(r => r.Car)
+                            .Include(r => r.Mechanic)
+                            .Include(r => r.Parts);
+  
+            var repairCardsVM = repairCards.Select(repairCard => new RepairCardIndexVM
+            {
+                StartDate = repairCard.StartDate,
+                EndDate = repairCard.EndDate,
+                SelectedCarId = repairCard.CarId,
+                CarRegistration = repairCard.Car.CarRegistration,
+                Description = repairCard.Description,
+                Price = repairCard.Price,
+                TypeOfRepair = repairCard.TypeOfRepair,
+                SelectedPartId = ,
+                Parts = ,
+                SelectedMechanicId = repairCard.MechanicId,
+                MechanicName = repairCard.Mechanic.FirstName + " " + repairCard.Mechanic.FirstName
+            });
+            return View(repairCardsVM);
         }
 
         [Authorize]
@@ -56,7 +74,7 @@ namespace CarRepairShop.Controllers
             var selectListMechanics = mechanics
                 .Select(mechanics => new SelectListItem(
                     mechanics.FirstName + " " + mechanics.LastName,
-                    mechanics.Id.ToString())); 
+                    mechanics.Id.ToString()));
 
             return View("Views/RepairCards/Create.cshtml", new CreateEditRepairCardVM
             {
@@ -68,7 +86,7 @@ namespace CarRepairShop.Controllers
                 Description = description,
                 TypeOfRepair = typeOfRepair,
                 Parts = selectListParts,
-                SelectedPartId = parts.ToList()[0].PartId, 
+                SelectedPartId = parts.ToList()[0].PartId,
                 Mechanics = selectListMechanics,
                 SelectedMechanicId = mechanics.ToList()[0].Id
             });
@@ -81,22 +99,22 @@ namespace CarRepairShop.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(CreateEditRepairCardVM createRepairCard)
         {
-            
-                Car selectedCarReg = _shopService.GetCars().Single(c => c.CarId == createRepairCard.SelectedCarId);
-                Part selectedPartId = _shopService.GetParts().Single(p => p.PartId == createRepairCard.SelectedPartId);
-                Mechanic selectedMechanicId = _shopService.GetMechanics().Single(m => m.Id == createRepairCard.SelectedMechanicId);
 
-                _shopService.CreateRepairCard(
-                    createRepairCard.RepairCardId,
-                    createRepairCard.StartDate,
-                    createRepairCard.EndDate,
-                    selectedCarReg,
-                    createRepairCard.Description,
-                    createRepairCard.TypeOfRepair,
-                    selectedPartId,
-                    selectedMechanicId
-                    );
-                return RedirectToAction(nameof(Index));
+            Car selectedCarReg = _shopService.GetCars().Single(c => c.CarId == createRepairCard.SelectedCarId);
+            Part selectedPartId = _shopService.GetParts().Single(p => p.PartId == createRepairCard.SelectedPartId);
+            Mechanic selectedMechanicId = _shopService.GetMechanics().Single(m => m.Id == createRepairCard.SelectedMechanicId);
+
+            _shopService.CreateRepairCard(
+                createRepairCard.RepairCardId,
+                createRepairCard.StartDate,
+                createRepairCard.EndDate,
+                selectedCarReg,
+                createRepairCard.Description,
+                createRepairCard.TypeOfRepair,
+                selectedPartId,
+                selectedMechanicId
+                );
+            return RedirectToAction(nameof(Index));
 
 
             //return View("Views/RepairCards/Create.cshtml", createRepairCard);

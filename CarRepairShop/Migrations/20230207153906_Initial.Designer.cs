@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarRepairShop.Migrations
 {
     [DbContext(typeof(MEchanicDataContext))]
-    [Migration("20230207095150_CardsParts")]
-    partial class CardsParts
+    [Migration("20230207153906_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -169,7 +169,7 @@ namespace CarRepairShop.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<int>("RepairCardId")
+                    b.Property<int?>("RepairCardId")
                         .HasColumnType("int");
 
                     b.Property<int>("TypeOfRepair")
@@ -383,9 +383,7 @@ namespace CarRepairShop.Migrations
                 {
                     b.HasOne("CarRepairShop.Models.RepairCard", "RepairCard")
                         .WithMany("Parts")
-                        .HasForeignKey("RepairCardId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("RepairCardId");
 
                     b.Navigation("RepairCard");
                 });

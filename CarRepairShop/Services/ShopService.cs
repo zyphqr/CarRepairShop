@@ -1,6 +1,7 @@
 ﻿using CarRepairShop.Areas.Identity.Data;
 using CarRepairShop.Common;
 using CarRepairShop.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.IO;
 
@@ -38,6 +39,7 @@ namespace CarRepairShop.Services
         {
             return _context.Towns.ToList();
         }
+
 
         public decimal CalculatePrice(Part selectedPart)
         {
@@ -204,7 +206,7 @@ namespace CarRepairShop.Services
 
         public void CreateRepairCard(int repairCardId,
                                     DateTime startDate,
-                                    DateTime endDate,
+                                    DateTime? endDate,
                                     Car selectedCar,
                                     string descpription,
                                     TypeOfRepairs typeOfRepair,

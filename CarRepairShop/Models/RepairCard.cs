@@ -13,8 +13,8 @@ namespace CarRepairShop.Models
         public int RepairCardId { get; set; }
 
         [Required]
-        public DateTime StartDate { get; set; }
-        public DateTime? EndDate { get; set; }
+        public DateTime StartDate { get; set; } = DateTime.Today;
+        public DateTime? EndDate { get; set; } = DateTime.Today;
 
         [MaxLength(256)]
         public string? Description { get; set; }
@@ -27,7 +27,7 @@ namespace CarRepairShop.Models
         public TypeOfRepairs TypeOfRepair { get; set; }
 
 
-        public ICollection<Part>? Parts { get; set; } 
+        public ICollection<Part> Parts { get; set; } 
         public int CarId { get; set; }
         public Car Car { get; set; }
         public string MechanicId { get; set; }

@@ -62,7 +62,7 @@
                     @Html.DisplayFor(modelItem => item.TypeOfRepair)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Parts.Select(p=>p.PartName).ToArray())
+                    @Html.DisplayFor(modelItem => item.Parts.Select(p=>p.PartName))
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Mechanic.FirstName)
