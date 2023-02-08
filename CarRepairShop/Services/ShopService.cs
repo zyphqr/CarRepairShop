@@ -230,6 +230,22 @@ namespace CarRepairShop.Services
             _context.Add(newRepairCard);
             _context.SaveChanges();
         }
+
+        public List<RepairCard> GetAllRepairCards()
+        {
+            var repairCards = _context.RepairCards
+                            .Include(r => r.Car)
+                            .Include(r => r.Mechanic)
+                            .Include(r => r.Parts).ToList();
+            return repairCards;
+        }
+
+        public List<Part> GetAllParts() 
+        { 
+            var parts = _context.Parts.Include(p=>p.RepairCard).ToList();
+            return parts;
+        }
+
     }
 }
 

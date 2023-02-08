@@ -28,10 +28,9 @@ namespace CarRepairShop.Controllers
         // GET: RepairCards
         public IActionResult Index()
         {
-            var repairCards = _context.RepairCards
-                            .Include(r => r.Car)
-                            .Include(r => r.Mechanic)
-                            .Include(r => r.Parts);
+            var repairCards = _shopService.GetAllRepairCards();
+
+            //var partIds = _context.Parts(x => x.RepairCard.Parts.Select(p=>p.PartId).Contains())
   
             var repairCardsVM = repairCards.Select(repairCard => new RepairCardIndexVM
             {
@@ -42,7 +41,7 @@ namespace CarRepairShop.Controllers
                 Description = repairCard.Description,
                 Price = repairCard.Price,
                 TypeOfRepair = repairCard.TypeOfRepair,
-                SelectedPartId = ,
+                SelectedPartsIds = ,
                 Parts = ,
                 SelectedMechanicId = repairCard.MechanicId,
                 MechanicName = repairCard.Mechanic.FirstName + " " + repairCard.Mechanic.FirstName
