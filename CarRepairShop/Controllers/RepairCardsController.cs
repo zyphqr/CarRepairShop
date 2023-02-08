@@ -29,6 +29,7 @@ namespace CarRepairShop.Controllers
         public IActionResult Index()
         {
             var repairCards = _shopService.GetAllRepairCards();
+            var parts = _shopService.GetAllParts();
 
             //var partIds = _context.Parts(x => x.RepairCard.Parts.Select(p=>p.PartId).Contains())
   
@@ -41,7 +42,10 @@ namespace CarRepairShop.Controllers
                 Description = repairCard.Description,
                 Price = repairCard.Price,
                 TypeOfRepair = repairCard.TypeOfRepair,
-                SelectedPartsIds = ,
+                SelectedPartsIds = parts.Select(part =>
+                {
+                    var partId = repairCards.Parts.Where(partId => repairCard.RepairCardId == partId.RepairCardId).ToList();
+                }),
                 Parts = ,
                 SelectedMechanicId = repairCard.MechanicId,
                 MechanicName = repairCard.Mechanic.FirstName + " " + repairCard.Mechanic.FirstName
