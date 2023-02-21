@@ -31,26 +31,23 @@ namespace CarRepairShop.Controllers
             var repairCards = _shopService.GetAllRepairCards();
             var parts = _shopService.GetAllParts();
 
-            //var partIds = _context.Parts(x => x.RepairCard.Parts.Select(p=>p.PartId).Contains())
-  
-            var repairCardsVM = repairCards.Select(repairCard => new RepairCardIndexVM
+            var indexVM = new IndexVMs
             {
-                StartDate = repairCard.StartDate,
-                EndDate = repairCard.EndDate,
-                SelectedCarId = repairCard.CarId,
-                CarRegistration = repairCard.Car.CarRegistration,
-                Description = repairCard.Description,
-                Price = repairCard.Price,
-                TypeOfRepair = repairCard.TypeOfRepair,
-                SelectedPartsIds = parts.Select(part =>
+                RepairCards = repairCards.Select(repairCard => new RepairCardIndexVM
                 {
-                    var partId = repairCards.Parts.Where(partId => repairCard.RepairCardId == partId.RepairCardId).ToList();
-                }),
-                Parts = ,
-                SelectedMechanicId = repairCard.MechanicId,
-                MechanicName = repairCard.Mechanic.FirstName + " " + repairCard.Mechanic.FirstName
-            });
-            return View(repairCardsVM);
+                    RepairCardId = repairCard.RepairCardId,
+                    StartDate = repairCard.StartDate,
+                    EndDate = repairCard.EndDate,
+                    CarRegistration = repairCard.Car.CarRegistration,
+                    Description = repairCard.Description,
+                    Price = repairCard.Price,
+                    TypeOfRepair = repairCard.TypeOfRepair,
+                    PartNames = (ICollection<Part>)repairCard.Parts.Select(p => p.PartName),
+                    MechanicName = repairCard.Mechanic.FirstName + " " + repairCard.Mechanic.FirstName
+                })
+            };
+
+            return View(indexVM);
         }
 
         [Authorize]

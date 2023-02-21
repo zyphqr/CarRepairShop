@@ -49,9 +49,9 @@ namespace CarRepairShop.Services
         }
 
         public void CreateCarCheck(int carId,
-                                   //int selectedTown,
-                                   //string carRegistrationNumbers,
-                                   //string carRegistrationCode,
+                                   Town selectedTown,
+                                   string carRegNumbers,
+                                   string CarRegLastDigits,
                                    string carRegistration,
                                    CarBrands brand,
                                    string model,
@@ -93,8 +93,7 @@ namespace CarRepairShop.Services
             Car newCar = new()
             {
                 CarId = carId,
-                //CarRegistration = (selectedTown + carRegistrationNumbers + carRegistrationCode).ToString(),
-                CarRegistration = carRegistration.ToUpper(),
+                CarRegistration = (selectedTown + carRegNumbers + CarRegLastDigits).ToString().ToUpper(),
                 CarBrand = brand,
                 CarModel = model.ToUpper(),
                 YearOfManifacture = yearOfManifacture,

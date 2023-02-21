@@ -1,4 +1,6 @@
-﻿@model IEnumerable<CarRepairShop.Models.RepairCard>
+﻿@using CarRepairShop.Common;
+@using CarRepairShop.ViewModels;
+@model IndexVMs;
 
 @{
     ViewData["Title"] = "Index";
@@ -12,45 +14,29 @@
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.StartDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EndDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Car.CarRegistration)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Price)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TypeOfRepair)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Parts)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Mechanic.FirstName)
-            </th>
+            <th>Car Registration</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Type Of Repair</th>
+            <th>Part Names</th>
+            <th>Mechanic Name</th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (RepairCardIndexVM item in Model.RepairCards)
         {
             <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CarRegistration)
+                </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.StartDate)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.EndDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Car.CarRegistration)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Description)
@@ -62,10 +48,15 @@
                     @Html.DisplayFor(modelItem => item.TypeOfRepair)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Parts.Select(p=>p.PartName))
+                    @foreach (var part in item.PartNames)
+                    {
+                        <ul>
+                            <li>@part</li>
+                        </ul>
+                    }
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Mechanic.FirstName)
+                    @Html.DisplayFor(modelItem => item.MechanicName)
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.RepairCardId">Edit</a> |

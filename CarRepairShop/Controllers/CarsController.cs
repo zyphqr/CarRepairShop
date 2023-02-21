@@ -36,8 +36,8 @@ namespace CarRepairShop.Controllers
         [HttpGet]
         [Authorize]
         public IActionResult Create(int carId,
-                                    //string carRegistationNumbers,
-                                    //string carRegistrationCode,
+                                    string carRegNumbers,
+                                    string carRegLastDigits,
                                     string carRegistration,
                                     CarBrands brand,
                                     string model,
@@ -50,19 +50,19 @@ namespace CarRepairShop.Controllers
                                     string ownerName,
                                     string ownerPhoneNum)
         {
-            //var towns = _shopService.GetTowns();
-            //var selectListTowns = towns
-            //    .Select(towns => new SelectListItem(
-            //        towns.TownCode,
-            //        towns.TownId.ToString()));
+            var towns = _shopService.GetTowns();
+            var selectListTowns = towns
+                .Select(towns => new SelectListItem(
+                    towns.TownCode,
+                    towns.TownId.ToString()));
 
             return View("Views/Cars/Create.cshtml", new CreateEditCarVM
             {
                 CarId = carId,
-                //Towns = selectListTowns,
-                //SelectedTownId = towns.ToList()[0].TownId,
-                //CarRegistrationNumbers = carRegistationNumbers,
-                //CarRegistrationCode = carRegistrationCode,
+                Towns = selectListTowns,
+                SelectedTownId = towns.ToList()[0].TownId,
+                CarRegNumbers = carRegNumbers,
+                CarRegLastDigits = carRegLastDigits,
                 CarRegistration = carRegistration,
                 Brand = brand,
                 Model = model,
@@ -81,13 +81,13 @@ namespace CarRepairShop.Controllers
         [Authorize]
         public IActionResult Create(CreateEditCarVM createCar)
         {
-            if (ModelState.IsValid)
-            {
-                _shopService.CreateCarCheck(
+            Town selectedTown = _shopService.GetTowns().Single(t => t.TownId == createCar.SelectedTownId);
+
+            _shopService.CreateCarCheck(
                     createCar.CarId,
-                    //createCar.SelectedTownId,
-                    //createCar.CarRegistrationNumbers,
-                    //createCar.CarRegistrationCode,
+                    selectedTown,
+                    createCar.CarRegNumbers,
+                    createCar.CarRegLastDigits,
                     createCar.CarRegistration,
                     createCar.Brand,
                     createCar.Model,
@@ -101,8 +101,7 @@ namespace CarRepairShop.Controllers
                     createCar.OwnerPhoneNum
                  );
                 return RedirectToAction(nameof(Index));
-            }
-            return View("Views/Cars/Create.cshtml", createCar);
+
         }
 
         [Authorize]

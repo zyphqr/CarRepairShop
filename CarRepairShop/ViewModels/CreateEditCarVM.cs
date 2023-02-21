@@ -8,12 +8,12 @@ namespace CarRepairShop.ViewModels
     {
         public int CarId { get; set; }
 
-        //public int SelectedTownId{ get; set; }
-        //public IEnumerable<SelectListItem> Towns { get; set; }
+        public int SelectedTownId{ get; set; }
+        public IEnumerable<SelectListItem> Towns { get; set; }
 
-        //public string CarRegistrationNumbers{ get; set; }
+        public string CarRegNumbers{ get; set; }
 
-        //public string CarRegistrationCode { get; set; }
+        public string CarRegLastDigits { get; set; }
 
         public string CarRegistration { get; set; }
 
