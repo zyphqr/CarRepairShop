@@ -52,7 +52,6 @@ namespace CarRepairShop.Services
                                    Town selectedTown,
                                    string carRegNumbers,
                                    string CarRegLastDigits,
-                                   string carRegistration,
                                    CarBrands brand,
                                    string model,
                                    YearsOfManifacture yearOfManifacture,
@@ -93,7 +92,7 @@ namespace CarRepairShop.Services
             Car newCar = new()
             {
                 CarId = carId,
-                CarRegistration = (selectedTown + carRegNumbers + CarRegLastDigits).ToString().ToUpper(),
+                CarRegistration = ($"{selectedTown.TownCode}{carRegNumbers}{CarRegLastDigits}").ToUpper(),
                 CarBrand = brand,
                 CarModel = model.ToUpper(),
                 YearOfManifacture = yearOfManifacture,

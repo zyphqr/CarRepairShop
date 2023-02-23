@@ -12,7 +12,7 @@ namespace CarRepairShop.ViewModels
         public string Description { get; set; }
         public decimal Price { get; set; }
         public TypeOfRepairs TypeOfRepair { get; set; }
-        public ICollection<Part> PartNames { get; set; }
+        public ICollection<string> PartNames { get; set; }
         public string MechanicName { get; set; }
     }
 }

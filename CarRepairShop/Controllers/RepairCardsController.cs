@@ -42,7 +42,7 @@ namespace CarRepairShop.Controllers
                     Description = repairCard.Description,
                     Price = repairCard.Price,
                     TypeOfRepair = repairCard.TypeOfRepair,
-                    PartNames = (ICollection<Part>)repairCard.Parts.Select(p => p.PartName),
+                    PartNames = repairCard.Parts.Select(p => p.PartName).ToList(),
                     MechanicName = repairCard.Mechanic.FirstName + " " + repairCard.Mechanic.FirstName
                 })
             };
@@ -52,11 +52,7 @@ namespace CarRepairShop.Controllers
 
         [Authorize]
         [HttpGet]
-        public IActionResult Create(int repairCardId,
-                                    DateTime startDate,
-                                    DateTime endDate,
-                                    string description,
-                                    TypeOfRepairs typeOfRepair)
+        public IActionResult Create(TypeOfRepairs typeOfRepair)
         {
             var cars = _shopService.GetCars();
             var selectListCars = cars
@@ -78,12 +74,10 @@ namespace CarRepairShop.Controllers
 
             return View("Views/RepairCards/Create.cshtml", new CreateEditRepairCardVM
             {
-                RepairCardId = repairCardId,
-                StartDate = startDate,
-                EndDate = endDate,
+                StartDate = DateTime.Now,
+                EndDate = DateTime.Now,
                 CarRegistrations = selectListCars,
                 SelectedCarId = cars.ToList()[0].CarId,
-                Description = description,
                 TypeOfRepair = typeOfRepair,
                 Parts = selectListParts,
                 SelectedPartId = parts.ToList()[0].PartId,

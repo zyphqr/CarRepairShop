@@ -35,20 +35,7 @@ namespace CarRepairShop.Controllers
 
         [HttpGet]
         [Authorize]
-        public IActionResult Create(int carId,
-                                    string carRegNumbers,
-                                    string carRegLastDigits,
-                                    string carRegistration,
-                                    CarBrands brand,
-                                    string model,
-                                    YearsOfManifacture yearOfManifacture,
-                                    string engineNum,
-                                    string frameNum,
-                                    Colors color,
-                                    double workingVolume,
-                                    string description,
-                                    string ownerName,
-                                    string ownerPhoneNum)
+        public IActionResult Create()
         {
             var towns = _shopService.GetTowns();
             var selectListTowns = towns
@@ -58,22 +45,8 @@ namespace CarRepairShop.Controllers
 
             return View("Views/Cars/Create.cshtml", new CreateEditCarVM
             {
-                CarId = carId,
                 Towns = selectListTowns,
                 SelectedTownId = towns.ToList()[0].TownId,
-                CarRegNumbers = carRegNumbers,
-                CarRegLastDigits = carRegLastDigits,
-                CarRegistration = carRegistration,
-                Brand = brand,
-                Model = model,
-                YearOfManifacture = yearOfManifacture,
-                EngineNum = engineNum,
-                FrameNum = frameNum,
-                Color = color,
-                WorkingVolume = workingVolume,
-                Description = description,
-                OwnerName = ownerName,
-                OwnerPhoneNum = ownerPhoneNum,
             });
         }
 
@@ -88,7 +61,6 @@ namespace CarRepairShop.Controllers
                     selectedTown,
                     createCar.CarRegNumbers,
                     createCar.CarRegLastDigits,
-                    createCar.CarRegistration,
                     createCar.Brand,
                     createCar.Model,
                     createCar.YearOfManifacture,
