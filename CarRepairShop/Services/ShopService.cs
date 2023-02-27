@@ -82,18 +82,10 @@ namespace CarRepairShop.Services
                 throw new Exception("The entered frame number is not valid.");
             }
 
-            //foreach (Car car in _context.Cars)
-            //{
-            //    if (car.CarRegistration == carRegistration || car.EngineNum == engineNum || car.FrameNum == frameNum)
-            //    {
-            //        throw new Exception("This car already exists.");
-            //    }
-            //}
-
             Car newCar = new()
             {
                 CarId = carId,
-                CarRegistration = (selectedTown + carRegNumbers + CarRegLastDigits).ToString().ToUpper(),
+                CarRegistration = $"{selectedTown.TownCode}{carRegNumbers}{CarRegLastDigits}".ToUpper(),
                 CarBrand = brand,
                 CarModel = model.ToUpper(),
                 YearOfManifacture = yearOfManifacture,
