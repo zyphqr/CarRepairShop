@@ -1,5 +1,6 @@
 ﻿@using CarRepairShop.Common;
 @using CarRepairShop.ViewModels;
+@using CarRepairShop.Controllers;
 @model CreateEditRepairCardVM;
 
 @{
@@ -33,7 +34,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="TypeOfRepair">Type of repair</label>
-                <select asp-for="TypeOfRepair" class="form-select" asp-items="@Html.GetEnumSelectList(typeof(TypeOfRepairs))">
+                <select asp-for="TypeOfRepair" class="form-select" asp-items="@Html.GetEnumSelectList(typeof(TypeOfRepairs))" onchange="@Url.Action("FilterParts","RepairCards")">
                     <option value="Select the type of repair">Select the type of repair</option>
                 </select>
             </div>

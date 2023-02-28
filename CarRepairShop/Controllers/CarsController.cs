@@ -161,11 +161,12 @@ namespace CarRepairShop.Controllers
 
             if (car != null)
             {
-                _context.Cars.Remove(car);
                 foreach (var cardToBeRemoved in repairCardsToBeRemoved)
                 {
                     _context.RepairCards.Remove(cardToBeRemoved);
                 }
+
+                _context.Cars.Remove(car);                
             }
 
             await _context.SaveChangesAsync();
