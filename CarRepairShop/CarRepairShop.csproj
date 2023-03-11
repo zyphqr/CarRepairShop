@@ -7,13 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Views\Home\Partials\**" />
-    <Content Remove="Views\Home\Partials\**" />
-    <EmbeddedResource Remove="Views\Home\Partials\**" />
-    <None Remove="Views\Home\Partials\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Remove="Views\Parts\Delete.cshtml~RF358d7ad4.TMP" />
   </ItemGroup>
 

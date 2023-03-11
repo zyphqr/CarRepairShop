@@ -34,7 +34,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="TypeOfRepair">Type of repair</label>
-                <select asp-for="TypeOfRepair" class="form-select" asp-items="@Html.GetEnumSelectList(typeof(TypeOfRepairs))" onchange="@Url.Action("FilterParts","RepairCards")">
+                <select asp-for="TypeOfRepair" class="form-select" asp-items="@Html.GetEnumSelectList(typeof(TypeOfRepairs))">
                     <option value="Select the type of repair">Select the type of repair</option>
                 </select>
             </div>

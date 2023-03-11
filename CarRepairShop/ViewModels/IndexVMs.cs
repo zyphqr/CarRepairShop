@@ -1,4 +1,6 @@
-﻿namespace CarRepairShop.ViewModels
+﻿using CarRepairShop.Common;
+
+namespace CarRepairShop.ViewModels
 {
     public class IndexVMs
     {

@@ -85,9 +85,37 @@ namespace CarRepairShop.Controllers
             });
         }
 
-        public IActionResult FilterParts()
+        [Authorize]
+        [HttpGet]
+        public IActionResult SelectRepair(TypeOfRepairs typeOfRepair)
         {
+            return PartialView("Views/Home/Partials/_TypeOfRepairForm.cshtml", new SelectRepairVM
+            {
+                TypeOfRepair = typeOfRepair
+            });
+        }
 
+        public IActionResult References(string criteria)
+        {
+            var repairCards = _shopService.GetAllRepairCards();
+
+            if (!string.IsNullOrEmpty(criteria) && criteria != "all")
+            {
+                //if (criteria == "startDate")
+                //{
+                //    repairCards = repairCards.Select(r => r.StartDate).ToList();
+                //}
+                //if (criteria == "endDate")
+                //{
+                //    repairCards = repairCards.Select(r => r.EndDate).ToList();
+                //}
+                if (criteria == "unfinishedRepair")
+                {
+                    var unfinished = repairCards.Where(r => r.EndDate > DateTime.Now).ToList();
+                    return PartialView("Views/RepairCards/_IndexReferences.cshtml", unfinished);
+                }
+            }
+            return PartialView("Views/RepairCards/_IndexReferences.cshtml", repairCards);
         }
 
         // POST: RepairCards/Create

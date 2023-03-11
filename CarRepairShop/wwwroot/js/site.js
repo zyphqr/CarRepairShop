@@ -1,4 +1,10 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿var repairPopUp = document.getElementById('repairPopUp');
+function openPopUp() {
+    repairPopUp.style.display = "block";
+}
 
-// Write your JavaScript code.
+
+document.querySelector('#closePopUp').addEventListener('click', function () {
+    document.querySelector('#repairPopUp').style.display = 'none';
+    console.log("It works");
+});
