@@ -13,26 +13,41 @@
 </p>
 
 <form asp-action="References">
-    <select name="criteria">
-        <option value="all">All repair cards</option>
-        <option value="startDate">Start date</option>
-        <option value="endDate">End date</option>
-        <option value="unfinishedRepair">Unfinished repairs</option>
-    </select>
+    <div class="form-group">
+        <label asp-for="Criteria">Criteria</label>
+        <select asp-for="Criteria" class="form-select" asp-items="@Html.GetEnumSelectList(typeof(Criteria))">
+            <option value="All">All repair cards</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label asp-for="StartEndDate">Start or end date</label>
+        <select asp-for="StartEndDate" class="form-select" asp-items="@Html.GetEnumSelectList(typeof(StartEndDate))">
+            <option value="Start date">Start date</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label asp-for="Date" class="control-label"></label>
+        <input asp-for="Date" class="form-control" />
+        <span asp-validation-for="Date" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <select asp-items="Model.CarRegistrations" asp-for="SelectedCarId"></select>
+    </div>
+    <input type="submit" value="Filter"/>
     <div id="container">
         <partial name="_IndexReferences.cshtml" model="@Model" />
     </div>
 </form>
 
 
-@section Scripts{
+@*@section Scripts{
     <script>
 
         $(function () {
             $("#criteria").change(function () {
                 $.ajax({
                     type: "Get",
-                    url: "/Home/References?type=" + $(this).val(),  //remember change the controller to your owns.
+                    url: "/RepairCards/References?type=" + $(this).val(),  //remember change the controller to your owns.
                     success: function (data) {
                         $("#container").html("");
                         $("#container").html(data);
@@ -44,4 +59,4 @@
             });
         });
     </script>
-}
+}*@

@@ -31,6 +31,12 @@ namespace CarRepairShop.Controllers
             var repairCards = _shopService.GetAllRepairCards();
             var parts = _shopService.GetAllParts();
 
+            var cars = _shopService.GetCars();
+            var selectListCars = cars
+                .Select(cars => new SelectListItem(
+                    cars.CarRegistration,
+                    cars.CarId.ToString()));
+
             var indexVM = new IndexVMs
             {
                 RepairCards = repairCards.Select(repairCard => new RepairCardIndexVM
@@ -44,7 +50,9 @@ namespace CarRepairShop.Controllers
                     TypeOfRepair = repairCard.TypeOfRepair,
                     PartNames = repairCard.Parts.Select(p => p.PartName),
                     MechanicName = repairCard.Mechanic.FirstName + " " + repairCard.Mechanic.FirstName
-                })
+                }),
+                CarRegistrations = selectListCars,
+                SelectedCarId = cars.ToList()[0].CarId,
             };
 
             return View(indexVM);
@@ -85,36 +93,53 @@ namespace CarRepairShop.Controllers
             });
         }
 
-        [Authorize]
-        [HttpGet]
-        public IActionResult SelectRepair(TypeOfRepairs typeOfRepair)
-        {
-            return PartialView("Views/Home/Partials/_TypeOfRepairForm.cshtml", new SelectRepairVM
-            {
-                TypeOfRepair = typeOfRepair
-            });
-        }
+        //[Authorize]
+        //[HttpGet]
+        //public IActionResult SelectRepair(TypeOfRepairs typeOfRepair)
+        //{
+        //    return PartialView("Views/Home/Partials/_TypeOfRepairForm.cshtml", new SelectRepairVM
+        //    {
+        //        TypeOfRepair = typeOfRepair
+        //    });
+        //}
 
-        public IActionResult References(string criteria)
+        public IActionResult References(IndexVMs vm)
         {
             var repairCards = _shopService.GetAllRepairCards();
-
-            if (!string.IsNullOrEmpty(criteria) && criteria != "all")
+            
+            if(vm.Criteria!=null)
             {
-                //if (criteria == "startDate")
-                //{
-                //    repairCards = repairCards.Select(r => r.StartDate).ToList();
-                //}
-                //if (criteria == "endDate")
-                //{
-                //    repairCards = repairCards.Select(r => r.EndDate).ToList();
-                //}
-                if (criteria == "unfinishedRepair")
+                switch (vm.Criteria)
                 {
-                    var unfinished = repairCards.Where(r => r.EndDate > DateTime.Now).ToList();
-                    return PartialView("Views/RepairCards/_IndexReferences.cshtml", unfinished);
+                    case Criteria.All:
+                        vm.RepairCards = repairCards.Select(repairCard => new RepairCardIndexVM
+                        {
+                            RepairCardId = repairCard.RepairCardId,
+                            StartDate = repairCard.StartDate,
+                            EndDate = repairCard.EndDate,
+                            CarRegistration = repairCard.Car.CarRegistration,
+                            Description = repairCard.Description,
+                            Price = repairCard.Price,
+                            TypeOfRepair = repairCard.TypeOfRepair,
+                            PartNames = repairCard.Parts.Select(p => p.PartName),
+                            MechanicName = repairCard.Mechanic.FirstName + " " + repairCard.Mechanic.FirstName
+                        }); break;
+                    case Criteria.Finished:
+                        vm.RepairCards = vm.RepairCards.Where(rc => rc.EndDate <= DateTime.Now); break;
+                    case Criteria.Unfinished:
+                        vm.RepairCards = vm.RepairCards.Where(rc => rc.EndDate > DateTime.Now); break;
+
                 }
             }
+            if(vm.StartEndDate!=null)
+            {
+
+            }
+            if(vm.SelectedCarId!=null)
+            {
+
+            }
+           
             return PartialView("Views/RepairCards/_IndexReferences.cshtml", repairCards);
         }
 

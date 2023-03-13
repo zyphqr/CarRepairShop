@@ -4,10 +4,10 @@ namespace CarRepairShop.Common
 {
     public enum Criteria
     {
-        [Display(Name = "Start date")]
-        Startdate = 1,
-        [Display(Name = "End date")]
-        Enddate = 2,
+        [Display(Name = "All repair cards")]
+        All = 1,
+        [Display(Name = "Finished")]
+        Finished = 2,
         [Display(Name = "Unfinished repair")]
         Unfinished = 3,
     }
