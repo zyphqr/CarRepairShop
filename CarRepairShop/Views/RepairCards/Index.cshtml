@@ -34,10 +34,63 @@
         <select asp-items="Model.CarRegistrations" asp-for="SelectedCarId"></select>
     </div>
     <input type="submit" value="Filter"/>
-    <div id="container">
-        <partial name="_IndexReferences.cshtml" model="@Model" />
-    </div>
 </form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Car Registration</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Type Of Repair</th>
+            <th>Part Names</th>
+            <th>Mechanic Name</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (RepairCardIndexVM item in Model.RepairCards)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CarRegistration)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StartDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EndDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TypeOfRepair)
+                </td>
+                <td>
+                    @foreach (var part in item.PartNames)
+                    {
+                        <ul>
+                            <li>@part</li>
+                        </ul>
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MechanicName)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.RepairCardId">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@item.RepairCardId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
 
 
 @*@section Scripts{

@@ -10,6 +10,7 @@ namespace CarRepairShop.ViewModels
         public Criteria? Criteria { get; set; }
 
         public StartEndDate? StartEndDate { get; set; }
+
         public DateTime? Date { get; set; }
 
         public int? SelectedCarId { get; set; }
