@@ -11,6 +11,7 @@ using CarRepairShop.Common;
 using CarRepairShop.Services;
 using CarRepairShop.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using System.IO;
 
 namespace CarRepairShop.Controllers
 {
@@ -26,6 +27,7 @@ namespace CarRepairShop.Controllers
         }
 
         // GET: RepairCards
+        [Authorize]
         public IActionResult Index()
         {
             var repairCards = _shopService.GetAllRepairCards();
@@ -62,6 +64,53 @@ namespace CarRepairShop.Controllers
         [HttpGet]
         public IActionResult Create()
         {
+            //var cars = _shopService.GetCars();
+            //var selectListCars = cars
+            //    .Select(cars => new SelectListItem(
+            //        cars.CarRegistration,
+            //        cars.CarId.ToString()));
+
+            //var parts = _shopService.GetParts();
+            //var selectListParts = parts
+            //    .Select(parts => new SelectListItem(
+            //        parts.PartName,
+            //        parts.PartId.ToString()));
+
+            //var mechanics = _shopService.GetMechanics();
+            //var selectListMechanics = mechanics
+            //    .Select(mechanics => new SelectListItem(
+            //        mechanics.FirstName + " " + mechanics.LastName,
+            //        mechanics.Id.ToString()));
+
+            return View("Views/RepairCards/Create.cshtml", new CreateEditRepairCardVM
+            {
+                //StartDate = DateTime.Now,
+                //EndDate = DateTime.Now,
+                //CarRegistrations = selectListCars,
+                //SelectedCarId = cars.ToList()[0].CarId,
+                //Parts = selectListParts,
+                //SelectedPartId = parts.ToList()[0].PartId,
+                //Mechanics = selectListMechanics,
+                //SelectedMechanicId = mechanics.ToList()[0].Id
+            });
+        }
+
+        [Authorize]
+        [HttpGet]
+        public IActionResult SelectRepair()
+        {
+           
+
+            return View("Views/RepairCards/TypeOfRepairForm.cshtml", new CreateEditRepairCardVM
+            {
+                
+            });
+        }
+
+        [Authorize]
+        [HttpPost]
+        public IActionResult SelectRepair(CreateEditRepairCardVM vm)
+        {
             var cars = _shopService.GetCars();
             var selectListCars = cars
                 .Select(cars => new SelectListItem(
@@ -69,10 +118,8 @@ namespace CarRepairShop.Controllers
                     cars.CarId.ToString()));
 
             var parts = _shopService.GetParts();
-            var selectListParts = parts
-                .Select(parts => new SelectListItem(
-                    parts.PartName,
-                    parts.PartId.ToString()));
+            parts = parts.Where(part => part.TypeOfRepair == vm.TypeOfRepair).ToList();
+            
 
             var mechanics = _shopService.GetMechanics();
             var selectListMechanics = mechanics
@@ -80,29 +127,21 @@ namespace CarRepairShop.Controllers
                     mechanics.FirstName + " " + mechanics.LastName,
                     mechanics.Id.ToString()));
 
-            return View("Views/RepairCards/Create.cshtml", new CreateEditRepairCardVM
+            return View("Views/RepairCards/Create.cshtml", new CreateEditRepairCardVM 
             {
                 StartDate = DateTime.Now,
                 EndDate = DateTime.Now,
                 CarRegistrations = selectListCars,
                 SelectedCarId = cars.ToList()[0].CarId,
-                Parts = selectListParts,
+                TypeOfRepair = vm.TypeOfRepair,
+                Parts = parts,
                 SelectedPartId = parts.ToList()[0].PartId,
                 Mechanics = selectListMechanics,
                 SelectedMechanicId = mechanics.ToList()[0].Id
             });
         }
 
-        //[Authorize]
-        //[HttpGet]
-        //public IActionResult SelectRepair(TypeOfRepairs typeOfRepair)
-        //{
-        //    return PartialView("Views/Home/Partials/_TypeOfRepairForm.cshtml", new SelectRepairVM
-        //    {
-        //        TypeOfRepair = typeOfRepair
-        //    });
-        //}
-
+        [Authorize]
         public IActionResult References(IndexVMs vm)
         {
             var repairCards = _shopService.GetAllRepairCards();
@@ -175,14 +214,16 @@ namespace CarRepairShop.Controllers
         // POST: RepairCards/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(CreateEditRepairCardVM createRepairCard)
         {
 
             Car selectedCarReg = _shopService.GetCars().Single(c => c.CarId == createRepairCard.SelectedCarId);
-            Part selectedPartId = _shopService.GetParts().Single(p => p.PartId == createRepairCard.SelectedPartId);
+            var selectedParts = createRepairCard.Parts.Where(part=>part.IsChecked == true).ToList();
             Mechanic selectedMechanicId = _shopService.GetMechanics().Single(m => m.Id == createRepairCard.SelectedMechanicId);
+
 
             _shopService.CreateRepairCard(
                 createRepairCard.RepairCardId,
@@ -191,13 +232,14 @@ namespace CarRepairShop.Controllers
                 selectedCarReg,
                 createRepairCard.Description,
                 createRepairCard.TypeOfRepair,
-                selectedPartId,
+                selectedParts,
                 selectedMechanicId
                 );
             return RedirectToAction(nameof(Index));
         }
 
         //// GET: RepairCards/Edit/5
+        ///[Authorize]
         //public async Task<IActionResult> Edit(int? id)
         //{
         //    if (id == null || _context.RepairCards == null)
@@ -253,6 +295,7 @@ namespace CarRepairShop.Controllers
         //}
 
         //// GET: RepairCards/Delete/5
+        ///[Authorize]
         //public async Task<IActionResult> Delete(int? id)
         //{
         //    if (id == null || _context.RepairCards == null)
@@ -273,6 +316,7 @@ namespace CarRepairShop.Controllers
         //}
 
         //// POST: RepairCards/Delete/5
+        ///[Authorize]
         //[HttpPost, ActionName("Delete")]
         //[ValidateAntiForgeryToken]
         //public async Task<IActionResult> DeleteConfirmed(int id)

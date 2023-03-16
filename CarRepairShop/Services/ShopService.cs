@@ -41,10 +41,14 @@ namespace CarRepairShop.Services
         }
 
 
-        public decimal CalculatePrice(Part selectedPart)
+        public decimal CalculatePrice(ICollection<Part> selectedParts)
         {
-            var part = _context.Set<Part>().FirstOrDefault(p => p.PartId == selectedPart.PartId);
-            decimal price = part.WorkingHours * workHourPrice + part.Price;
+            decimal price = 0;
+            foreach (var part in selectedParts)
+            {
+                price += part.WorkingHours * workHourPrice + part.Price;
+            }
+
             return price;
         }
 
@@ -201,7 +205,7 @@ namespace CarRepairShop.Services
                                     Car selectedCar,
                                     string descpription,
                                     TypeOfRepairs typeOfRepair,
-                                    Part selectedPart,
+                                    ICollection<Part> selectedPart,
                                     Mechanic selectedMechanic)
         {
 

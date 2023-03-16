@@ -1,4 +1,5 @@
 ﻿using CarRepairShop.Common;
+using CarRepairShop.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
 
@@ -28,7 +29,8 @@ namespace CarRepairShop.ViewModels
         public TypeOfRepairs TypeOfRepair { get; set; }
 
         public int SelectedPartId { get; set; }
-        public IEnumerable<SelectListItem> Parts { get; set; }
+        public List<Part> Parts { get; set; }
+        
 
         public string SelectedMechanicId { get; set; }
         public IEnumerable<SelectListItem> Mechanics { get; set; }

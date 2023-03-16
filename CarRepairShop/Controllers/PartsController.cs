@@ -25,6 +25,7 @@ namespace CarRepairShop.Controllers
             _shopService = shopService;
         }
 
+        [Authorize]
         public async Task<IActionResult> Index()
         {
               return View(await _context.Parts.ToListAsync());
