@@ -25,8 +25,6 @@ namespace CarRepairShop.Models
 
         [Required]
         public TypeOfRepairs TypeOfRepair { get; set; } 
-
-        public bool IsChecked { get; set; }
         
         public int? RepairCardId { get; set; }
         public RepairCard? RepairCard { get; set; }

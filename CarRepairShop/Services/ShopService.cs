@@ -1,6 +1,7 @@
 ﻿using CarRepairShop.Areas.Identity.Data;
 using CarRepairShop.Common;
 using CarRepairShop.Models;
+using CarRepairShop.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.IO;
@@ -41,7 +42,7 @@ namespace CarRepairShop.Services
         }
 
 
-        public decimal CalculatePrice(ICollection<Part> selectedParts)
+        public decimal CalculatePrice(ICollection<CreateEditPartVM> selectedParts)
         {
             decimal price = 0;
             foreach (var part in selectedParts)
@@ -205,7 +206,7 @@ namespace CarRepairShop.Services
                                     Car selectedCar,
                                     string descpription,
                                     TypeOfRepairs typeOfRepair,
-                                    ICollection<Part> selectedPart,
+                                    ICollection<CreateEditPartVM> selectedPart,
                                     Mechanic selectedMechanic)
         {
 
@@ -220,7 +221,10 @@ namespace CarRepairShop.Services
                 Price = CalculatePrice(selectedPart),
                 Mechanic = selectedMechanic,
             };
-            selectedPart.RepairCard = newRepairCard;
+            foreach (var part in selectedPart)
+            {
+                part.RepairCard = newRepairCard;
+            }            
 
             _context.Add(newRepairCard);
             _context.SaveChanges();

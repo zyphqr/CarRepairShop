@@ -119,6 +119,22 @@ namespace CarRepairShop.Controllers
 
             var parts = _shopService.GetParts();
             parts = parts.Where(part => part.TypeOfRepair == vm.TypeOfRepair).ToList();
+            List<CreateEditPartVM> partVMs = new(); //TODO: Might cause issues due typing missmatching
+
+            foreach(Part part in parts)
+            {
+                CreateEditPartVM newvm = new()
+                {
+                    PartName = part.PartName,
+                    Quantity = part.Quantity,
+                    Price = part.Price,
+                    WorkingHours = part.WorkingHours,
+                    PartId = part.PartId,
+                    TypeOfRepair = part.TypeOfRepair,
+                };
+
+                partVMs.Add(newvm);
+            }
             
 
             var mechanics = _shopService.GetMechanics();
@@ -134,8 +150,7 @@ namespace CarRepairShop.Controllers
                 CarRegistrations = selectListCars,
                 SelectedCarId = cars.ToList()[0].CarId,
                 TypeOfRepair = vm.TypeOfRepair,
-                Parts = parts,
-                SelectedPartId = parts.ToList()[0].PartId,
+                partVMs = partVMs,
                 Mechanics = selectListMechanics,
                 SelectedMechanicId = mechanics.ToList()[0].Id
             });
@@ -221,7 +236,7 @@ namespace CarRepairShop.Controllers
         {
 
             Car selectedCarReg = _shopService.GetCars().Single(c => c.CarId == createRepairCard.SelectedCarId);
-            var selectedParts = createRepairCard.Parts.Where(part=>part.IsChecked == true).ToList();
+            List<CreateEditPartVM> selectedParts = createRepairCard.partVMs.Where(part=>part.IsSelected == true).ToList();
             Mechanic selectedMechanicId = _shopService.GetMechanics().Single(m => m.Id == createRepairCard.SelectedMechanicId);
 
 

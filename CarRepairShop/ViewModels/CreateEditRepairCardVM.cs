@@ -28,11 +28,9 @@ namespace CarRepairShop.ViewModels
         [Required]
         public TypeOfRepairs TypeOfRepair { get; set; }
 
-        public int SelectedPartId { get; set; }
-        public List<Part> Parts { get; set; }
-        
-
         public string SelectedMechanicId { get; set; }
         public IEnumerable<SelectListItem> Mechanics { get; set; }
+
+        public IEnumerable<CreateEditPartVM> partVMs { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using CarRepairShop.Common;
+using CarRepairShop.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace CarRepairShop.ViewModels
@@ -18,5 +19,7 @@ namespace CarRepairShop.ViewModels
         public int WorkingHours { get; set; }
 
         public TypeOfRepairs TypeOfRepair { get; set; }
+
+        public RepairCard? RepairCard { get; set; }
     }
 }
