@@ -19,13 +19,13 @@ namespace CarRepairShop.Controllers
     public class CarsController : Controller
     {
         private readonly MEchanicDataContext _context;
-        private readonly ShopService _shopService;
+        private readonly CarsService _carsService;
 
         public CarsController(MEchanicDataContext context,
-                              ShopService shopService)
+                              CarsService carsService)
         {
             _context = context;
-            _shopService = shopService;
+            _carsService = carsService;
         }
 
         // GET: Cars
@@ -39,13 +39,13 @@ namespace CarRepairShop.Controllers
         [Authorize]
         public IActionResult Create()
         {
-            var towns = _shopService.GetTowns();
+            var towns = _carsService.GetTowns();
             var selectListTowns = towns
                 .Select(towns => new SelectListItem(
                     towns.TownCode,
                     towns.TownId.ToString()));
 
-            return View("Views/Cars/Create.cshtml", new CreateEditCarVM
+            return View("Views/Cars/Create.cshtml", new CarVM
             {
                 Towns = selectListTowns,
                 SelectedTownId = towns.ToList()[0].TownId,
@@ -54,16 +54,15 @@ namespace CarRepairShop.Controllers
 
         [HttpPost]
         [Authorize]
-        public IActionResult Create(CreateEditCarVM createCar)
+        public IActionResult Create(CarVM createCar)
         {
-            Town selectedTown = _shopService.GetTowns().Single(t => t.TownId == createCar.SelectedTownId);
+            Town selectedTown = _carsService.GetTowns().Single(t => t.TownId == createCar.SelectedTownId);
 
-                _shopService.CreateCarCheck(
+                _carsService.CreateCar(
                                     createCar.CarId,
                                     selectedTown,
                                     createCar.CarRegNumbers,
                                     createCar.CarRegLastDigits,
-                                    createCar.CarRegistration,
                                     createCar.Brand,
                                     createCar.Model,
                                     createCar.YearOfManifacture,
@@ -86,7 +85,7 @@ namespace CarRepairShop.Controllers
                 return NotFound();
             }
             var car = _context.Cars.Find(id);
-            CreateEditCarVM editCar = new()
+            CarVM editCar = new()
             {
                 CarId = car.CarId,
                 CarRegistration = car.CarRegistration,
@@ -106,11 +105,11 @@ namespace CarRepairShop.Controllers
 
         [HttpPost]
         [Authorize]
-        public IActionResult Edit(CreateEditCarVM editCar)
+        public IActionResult Edit(CarVM editCar)
         {
             if (ModelState.IsValid)
             {
-                _shopService.EditCarCheck(editCar.CarId,
+                _carsService.EditCar(editCar.CarId,
                     editCar.CarRegistration,
                     editCar.Brand,
                     editCar.Model,
@@ -157,7 +156,7 @@ namespace CarRepairShop.Controllers
                 return Problem("Entity set 'MEchanicDataContext.Cars'  is null.");
             }
             var car = await _context.Cars.FindAsync(id);
-            var allRepairCards = _shopService.GetAllRepairCards();
+            var allRepairCards = _carsService.GetAllRepairCards();
             var repairCardsToBeRemoved = allRepairCards.Where(c => c.CarId == id);
 
             if (car != null)

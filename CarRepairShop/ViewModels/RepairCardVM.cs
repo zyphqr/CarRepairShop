@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CarRepairShop.ViewModels
 {
-    public class CreateEditRepairCardVM
+    public class RepairCardVM
     {
         [Required]
         public int RepairCardId { get; set; }
@@ -31,6 +31,6 @@ namespace CarRepairShop.ViewModels
         public string SelectedMechanicId { get; set; }
         public IEnumerable<SelectListItem> Mechanics { get; set; }
 
-        public IEnumerable<CreateEditPartVM> partVMs { get; set; }
+        public IEnumerable<PartVM> partVMs { get; set; }
     }
 }

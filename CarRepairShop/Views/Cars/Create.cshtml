@@ -1,6 +1,6 @@
 ﻿@using CarRepairShop.Common;
 @using CarRepairShop.ViewModels;
-@model CreateEditCarVM;
+@model CarVM;
 
 @{
     ViewData["Title"] = "Add";
@@ -12,22 +12,23 @@
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-floating">
-                <select asp-items="Model.Towns" asp-for="SelectedTownId">Town codes</select>
-            </div>
             <div class="form-group">
-                <label asp-for="CarRegNumbers" class="control-label">Numbers</label>
-                <input asp-for="CarRegNumbers" class="form-control" />
-                <span asp-validation-for="CarRegNumbers" class="text-danger"></span>
-                <label asp-for="CarRegLastDigits" class="control-label">Last letters</label>
-                <input asp-for="CarRegLastDigits" class="form-control" />
-                <span asp-validation-for="CarRegLastDigits" class="text-danger"></span>
+                <label>Select town code</label>
+                <select class="form-select" asp-items="Model.Towns" asp-for="SelectedTownId"></select>
+            </div>
+            <br/>
+            <div class="form-group">
+                <div class="input-group">
+                    <input asp-for="CarRegNumbers" class="form-control" placeholder="Numbers" />
+                    <span asp-validation-for="CarRegNumbers" class="text-danger"></span>
+
+                    <input asp-for="CarRegLastDigits" class="form-control" placeholder="Last digits" />
+                    <span asp-validation-for="CarRegLastDigits" class="text-danger"></span>
+                </div>
             </div>
             <div class="form-group">
                 <label asp-for="Brand">Brand</label>
-                <select asp-for="Brand" class="form-select" asp-items="@Html.GetEnumSelectList(typeof(CarBrands))">
-                    <option value="Select brand">Select brand</option>
-                </select>
+                <select asp-for="Brand" class="form-select" asp-items="@Html.GetEnumSelectList(typeof(CarBrands))"></select>
             </div>
             <div class="form-group">
                 <label asp-for="Model" class="control-label">Car model</label>
@@ -36,9 +37,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="YearOfManifacture">Year of manifacture</label>
-                <select asp-for="YearOfManifacture" class="form-select" asp-items="@Html.GetEnumSelectList(typeof(YearsOfManifacture))">
-                    <option value="Select year of manifacture">Select year of manifacture</option>
-                </select>
+                <select asp-for="YearOfManifacture" class="form-select" asp-items="@Html.GetEnumSelectList(typeof(YearsOfManifacture))"></select>
             </div>
             <div class="form-group">
                 <label asp-for="EngineNum" class="control-label">Engine number</label>
@@ -52,9 +51,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Color">Color of the car</label>
-                <select asp-for="Color" class="form-select" asp-items="@Html.GetEnumSelectList(typeof(Colors))">
-                    <option value="Select color">Select color</option>
-                </select>
+                <select asp-for="Color" class="form-select" asp-items="@Html.GetEnumSelectList(typeof(Colors))"></select>
             </div>
             <div class="form-group">
                 <label asp-for="WorkingVolume" class="control-label">Working volume</label>
@@ -76,6 +73,7 @@
                 <input asp-for="OwnerPhoneNum" class="form-control" />
                 <span asp-validation-for="OwnerPhoneNum" class="text-danger"></span>
             </div>
+            <br/>
             <div class="form-group">
                 <input type="submit" value="Add" class="btn btn-primary" />
             </div>

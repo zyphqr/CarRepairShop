@@ -1,39 +1,19 @@
 ﻿using CarRepairShop.Areas.Identity.Data;
 using CarRepairShop.Common;
 using CarRepairShop.Models;
-using CarRepairShop.ViewModels;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.IO;
 
 namespace CarRepairShop.Services
 {
-    public class ShopService
+    public class CarsService
     {
-        private const int registrationMaxLength = 8;
         private const int engineNumMaxLength = 10;
         private const int frameNumMaxLength = 17;
-        private const int workHourPrice = 2;
 
         private readonly MEchanicDataContext _context;
-        public ShopService(MEchanicDataContext context)
+        public CarsService(MEchanicDataContext context)
         {
             _context = context;
-        }
-
-        public List<Mechanic> GetMechanics()
-        {
-            return _context.Mechanics.ToList();
-        }
-
-        public List<Part> GetParts()
-        {
-            return _context.Parts.ToList();
-        }
-
-        public List<Car> GetCars()
-        {
-            return _context.Cars.ToList();
         }
 
         public List<Town> GetTowns()
@@ -41,23 +21,19 @@ namespace CarRepairShop.Services
             return _context.Towns.ToList();
         }
 
-
-        public decimal CalculatePrice(ICollection<CreateEditPartVM> selectedParts)
+        public List<RepairCard> GetAllRepairCards()
         {
-            decimal price = 0;
-            foreach (var part in selectedParts)
-            {
-                price += part.WorkingHours * workHourPrice + part.Price;
-            }
-
-            return price;
+            var repairCards = _context.RepairCards
+                            .Include(r => r.Car)
+                            .Include(r => r.Mechanic)
+                            .Include(r => r.Parts).ToList();
+            return repairCards;
         }
 
-        public void CreateCarCheck(int carId,
+        public void CreateCar(int carId,
                                    Town selectedTown,
                                    string carRegNumbers,
                                    string CarRegLastDigits,
-                                   string carRegistration,
                                    CarBrands brand,
                                    string model,
                                    YearsOfManifacture yearOfManifacture,
@@ -108,7 +84,7 @@ namespace CarRepairShop.Services
 
         }
 
-        public void EditCarCheck(int carId,
+        public void EditCar(int carId,
                                    string carRegistration,
                                    CarBrands brand,
                                    string model,
@@ -157,98 +133,5 @@ namespace CarRepairShop.Services
             _context.Update(carToBeUpdated);
             _context.SaveChanges();
         }
-
-        public void CreatePartCheck(int partId, string partName, int quantity, decimal price, int workingHours, TypeOfRepairs typeOfRepair)
-        {
-            foreach (Part part in _context.Parts)
-            {
-                if (part.PartId == partId || part.PartName == partName)
-                {
-                    throw new Exception("This part already exists.");
-                }
-            }
-
-            Part newPart = new()
-            {
-                PartId = partId,
-                PartName = partName,
-                Quantity = quantity,
-                Price = price,
-                WorkingHours = workingHours,
-                TypeOfRepair = typeOfRepair
-            };
-
-            _context.Add(newPart);
-            _context.SaveChanges();
-        }
-
-        public void EditPartCheck(int partId, string partName, int quantity, decimal price, int workingHours, TypeOfRepairs typeOfRepair)
-        {  
-
-            Part partToBeUpdated = new()
-            {
-                PartId = partId,
-                PartName = partName,
-                Quantity = quantity,
-                Price = price,
-                WorkingHours = workingHours,
-                TypeOfRepair = typeOfRepair
-            };
-
-            _context.Update(partToBeUpdated);
-            _context.SaveChanges();
-        }
-
-
-        public void CreateRepairCard(int repairCardId,
-                                    DateTime startDate,
-                                    DateTime? endDate,
-                                    Car selectedCar,
-                                    string descpription,
-                                    TypeOfRepairs typeOfRepair,
-                                    ICollection<CreateEditPartVM> selectedPart,
-                                    Mechanic selectedMechanic)
-        {
-
-            RepairCard newRepairCard = new()
-            {
-                RepairCardId = repairCardId,
-                StartDate = startDate,
-                EndDate = endDate,
-                Car = selectedCar,
-                Description = descpription,
-                TypeOfRepair = typeOfRepair,
-                Price = CalculatePrice(selectedPart),
-                Mechanic = selectedMechanic,
-            };
-            foreach (var part in selectedPart)
-            {
-                part.RepairCard = newRepairCard;
-            }            
-
-            _context.Add(newRepairCard);
-            _context.SaveChanges();
-        }
-
-        public List<RepairCard> GetAllRepairCards()
-        {
-            var repairCards = _context.RepairCards
-                            .Include(r => r.Car)
-                            .Include(r => r.Mechanic)
-                            .Include(r => r.Parts).ToList();
-            return repairCards;
-        }
-
-        public List<Part> GetAllParts() 
-        { 
-            var parts = _context.Parts.Include(p=>p.RepairCard).ToList();
-            return parts;
-        }
-
     }
 }
-
-
-
-
-

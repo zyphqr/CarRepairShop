@@ -14,7 +14,11 @@ builder.Services.AddDefaultIdentity<Mechanic>(options => options.SignIn.RequireC
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddScoped<ShopService>();
+builder.Services.AddScoped<CarsService>();
+builder.Services.AddScoped<PartsService>();
+builder.Services.AddScoped<RepairCardsService>();
+
+
 
 var app = builder.Build();
 

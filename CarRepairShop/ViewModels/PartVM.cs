@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CarRepairShop.ViewModels
 {
-    public class CreateEditPartVM
+    public class PartVM
     {
         public int PartId { get; set; }
 

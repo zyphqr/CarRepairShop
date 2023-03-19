@@ -17,12 +17,12 @@ namespace CarRepairShop.Controllers
     public class PartsController : Controller
     {
         private readonly MEchanicDataContext _context;
-        private readonly ShopService _shopService;
+        private readonly PartsService _partsService;
 
-        public PartsController(MEchanicDataContext context, ShopService shopService)
+        public PartsController(MEchanicDataContext context, PartsService partsService)
         {
             _context = context;
-            _shopService = shopService;
+            _partsService = partsService;
         }
 
         [Authorize]
@@ -33,30 +33,19 @@ namespace CarRepairShop.Controllers
 
         [HttpGet]
         [Authorize]
-        public IActionResult Create(int partId,
-                                    string partName,
-                                    int quantity,
-                                    decimal price,
-                                    TypeOfRepairs typeOfRepair)
+        public IActionResult Create()
         {
-            return View("Views/Parts/Create.cshtml", new CreateEditPartVM
-            {
-                PartId = partId,
-                PartName = partName,
-                Quantity = quantity,
-                Price = price,
-                TypeOfRepair = typeOfRepair,
-            });
+            return View("Views/Parts/Create.cshtml", new PartVM());
         }
 
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(CreateEditPartVM createPart)
+        public IActionResult Create(PartVM createPart)
         {
             if (ModelState.IsValid)
             {
-                _shopService.CreatePartCheck(createPart.PartId,
+                _partsService.CreatePart(createPart.PartId,
                                              createPart.PartName,
                                              createPart.Quantity,
                                              createPart.Price,
@@ -77,7 +66,7 @@ namespace CarRepairShop.Controllers
             }
 
             var part = await _context.Parts.FindAsync(id);
-            CreateEditPartVM editPart = new()
+            PartVM editPart = new()
             {
                 PartId = part.PartId,
                 PartName = part.PartName,
@@ -93,11 +82,11 @@ namespace CarRepairShop.Controllers
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(CreateEditPartVM editPart)
+        public IActionResult Edit(PartVM editPart)
         {
             if (ModelState.IsValid)
             {
-                _shopService.EditPartCheck(editPart.PartId,
+                _partsService.EditPart(editPart.PartId,
                                           editPart.PartName,
                                           editPart.Quantity,
                                           editPart.Price,

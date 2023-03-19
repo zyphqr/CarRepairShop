@@ -1,6 +1,6 @@
 ﻿@using CarRepairShop.Common;
 @using CarRepairShop.ViewModels;
-@model CreateEditCarVM;
+@model CarVM;
 
 @{
     ViewData["Title"] = "Edit";
@@ -15,7 +15,7 @@
             <input type="hidden" asp-for="CarId" />
             <div class="form-group">
                 <label asp-for="CarRegistration" class="control-label">Car registration</label>
-                <input asp-for="CarRegistration" class="form-control" />
+                <input asp-for="CarRegistration" class="form-control" disabled />
                 <span asp-validation-for="CarRegistration" class="text-danger"></span>
             </div>
             <div class="form-group">
