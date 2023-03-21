@@ -24,9 +24,8 @@ namespace CarRepairShop.Models
         public int WorkingHours { get; set; }
 
         [Required]
-        public TypeOfRepairs TypeOfRepair { get; set; } 
-        
-        public int? RepairCardId { get; set; }
-        public RepairCard? RepairCard { get; set; }
+        public TypeOfRepairs TypeOfRepair { get; set; }
+
+        public ICollection<RepairCardPart> RepairCards { get; set; } = new List<RepairCardPart>();
     }
 }

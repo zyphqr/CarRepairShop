@@ -46,11 +46,11 @@ namespace CarRepairShop.Services
 
         public List<Part> GetAllParts()
         {
-            var parts = _context.Parts.Include(p => p.RepairCard).ToList();
+            var parts = _context.Parts.Include(p => p.RepairCards).ToList();
             return parts;
         }
 
-        public decimal CalculatePrice(ICollection<PartVM> selectedParts)
+        public decimal CalculatePrice(List<Part> selectedParts)
         {
             decimal price = 0;
             foreach (var part in selectedParts)
@@ -67,13 +67,12 @@ namespace CarRepairShop.Services
                                     Car selectedCar,
                                     string descpription,
                                     TypeOfRepairs typeOfRepair,
-                                    ICollection<PartVM> selectedParts,
+                                    List<Part> selectedParts,
                                     Mechanic selectedMechanic)
         {
 
             RepairCard newRepairCard = new()
             {
-                RepairCardId = repairCardId,
                 StartDate = startDate,
                 EndDate = endDate,
                 Car = selectedCar,
@@ -82,12 +81,21 @@ namespace CarRepairShop.Services
                 Price = CalculatePrice(selectedParts),
                 Mechanic = selectedMechanic,
             };
-            foreach (var part in selectedParts)
-            {
-                part.RepairCard = newRepairCard;
-            }
+            
+           
 
             _context.Add(newRepairCard);
+            _context.SaveChanges();
+
+            foreach (var part in selectedParts)
+            {
+                var parttoenter = _context.Parts.FirstOrDefault(p => p.PartId == part.PartId);
+                newRepairCard.Parts.Add(new RepairCardPart()
+                {
+                    PartId = parttoenter.PartId,
+                    RepairCardId = newRepairCard.RepairCardId
+                });
+            }
             _context.SaveChanges();
         }
 

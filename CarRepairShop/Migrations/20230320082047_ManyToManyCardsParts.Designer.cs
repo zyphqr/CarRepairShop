@@ -4,6 +4,7 @@ using CarRepairShop.Areas.Identity.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarRepairShop.Migrations
 {
     [DbContext(typeof(MEchanicDataContext))]
-    partial class MEchanicDataContextModelSnapshot : ModelSnapshot
+    [Migration("20230320082047_ManyToManyCardsParts")]
+    partial class ManyToManyCardsParts
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -226,9 +228,6 @@ namespace CarRepairShop.Migrations
                     b.Property<int>("PartId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
                     b.HasKey("RepairCardId", "PartId");
 
                     b.HasIndex("PartId");
@@ -412,13 +411,13 @@ namespace CarRepairShop.Migrations
             modelBuilder.Entity("CarRepairShop.Models.RepairCardPart", b =>
                 {
                     b.HasOne("CarRepairShop.Models.Part", "Part")
-                        .WithMany("RepairCards")
+                        .WithMany("RepairCardParts")
                         .HasForeignKey("PartId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("CarRepairShop.Models.RepairCard", "RepairCard")
-                        .WithMany("Parts")
+                        .WithMany("RepairCardParts")
                         .HasForeignKey("RepairCardId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -491,12 +490,12 @@ namespace CarRepairShop.Migrations
 
             modelBuilder.Entity("CarRepairShop.Models.Part", b =>
                 {
-                    b.Navigation("RepairCards");
+                    b.Navigation("RepairCardParts");
                 });
 
             modelBuilder.Entity("CarRepairShop.Models.RepairCard", b =>
                 {
-                    b.Navigation("Parts");
+                    b.Navigation("RepairCardParts");
                 });
 #pragma warning restore 612, 618
         }

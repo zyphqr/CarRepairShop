@@ -39,6 +39,12 @@ namespace CarRepairShop.Controllers
                     cars.CarRegistration,
                     cars.CarId.ToString()));
 
+            List<string> selectedParts = new();
+            foreach ( int id in _context.RepairCardParts.Select(p => p.PartId).ToList())
+            {
+                selectedParts.Add(_context.Parts.FirstOrDefault(p => p.PartId == id).PartName);
+            }
+
             var indexVM = new IndexVMs
             {
                 RepairCards = repairCards.Select(repairCard => new RepairCardIndexVM
@@ -50,7 +56,7 @@ namespace CarRepairShop.Controllers
                     Description = repairCard.Description,
                     Price = repairCard.Price,
                     TypeOfRepair = repairCard.TypeOfRepair,
-                    PartNames = repairCard.Parts.Select(p => p.PartName),
+                    PartNames = selectedParts,
                     MechanicName = repairCard.Mechanic.FirstName + " " + repairCard.Mechanic.FirstName
                 }),
                 CarRegistrations = selectListCars,
@@ -114,29 +120,35 @@ namespace CarRepairShop.Controllers
 
             var parts = _repairCardsService.GetParts();
             parts = parts.Where(part => part.TypeOfRepair == vm.TypeOfRepair).ToList();
-            List<PartVM> partVMs = new(); //TODO: Might cause issues due typing missmatching
 
-            foreach(Part part in parts)
-            {
-                PartVM newvm = new()
-                {
-                    PartName = part.PartName,
-                    Quantity = part.Quantity,
-                    Price = part.Price,
-                    WorkingHours = part.WorkingHours,
-                    PartId = part.PartId,
-                    TypeOfRepair = part.TypeOfRepair,
-                };
-
-                partVMs.Add(newvm);
-            }
-            
+            var selectListParts = parts
+                .Select(parts => new SelectListItem(
+                    parts.PartName,
+                    parts.PartId.ToString()));
 
             var mechanics = _repairCardsService.GetMechanics();
             var selectListMechanics = mechanics
                 .Select(mechanics => new SelectListItem(
                     mechanics.FirstName + " " + mechanics.LastName,
                     mechanics.Id.ToString()));
+
+
+            //List<PartVM> partVMs = new(); //TODO: Might cause issues due typing missmatching
+
+            //foreach(Part part in parts)
+            //{
+            //    PartVM newvm = new()
+            //    {
+            //        PartName = part.PartName,
+            //        Quantity = part.Quantity,
+            //        Price = part.Price,
+            //        WorkingHours = part.WorkingHours,
+            //        PartId = part.PartId,
+            //        TypeOfRepair = part.TypeOfRepair,
+            //    };
+
+            //    partVMs.Add(newvm);
+            //}
 
             return View("Views/RepairCards/Create.cshtml", new RepairCardVM 
             {
@@ -145,7 +157,8 @@ namespace CarRepairShop.Controllers
                 CarRegistrations = selectListCars,
                 SelectedCarId = cars.ToList()[0].CarId,
                 TypeOfRepair = vm.TypeOfRepair,
-                partVMs = partVMs,
+                //partVMs = partVMs,
+                Parts = selectListParts,
                 Mechanics = selectListMechanics,
                 SelectedMechanicId = mechanics.ToList()[0].Id
             });
@@ -155,6 +168,12 @@ namespace CarRepairShop.Controllers
         public IActionResult References(IndexVMs vm)
         {
             var repairCards = _repairCardsService.GetAllRepairCards();
+
+            List<string> selectedParts = new();
+            foreach (int id in _context.RepairCardParts.Select(p => p.PartId).ToList())
+            {
+                selectedParts.Add(_context.Parts.FirstOrDefault(p => p.PartId == id).PartName);
+            }
 
             var newVm = new IndexVMs
             {
@@ -171,7 +190,7 @@ namespace CarRepairShop.Controllers
                     Description = repairCard.Description,
                     Price = repairCard.Price,
                     TypeOfRepair = repairCard.TypeOfRepair,
-                    PartNames = repairCard.Parts.Select(p => p.PartName).ToList(),
+                    PartNames = selectedParts,
                     MechanicName = repairCard.Mechanic.FirstName + " " + repairCard.Mechanic.LastName
                 }),
                 
@@ -191,7 +210,7 @@ namespace CarRepairShop.Controllers
                             Description = repairCard.Description,
                             Price = repairCard.Price,
                             TypeOfRepair = repairCard.TypeOfRepair,
-                            PartNames = repairCard.Parts.Select(p => p.PartName).ToList(),
+                            PartNames = selectedParts,
                             MechanicName = repairCard.Mechanic.FirstName + " " + repairCard.Mechanic.LastName
                         }); break;
                     case Criteria.Finished:
@@ -231,7 +250,12 @@ namespace CarRepairShop.Controllers
         {
 
             Car selectedCarReg = _repairCardsService.GetCars().Single(c => c.CarId == createRepairCard.SelectedCarId);
-            List<PartVM> selectedParts = createRepairCard.partVMs.Where(part=>part.IsSelected == true).ToList();
+            //List<PartVM> selectedParts = createRepairCard.partVMs.Where(part=>part.IsSelected == true).ToList();
+            List<Part> selectedPartIds = new();
+            foreach (var partId in createRepairCard.SelectedPartId)
+            {
+                selectedPartIds.Add(_repairCardsService.GetParts().Single(c => c.PartId == partId));
+            }
             Mechanic selectedMechanicId = _repairCardsService.GetMechanics().Single(m => m.Id == createRepairCard.SelectedMechanicId);
 
 
@@ -242,30 +266,65 @@ namespace CarRepairShop.Controllers
                 selectedCarReg,
                 createRepairCard.Description,
                 createRepairCard.TypeOfRepair,
-                selectedParts,
+                selectedPartIds,
                 selectedMechanicId
                 );
             return RedirectToAction(nameof(Index));
         }
 
-        //// GET: RepairCards/Edit/5
-        ///[Authorize]
-        //public async Task<IActionResult> Edit(int? id)
-        //{
-        //    if (id == null || _context.RepairCards == null)
-        //    {
-        //        return NotFound();
-        //    }
+        // GET: RepairCards/Edit/5
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null || _context.RepairCards == null)
+            {
+                return NotFound();
+            }
 
-        //    var repairCard = await _context.RepairCards.FindAsync(id);
-        //    if (repairCard == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    ViewData["RepairCardId"] = new SelectList(_context.Cars, "CarId", "CarId", repairCard.RepairCardId);
-        //    ViewData["MechanicId"] = new SelectList(_context.Mechanics, "Id", "Id", repairCard.MechanicId);
-        //    return View(repairCard);
-        //}
+            var repairCard = await _context.RepairCards.FindAsync(id);
+            if (repairCard == null)
+            {
+                return NotFound();
+            }
+
+            var cars = _repairCardsService.GetCars();
+            var selectListCars = cars
+                .Select(cars => new SelectListItem(
+                    cars.CarRegistration,
+                    cars.CarId.ToString()));
+
+            var parts = _repairCardsService.GetParts();
+            parts = parts.Where(part => part.TypeOfRepair == repairCard.TypeOfRepair).ToList();
+
+            var selectListParts = parts
+                .Select(parts => new SelectListItem(
+                    parts.PartName,
+                    parts.PartId.ToString()));
+
+            var mechanics = _repairCardsService.GetMechanics();
+            var selectListMechanics = mechanics
+                .Select(mechanics => new SelectListItem(
+                    mechanics.FirstName + " " + mechanics.LastName,
+                    mechanics.Id.ToString()));
+
+            RepairCardVM editRepairCard = new()
+            {
+                RepairCardId = repairCard.RepairCardId,
+                StartDate = repairCard.StartDate,
+                EndDate = repairCard.EndDate,
+                SelectedCarId = repairCard.CarId,
+                CarRegistrations = selectListCars,
+                Description = repairCard.Description,
+                SelectedPartId = repairCard.Parts.Select(rc=>rc.PartId).ToList(),
+                Parts = selectListParts,
+                Price = repairCard.Price,
+                TypeOfRepair = repairCard.TypeOfRepair,
+                SelectedMechanicId = repairCard.MechanicId,
+                Mechanics = selectListMechanics,
+            };
+            return View(editRepairCard);
+        }
 
         //// POST: RepairCards/Edit/5
         //// To protect from overposting attacks, enable the specific properties you want to bind to.

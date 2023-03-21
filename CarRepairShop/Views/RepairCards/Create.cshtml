@@ -35,7 +35,7 @@
             <div class="form-group">
                 @Model.TypeOfRepair
             </div>
-            <div class="form-group">
+            @*<div class="form-group">
                 @foreach (var part in Model.partVMs)
                 {
                     <input type="checkbox" asp-for="@Model.[part.PartId].IsSelected" />
@@ -44,6 +44,9 @@
                     <input type="hidden" asp-for="@Model.[part.PartId].PartName" />
                     <br />
                 }
+            </div>*@
+            <div class="form-group">
+                <select class="form-select" asp-items="Model.Parts" asp-for="SelectedPartId" multiple></select>
             </div>
             <div class="form-group">
                 <select class="form-select" asp-items="Model.Mechanics" asp-for="SelectedMechanicId"></select>
