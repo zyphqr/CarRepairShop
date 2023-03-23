@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarRepairShop.Migrations
 {
     [DbContext(typeof(MEchanicDataContext))]
-    [Migration("20230320082047_ManyToManyCardsParts")]
-    partial class ManyToManyCardsParts
+    [Migration("20230323113530_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -228,6 +228,9 @@ namespace CarRepairShop.Migrations
                     b.Property<int>("PartId")
                         .HasColumnType("int");
 
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
                     b.HasKey("RepairCardId", "PartId");
 
                     b.HasIndex("PartId");
@@ -411,13 +414,13 @@ namespace CarRepairShop.Migrations
             modelBuilder.Entity("CarRepairShop.Models.RepairCardPart", b =>
                 {
                     b.HasOne("CarRepairShop.Models.Part", "Part")
-                        .WithMany("RepairCardParts")
+                        .WithMany("RepairCards")
                         .HasForeignKey("PartId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("CarRepairShop.Models.RepairCard", "RepairCard")
-                        .WithMany("RepairCardParts")
+                        .WithMany("Parts")
                         .HasForeignKey("RepairCardId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -490,12 +493,12 @@ namespace CarRepairShop.Migrations
 
             modelBuilder.Entity("CarRepairShop.Models.Part", b =>
                 {
-                    b.Navigation("RepairCardParts");
+                    b.Navigation("RepairCards");
                 });
 
             modelBuilder.Entity("CarRepairShop.Models.RepairCard", b =>
                 {
-                    b.Navigation("RepairCardParts");
+                    b.Navigation("Parts");
                 });
 #pragma warning restore 612, 618
         }

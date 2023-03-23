@@ -22,7 +22,8 @@ namespace CarRepairShop.Services
 
         public List<Part> GetParts()
         {
-            return _context.Parts.ToList();
+            var parts = _context.Parts.Include(p => p.RepairCards).ToList();
+            return parts;
         }
 
         public List<Car> GetCars()
@@ -44,12 +45,6 @@ namespace CarRepairShop.Services
             return repairCards;
         }
 
-        public List<Part> GetAllParts()
-        {
-            var parts = _context.Parts.Include(p => p.RepairCards).ToList();
-            return parts;
-        }
-
         public decimal CalculatePrice(List<Part> selectedParts)
         {
             decimal price = 0;
@@ -57,12 +52,21 @@ namespace CarRepairShop.Services
             {
                 price += part.WorkingHours * workHourPrice + part.Price;
             }
-
             return price;
         }
 
-        public void CreateRepairCard(int repairCardId,
-                                    DateTime startDate,
+        public List<Part> GetAllParts(RepairCard repairCard)
+        {
+            List<Part> Parts = new();
+            foreach (RepairCardPart rpc in repairCard.Parts)
+            {
+                Parts.Add(_context.Parts.FirstOrDefault(p => p.PartId == rpc.PartId));
+            }
+
+            return Parts;
+        }
+
+        public void CreateRepairCard(DateTime startDate,
                                     DateTime? endDate,
                                     Car selectedCar,
                                     string descpription,
@@ -81,8 +85,11 @@ namespace CarRepairShop.Services
                 Price = CalculatePrice(selectedParts),
                 Mechanic = selectedMechanic,
             };
-            
-           
+
+            foreach (Part part in selectedParts)
+            {
+                part.Quantity--;
+            }
 
             _context.Add(newRepairCard);
             _context.SaveChanges();
@@ -99,6 +106,55 @@ namespace CarRepairShop.Services
             _context.SaveChanges();
         }
 
-       
+        public void EditRepairCard(int repairCardId,
+                                    DateTime startDate,
+                                    DateTime? endDate,
+                                    Car selectedCar,
+                                    string descpription,
+                                    TypeOfRepairs typeOfRepair,
+                                    List<Part> selectedParts,
+                                    Mechanic selectedMechanic)
+        {
+            RepairCard repairCardToEdit = new()
+            {
+                RepairCardId = repairCardId,
+                StartDate = startDate,
+                EndDate = endDate,
+                Car = selectedCar,
+                Description = descpription,
+                TypeOfRepair = typeOfRepair,
+                Price = CalculatePrice(selectedParts),
+                Mechanic = selectedMechanic
+            };
+
+            
+
+            foreach (Part part in GetAllParts(repairCardToEdit))
+            {
+                part.Quantity++;
+            }
+
+            repairCardToEdit.Parts.Clear();
+
+            foreach (var part in selectedParts)
+            {
+                var partToEnter = _context.Parts.FirstOrDefault(p => p.PartId == part.PartId);
+                repairCardToEdit.Parts.Add(new RepairCardPart()
+                {
+                    PartId = partToEnter.PartId,
+                    RepairCardId = repairCardToEdit.RepairCardId
+                });
+            }
+
+            foreach (Part part in selectedParts)
+            {
+                part.Quantity--;
+            }
+
+            _context.Update(repairCardToEdit);
+            _context.SaveChanges();
+
+        }
+
     }
 }

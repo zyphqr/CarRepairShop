@@ -31,7 +31,7 @@ namespace CarRepairShop.Controllers
         public IActionResult Index()
         {
             var repairCards = _repairCardsService.GetAllRepairCards();
-            var parts = _repairCardsService.GetAllParts();
+            var parts = _repairCardsService.GetParts();
 
             var cars = _repairCardsService.GetCars();
             var selectListCars = cars
@@ -40,7 +40,7 @@ namespace CarRepairShop.Controllers
                     cars.CarId.ToString()));
 
             List<string> selectedParts = new();
-            foreach ( int id in _context.RepairCardParts.Select(p => p.PartId).ToList())
+            foreach (int id in _context.RepairCardParts.Select(p => p.PartId).ToList())
             {
                 selectedParts.Add(_context.Parts.FirstOrDefault(p => p.PartId == id).PartName);
             }
@@ -57,7 +57,7 @@ namespace CarRepairShop.Controllers
                     Price = repairCard.Price,
                     TypeOfRepair = repairCard.TypeOfRepair,
                     PartNames = selectedParts,
-                    MechanicName = repairCard.Mechanic.FirstName + " " + repairCard.Mechanic.FirstName
+                    MechanicName = repairCard.Mechanic.FirstName + " " + repairCard.Mechanic.LastName
                 }),
                 CarRegistrations = selectListCars,
                 SelectedCarId = cars.ToList()[0].CarId,
@@ -66,40 +66,6 @@ namespace CarRepairShop.Controllers
             return View(indexVM);
         }
 
-        [Authorize]
-        [HttpGet]
-        public IActionResult Create()
-        {
-            //var cars = _shopService.GetCars();
-            //var selectListCars = cars
-            //    .Select(cars => new SelectListItem(
-            //        cars.CarRegistration,
-            //        cars.CarId.ToString()));
-
-            //var parts = _shopService.GetParts();
-            //var selectListParts = parts
-            //    .Select(parts => new SelectListItem(
-            //        parts.PartName,
-            //        parts.PartId.ToString()));
-
-            //var mechanics = _shopService.GetMechanics();
-            //var selectListMechanics = mechanics
-            //    .Select(mechanics => new SelectListItem(
-            //        mechanics.FirstName + " " + mechanics.LastName,
-            //        mechanics.Id.ToString()));
-
-            return View("Views/RepairCards/Create.cshtml", new RepairCardVM
-            {
-                //StartDate = DateTime.Now,
-                //EndDate = DateTime.Now,
-                //CarRegistrations = selectListCars,
-                //SelectedCarId = cars.ToList()[0].CarId,
-                //Parts = selectListParts,
-                //SelectedPartId = parts.ToList()[0].PartId,
-                //Mechanics = selectListMechanics,
-                //SelectedMechanicId = mechanics.ToList()[0].Id
-            });
-        }
 
         [Authorize]
         [HttpGet]
@@ -150,7 +116,7 @@ namespace CarRepairShop.Controllers
             //    partVMs.Add(newvm);
             //}
 
-            return View("Views/RepairCards/Create.cshtml", new RepairCardVM 
+            return View("Views/RepairCards/Create.cshtml", new RepairCardVM
             {
                 StartDate = DateTime.Now,
                 EndDate = DateTime.Now,
@@ -162,6 +128,71 @@ namespace CarRepairShop.Controllers
                 Mechanics = selectListMechanics,
                 SelectedMechanicId = mechanics.ToList()[0].Id
             });
+        }
+
+        [Authorize]
+        [HttpGet]
+        public IActionResult Create()
+        {
+            //var cars = _shopService.GetCars();
+            //var selectListCars = cars
+            //    .Select(cars => new SelectListItem(
+            //        cars.CarRegistration,
+            //        cars.CarId.ToString()));
+
+            //var parts = _shopService.GetParts();
+            //var selectListParts = parts
+            //    .Select(parts => new SelectListItem(
+            //        parts.PartName,
+            //        parts.PartId.ToString()));
+
+            //var mechanics = _shopService.GetMechanics();
+            //var selectListMechanics = mechanics
+            //    .Select(mechanics => new SelectListItem(
+            //        mechanics.FirstName + " " + mechanics.LastName,
+            //        mechanics.Id.ToString()));
+
+            return View("Views/RepairCards/Create.cshtml", new RepairCardVM
+            {
+                //StartDate = DateTime.Now,
+                //EndDate = DateTime.Now,
+                //CarRegistrations = selectListCars,
+                //SelectedCarId = cars.ToList()[0].CarId,
+                //Parts = selectListParts,
+                //SelectedPartId = parts.ToList()[0].PartId,
+                //Mechanics = selectListMechanics,
+                //SelectedMechanicId = mechanics.ToList()[0].Id
+            });
+        }
+
+
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(RepairCardVM createRepairCard)
+        {
+
+            Car selectedCarReg = _repairCardsService.GetCars().Single(c => c.CarId == createRepairCard.SelectedCarId);
+            //List<PartVM> selectedParts = createRepairCard.partVMs.Where(part=>part.IsSelected == true).ToList();
+            List<Part> selectedParts = new();
+            foreach (var partId in createRepairCard.SelectedPartIds)
+            {
+                selectedParts.Add(_repairCardsService.GetParts().Single(c => c.PartId == partId));
+            }
+            Mechanic selectedMechanicId = _repairCardsService.GetMechanics().Single(m => m.Id == createRepairCard.SelectedMechanicId);
+
+            createRepairCard.TypeOfRepair = selectedParts[0].TypeOfRepair;//TODO: FIx  is scuffed
+
+            _repairCardsService.CreateRepairCard(
+                createRepairCard.StartDate,
+                createRepairCard.EndDate,
+                selectedCarReg,
+                createRepairCard.Description,
+                createRepairCard.TypeOfRepair,
+                selectedParts,
+                selectedMechanicId
+                );
+            return RedirectToAction(nameof(Index));
         }
 
         [Authorize]
@@ -179,8 +210,8 @@ namespace CarRepairShop.Controllers
             {
                 Criteria = vm.Criteria,
                 StartEndDate = vm.StartEndDate,
-                SelectedCarId= vm.SelectedCarId,
-                Date= vm.Date,
+                SelectedCarId = vm.SelectedCarId,
+                Date = vm.Date,
                 RepairCards = repairCards.Select(repairCard => new RepairCardIndexVM
                 {
                     RepairCardId = repairCard.RepairCardId,
@@ -193,10 +224,10 @@ namespace CarRepairShop.Controllers
                     PartNames = selectedParts,
                     MechanicName = repairCard.Mechanic.FirstName + " " + repairCard.Mechanic.LastName
                 }),
-                
+
             };
 
-            if (newVm.Criteria!=null)
+            if (newVm.Criteria != null)
             {
                 switch (newVm.Criteria)
                 {
@@ -220,9 +251,9 @@ namespace CarRepairShop.Controllers
 
                 }
             }
-            if(newVm.StartEndDate!=null)
+            if (newVm.StartEndDate != null)
             {
-                if(newVm.StartEndDate == StartEndDate.StartDate)
+                if (newVm.StartEndDate == StartEndDate.StartDate)
                 {
                     newVm.RepairCards = newVm.RepairCards.Where(rc => rc.StartDate == newVm.Date);
                 }
@@ -231,48 +262,15 @@ namespace CarRepairShop.Controllers
                     newVm.RepairCards = newVm.RepairCards.Where(rc => rc.EndDate == newVm.Date);
                 }
             }
-            if(newVm.SelectedCarId!=null)
+            if (newVm.SelectedCarId != null)
             {
                 Car CarToSearch = _context.Cars.FirstOrDefault(car => car.CarId == vm.SelectedCarId);
                 newVm.RepairCards = newVm.RepairCards.Where(rc => rc.CarRegistration == CarToSearch.CarRegistration);
             }
-           
+
             return View("Views/RepairCards/Index.cshtml", newVm);
         }
 
-        // POST: RepairCards/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Create(RepairCardVM createRepairCard)
-        {
-
-            Car selectedCarReg = _repairCardsService.GetCars().Single(c => c.CarId == createRepairCard.SelectedCarId);
-            //List<PartVM> selectedParts = createRepairCard.partVMs.Where(part=>part.IsSelected == true).ToList();
-            List<Part> selectedPartIds = new();
-            foreach (var partId in createRepairCard.SelectedPartId)
-            {
-                selectedPartIds.Add(_repairCardsService.GetParts().Single(c => c.PartId == partId));
-            }
-            Mechanic selectedMechanicId = _repairCardsService.GetMechanics().Single(m => m.Id == createRepairCard.SelectedMechanicId);
-
-
-            _repairCardsService.CreateRepairCard(
-                createRepairCard.RepairCardId,
-                createRepairCard.StartDate,
-                createRepairCard.EndDate,
-                selectedCarReg,
-                createRepairCard.Description,
-                createRepairCard.TypeOfRepair,
-                selectedPartIds,
-                selectedMechanicId
-                );
-            return RedirectToAction(nameof(Index));
-        }
-
-        // GET: RepairCards/Edit/5
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> Edit(int? id)
@@ -315,53 +313,44 @@ namespace CarRepairShop.Controllers
                 EndDate = repairCard.EndDate,
                 SelectedCarId = repairCard.CarId,
                 CarRegistrations = selectListCars,
+                Car = repairCard.Car,
                 Description = repairCard.Description,
-                SelectedPartId = repairCard.Parts.Select(rc=>rc.PartId).ToList(),
+                SelectedPartIds = repairCard.Parts.Select(rc => rc.PartId).ToList(),
                 Parts = selectListParts,
                 Price = repairCard.Price,
                 TypeOfRepair = repairCard.TypeOfRepair,
                 SelectedMechanicId = repairCard.MechanicId,
                 Mechanics = selectListMechanics,
+                Mechanic = repairCard.Mechanic
             };
             return View(editRepairCard);
         }
 
-        //// POST: RepairCards/Edit/5
-        //// To protect from overposting attacks, enable the specific properties you want to bind to.
-        //// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Edit(int id, [Bind("RepairCardId,StartDate,EndDate,CarRegistration,Description,Price,TypeOfRepair,MechanicId")] RepairCard repairCard)
-        //{
-        //    if (id != repairCard.RepairCardId)
-        //    {
-        //        return NotFound();
-        //    }
 
-        //    if (ModelState.IsValid)
-        //    {
-        //        try
-        //        {
-        //            _context.Update(repairCard);
-        //            await _context.SaveChangesAsync();
-        //        }
-        //        catch (DbUpdateConcurrencyException)
-        //        {
-        //            if (!RepairCardExists(repairCard.RepairCardId))
-        //            {
-        //                return NotFound();
-        //            }
-        //            else
-        //            {
-        //                throw;
-        //            }
-        //        }
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    ViewData["RepairCardId"] = new SelectList(_context.Cars, "CarId", "CarId", repairCard.RepairCardId);
-        //    ViewData["MechanicId"] = new SelectList(_context.Mechanics, "Id", "Id", repairCard.MechanicId);
-        //    return View(repairCard);
-        //}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(RepairCardVM editRepairCard)
+        {
+            if (ModelState.IsValid)
+            {
+                List<Part> SelectedParts = new();
+                foreach(var id in editRepairCard.SelectedPartIds)
+                {
+                    SelectedParts.Add(_context.Parts.FirstOrDefault(p => p.PartId == id));
+                }
+                _repairCardsService.EditRepairCard(editRepairCard.RepairCardId,
+                                                    editRepairCard.StartDate,
+                                                    editRepairCard.EndDate,
+                                                    editRepairCard.Car,
+                                                    editRepairCard.Description,
+                                                    editRepairCard.TypeOfRepair,
+                                                    SelectedParts,
+                                                    editRepairCard.Mechanic);
+
+                return RedirectToAction(nameof(Index));
+            }
+            return View(editRepairCard);
+        }
 
         //// GET: RepairCards/Delete/5
         ///[Authorize]

@@ -1,4 +1,5 @@
-﻿using CarRepairShop.Common;
+﻿using CarRepairShop.Areas.Identity.Data;
+using CarRepairShop.Common;
 using CarRepairShop.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
@@ -18,11 +19,12 @@ namespace CarRepairShop.ViewModels
 
         public int SelectedCarId { get; set; }
         public IEnumerable<SelectListItem> CarRegistrations { get; set; }
+        public Car Car { get; set; }
 
         [Required]
         public string Description { get; set; }
 
-        public List<int> SelectedPartId { get; set; }
+        public List<int> SelectedPartIds { get; set; }
         public IEnumerable<SelectListItem> Parts { get; set; }
 
         [Required]
@@ -33,6 +35,7 @@ namespace CarRepairShop.ViewModels
 
         public string SelectedMechanicId { get; set; }
         public IEnumerable<SelectListItem> Mechanics { get; set; } 
+        public Mechanic Mechanic { get; set; }
 
         //public IEnumerable<PartVM> partVMs { get; set; }
     }
