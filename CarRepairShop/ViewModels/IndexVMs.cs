@@ -5,7 +5,7 @@ namespace CarRepairShop.ViewModels
 {
     public class IndexVMs
     {
-        public IEnumerable<RepairCardIndexVM> RepairCards { get; set; }
+        public IEnumerable<RepairCardIndexVM> RepairCardsVM { get; set; }
 
         public Criteria? Criteria { get; set; }
 

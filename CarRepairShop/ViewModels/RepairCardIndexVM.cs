@@ -14,5 +14,6 @@ namespace CarRepairShop.ViewModels
         public TypeOfRepairs TypeOfRepair { get; set; }
         public IEnumerable<string> PartNames { get; set; }
         public string MechanicName { get; set; }
+        public List<Part> Parts { get; set; }
     }
 }

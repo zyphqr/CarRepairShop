@@ -47,7 +47,7 @@ namespace CarRepairShop.Controllers
 
             var indexVM = new IndexVMs
             {
-                RepairCards = repairCards.Select(repairCard => new RepairCardIndexVM
+                RepairCardsVM = repairCards.Select(repairCard => new RepairCardIndexVM
                 {
                     RepairCardId = repairCard.RepairCardId,
                     StartDate = repairCard.StartDate,
@@ -57,7 +57,8 @@ namespace CarRepairShop.Controllers
                     Price = repairCard.Price,
                     TypeOfRepair = repairCard.TypeOfRepair,
                     PartNames = selectedParts,
-                    MechanicName = repairCard.Mechanic.FirstName + " " + repairCard.Mechanic.LastName
+                    MechanicName = repairCard.Mechanic.FirstName + " " + repairCard.Mechanic.LastName,
+                    Parts = _repairCardsService.GetAllParts(_context.RepairCards.FirstOrDefault(rc => rc.RepairCardId == repairCard.RepairCardId)),
                 }),
                 CarRegistrations = selectListCars,
                 SelectedCarId = cars.ToList()[0].CarId,
@@ -212,7 +213,7 @@ namespace CarRepairShop.Controllers
                 StartEndDate = vm.StartEndDate,
                 SelectedCarId = vm.SelectedCarId,
                 Date = vm.Date,
-                RepairCards = repairCards.Select(repairCard => new RepairCardIndexVM
+                RepairCardsVM = repairCards.Select(repairCard => new RepairCardIndexVM
                 {
                     RepairCardId = repairCard.RepairCardId,
                     StartDate = repairCard.StartDate,
@@ -232,7 +233,7 @@ namespace CarRepairShop.Controllers
                 switch (newVm.Criteria)
                 {
                     case Criteria.All:
-                        newVm.RepairCards = repairCards.Select(repairCard => new RepairCardIndexVM
+                        newVm.RepairCardsVM = repairCards.Select(repairCard => new RepairCardIndexVM
                         {
                             RepairCardId = repairCard.RepairCardId,
                             StartDate = repairCard.StartDate,
@@ -245,9 +246,9 @@ namespace CarRepairShop.Controllers
                             MechanicName = repairCard.Mechanic.FirstName + " " + repairCard.Mechanic.LastName
                         }); break;
                     case Criteria.Finished:
-                        newVm.RepairCards = newVm.RepairCards.Where(rc => rc.EndDate <= DateTime.Now); break;
+                        newVm.RepairCardsVM = newVm.RepairCardsVM.Where(rc => rc.EndDate <= DateTime.Now); break;
                     case Criteria.Unfinished:
-                        newVm.RepairCards = newVm.RepairCards.Where(rc => rc.EndDate > DateTime.Now); break;
+                        newVm.RepairCardsVM = newVm.RepairCardsVM.Where(rc => rc.EndDate > DateTime.Now); break;
 
                 }
             }
@@ -255,17 +256,17 @@ namespace CarRepairShop.Controllers
             {
                 if (newVm.StartEndDate == StartEndDate.StartDate)
                 {
-                    newVm.RepairCards = newVm.RepairCards.Where(rc => rc.StartDate == newVm.Date);
+                    newVm.RepairCardsVM = newVm.RepairCardsVM.Where(rc => rc.StartDate == newVm.Date);
                 }
                 else
                 {
-                    newVm.RepairCards = newVm.RepairCards.Where(rc => rc.EndDate == newVm.Date);
+                    newVm.RepairCardsVM = newVm.RepairCardsVM.Where(rc => rc.EndDate == newVm.Date);
                 }
             }
             if (newVm.SelectedCarId != null)
             {
                 Car CarToSearch = _context.Cars.FirstOrDefault(car => car.CarId == vm.SelectedCarId);
-                newVm.RepairCards = newVm.RepairCards.Where(rc => rc.CarRegistration == CarToSearch.CarRegistration);
+                newVm.RepairCardsVM = newVm.RepairCardsVM.Where(rc => rc.CarRegistration == CarToSearch.CarRegistration);
             }
 
             return View("Views/RepairCards/Index.cshtml", newVm);
@@ -352,50 +353,45 @@ namespace CarRepairShop.Controllers
             return View(editRepairCard);
         }
 
-        //// GET: RepairCards/Delete/5
-        ///[Authorize]
-        //public async Task<IActionResult> Delete(int? id)
-        //{
-        //    if (id == null || _context.RepairCards == null)
-        //    {
-        //        return NotFound();
-        //    }
+       
+        [Authorize]
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null || _context.RepairCards == null)
+            {
+                return NotFound();
+            }
 
-        //    var repairCard = await _context.RepairCards
-        //        .Include(r => r.Car)
-        //        .Include(r => r.Mechanic)
-        //        .FirstOrDefaultAsync(m => m.RepairCardId == id);
-        //    if (repairCard == null)
-        //    {
-        //        return NotFound();
-        //    }
+            var repairCard = await _context.RepairCards
+                .Include(r => r.Car)
+                .Include(r => r.Mechanic)
+                .FirstOrDefaultAsync(m => m.RepairCardId == id);
+            if (repairCard == null)
+            {
+                return NotFound();
+            }
 
-        //    return View(repairCard);
-        //}
+            return View(repairCard);
+        }
 
-        //// POST: RepairCards/Delete/5
-        ///[Authorize]
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> DeleteConfirmed(int id)
-        //{
-        //    if (_context.RepairCards == null)
-        //    {
-        //        return Problem("Entity set 'MEchanicDataContext.RepairCards'  is null.");
-        //    }
-        //    var repairCard = await _context.RepairCards.FindAsync(id);
-        //    if (repairCard != null)
-        //    {
-        //        _context.RepairCards.Remove(repairCard);
-        //    }
 
-        //    await _context.SaveChangesAsync();
-        //    return RedirectToAction(nameof(Index));
-        //}
+        [Authorize]
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            if (_context.RepairCards == null)
+            {
+                return Problem("Entity set 'MEchanicDataContext.RepairCards'  is null.");
+            }
+            var repairCard = await _context.RepairCards.FindAsync(id);
+            if (repairCard != null)
+            {
+                _context.RepairCards.Remove(repairCard);
+            }
 
-        //private bool RepairCardExists(int id)
-        //{
-        //    return _context.RepairCards.Any(e => e.RepairCardId == id);
-        //}
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

@@ -80,7 +80,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (RepairCardIndexVM item in Model.RepairCards)
+        @foreach (RepairCardIndexVM item in Model.RepairCardsVM)
         {
             <tr>
                 <td>
@@ -102,10 +102,10 @@
                     @Html.DisplayFor(modelItem => item.TypeOfRepair)
                 </td>
                 <td>
-                    @foreach (var part in item.PartNames)
+                    @foreach (Part part in item.Parts)
                     {
                         <ul>
-                            <li>@part</li>
+                            <li>@part.PartName</li>
                         </ul>
                     }
                 </td>
