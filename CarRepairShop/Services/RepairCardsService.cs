@@ -127,7 +127,6 @@ namespace CarRepairShop.Services
                 Mechanic = selectedMechanic
             };
 
-            
 
             foreach (Part part in GetAllParts(repairCardToEdit))
             {

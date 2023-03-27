@@ -49,8 +49,8 @@
                 @Html.DisplayFor(modelItem => item.TypeOfRepair)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.PartId">Edit</a> |
-                <a asp-action="Delete" asp-route-id="@item.PartId">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@item.PartId" class="btn btn-warning">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@item.PartId" class="btn btn-danger">Delete</a>
             </td>
         </tr>
 }

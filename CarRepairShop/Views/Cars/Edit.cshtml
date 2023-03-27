@@ -8,80 +8,109 @@
 
 <h3>Editing car @Model.CarRegistration</h3>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="CarId" />
-            <div class="form-group">
-                <label asp-for="CarRegistration" class="control-label">Car registration</label>
-                <input asp-for="CarRegistration" class="form-control" disabled />
-                <span asp-validation-for="CarRegistration" class="text-danger"></span>
+<form asp-action="Edit" class="card">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="CarId" />
+    <br />
+    <div class="container">
+        <div class="row">
+            <div class="col-5">
+                <div class="form-group">
+                    <label asp-for="CarRegistration" class="control-label">Car registration</label>
+                    <input asp-for="CarRegistration" class="form-control" disabled />
+                    <span asp-validation-for="CarRegistration" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Brand">Brand</label>
-                <select asp-for="Brand" class="form-select" asp-items="@Html.GetEnumSelectList(typeof(CarBrands))">
-                    <option value="Select brand">Select brand</option>
-                </select>
+            <div class="col-1"></div>
+            <div class="col-5">
+                <div class="form-group">
+                    <select asp-for="Brand" class="form-select" asp-items="@Html.GetEnumSelectList(typeof(CarBrands))">
+                        <option value="" selected disabled>Select the car's brand</option>
+                    </select>
+                </div>
+                <br />
+                <div class="form-group">
+                    <input asp-for="Model" class="form-control" placeholder="Enter the car's model:" />
+                    <span asp-validation-for="Model" class="text-danger"></span>
+                </div>
+                <br />
+                <div class="form-group">
+                    <select asp-for="Color" class="form-select" asp-items="@Html.GetEnumSelectList(typeof(Colors))">
+                        <option value="" selected disabled>Select the car's color</option>
+                    </select>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Model" class="control-label">Car model</label>
-                <input asp-for="Model" class="form-control" />
-                <span asp-validation-for="Model" class="text-danger"></span>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-5">
+                <div class="form-group">
+                    <select asp-for="YearOfManifacture" class="form-select" asp-items="@Html.GetEnumSelectList(typeof(YearsOfManifacture))">
+                        <option value="" selected disabled>Select the year of manifacture of the car</option>
+                    </select>
+                </div>
+                <br />
+                <div class="form-group">
+                    <input asp-for="EngineNum" class="form-control" placeholder="Enter the car's engine number:" />
+                    <span asp-validation-for="EngineNum" class="text-danger"></span>
+                </div>
+                <br />
+                <div class="form-group">
+                    <input asp-for="FrameNum" class="form-control" placeholder="Enter the car's VIN:" />
+                    <span asp-validation-for="FrameNum" class="text-danger"></span>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-8">
+                        <label for="WorkingVolume">Enter the car's working volume:</label>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <input asp-for="WorkingVolume" class="form-control" />
+                            <span asp-validation-for="WorkingVolume" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <br />
             </div>
-            <div class="form-group">
-                <label asp-for="YearOfManifacture">Year of manifacture</label>
-                <select asp-for="YearOfManifacture" class="form-select" asp-items="@Html.GetEnumSelectList(typeof(YearsOfManifacture))">
-                    <option value="Select year of manifacture">Select year of manifacture</option>
-                </select>
+            <div class="col-1"></div>
+            <div class="col-5">
+                <div class="form-outline w-100">
+                    <textarea asp-for="Description" class="form-control" placeholder="Enter description for the car: (optional)" rows="4"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <br />
+                <div class="form-group">
+                    <input asp-for="OwnerName" class="form-control" placeholder="Enter the full name of the owner:" />
+                    <span asp-validation-for="OwnerName" class="text-danger"></span>
+                </div>
+                <br />
+                <div class="form-group">
+                    <input asp-for="OwnerPhoneNum" class="form-control" maxlength="11" placeholder="Enter the phone number of the owner:" />
+                    <span asp-validation-for="OwnerPhoneNum" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="EngineNum" class="control-label">Engine number</label>
-                <input asp-for="EngineNum" class="form-control" />
-                <span asp-validation-for="EngineNum" class="text-danger"></span>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-5"></div>
+            <div class="col-2 align-items-center">
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="FrameNum" class="control-label">Frame number</label>
-                <input asp-for="FrameNum" class="form-control" />
-                <span asp-validation-for="FrameNum" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Color">Color of the car</label>
-                <select asp-for="Color" class="form-select" asp-items="@Html.GetEnumSelectList(typeof(Colors))">
-                    <option value="Select color">Select color</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label asp-for="WorkingVolume" class="control-label">Working volume</label>
-                <input asp-for="WorkingVolume" class="form-control" />
-                <span asp-validation-for="WorkingVolume" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label">Description</label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="OwnerName" class="control-label">Owner's name</label>
-                <input asp-for="OwnerName" class="form-control" />
-                <span asp-validation-for="OwnerName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="OwnerPhoneNum" class="control-label">Owner's phone number</label>
-                <input asp-for="OwnerPhoneNum" class="form-control" />
-                <span asp-validation-for="OwnerPhoneNum" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+            <div class="col-5"></div>
+        </div>
+        <br />
     </div>
-</div>
+</form>
 
 <div>
     <a asp-action="Index">Back to all cars.</a>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
