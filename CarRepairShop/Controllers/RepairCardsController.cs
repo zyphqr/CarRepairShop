@@ -175,14 +175,14 @@ namespace CarRepairShop.Controllers
 
             Car selectedCarReg = _repairCardsService.GetCars().Single(c => c.CarId == createRepairCard.SelectedCarId);
             //List<PartVM> selectedParts = createRepairCard.partVMs.Where(part=>part.IsSelected == true).ToList();
-            List<Part> selectedParts = new();
+            List<Part> SelectedParts = new();
             foreach (var partId in createRepairCard.SelectedPartIds)
             {
-                selectedParts.Add(_repairCardsService.GetParts().Single(c => c.PartId == partId));
+                SelectedParts.Add(_repairCardsService.GetParts().Single(c => c.PartId == partId));
             }
             Mechanic selectedMechanicId = _repairCardsService.GetMechanics().Single(m => m.Id == createRepairCard.SelectedMechanicId);
 
-            createRepairCard.TypeOfRepair = selectedParts[0].TypeOfRepair;//TODO: FIx  is scuffed
+            createRepairCard.TypeOfRepair = SelectedParts[0].TypeOfRepair;//TODO: FIx  is scuffed
 
             _repairCardsService.CreateRepairCard(
                 createRepairCard.StartDate,
@@ -190,7 +190,7 @@ namespace CarRepairShop.Controllers
                 selectedCarReg,
                 createRepairCard.Description,
                 createRepairCard.TypeOfRepair,
-                selectedParts,
+                SelectedParts,
                 selectedMechanicId
                 );
             return RedirectToAction(nameof(Index));
@@ -293,8 +293,9 @@ namespace CarRepairShop.Controllers
                     cars.CarRegistration,
                     cars.CarId.ToString()));
 
-            var parts = _repairCardsService.GetParts();
-            parts = parts.Where(part => part.TypeOfRepair == repairCard.TypeOfRepair).ToList();
+            var tobeedited = _context.RepairCards.FirstOrDefault(p => p.RepairCardId == id);
+            var parts = _context.Parts.Where(p => tobeedited.Parts.Select(part => part.PartId).ToList().Contains(p.PartId)).ToList();
+            //parts = parts.Where(part => part.TypeOfRepair == repairCard.TypeOfRepair).ToList();
 
             var selectListParts = parts
                 .Select(parts => new SelectListItem(
@@ -332,28 +333,33 @@ namespace CarRepairShop.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(RepairCardVM editRepairCard)
         {
-            if (ModelState.IsValid)
-            {
-                List<Part> SelectedParts = new();
-                foreach(var id in editRepairCard.SelectedPartIds)
-                {
-                    SelectedParts.Add(_context.Parts.FirstOrDefault(p => p.PartId == id));
-                }
-                _repairCardsService.EditRepairCard(editRepairCard.RepairCardId,
-                                                    editRepairCard.StartDate,
-                                                    editRepairCard.EndDate,
-                                                    editRepairCard.Car,
-                                                    editRepairCard.Description,
-                                                    editRepairCard.TypeOfRepair,
-                                                    SelectedParts,
-                                                    editRepairCard.Mechanic);
+            Car selectedCarReg = _repairCardsService.GetCars().Single(c => c.CarId == editRepairCard.SelectedCarId);
 
-                return RedirectToAction(nameof(Index));
+            List<Part> SelectedParts = new();
+
+            Mechanic selectedMechanicId = _repairCardsService.GetMechanics().Single(m => m.Id == editRepairCard.SelectedMechanicId);
+
+            foreach (var id in editRepairCard.SelectedPartIds)
+            {
+                SelectedParts.Add(_context.Parts.FirstOrDefault(p => p.PartId == id));
             }
-            return View(editRepairCard);
+
+            editRepairCard.TypeOfRepair = SelectedParts[0].TypeOfRepair;//TODO: FIx  is scuffed
+
+
+            _repairCardsService.EditRepairCard(editRepairCard.RepairCardId,
+                                                editRepairCard.StartDate,
+                                                editRepairCard.EndDate,
+                                                selectedCarReg,
+                                                editRepairCard.Description,
+                                                editRepairCard.TypeOfRepair,
+                                                SelectedParts,
+                                                selectedMechanicId);
+
+            return RedirectToAction(nameof(Index));
         }
 
-       
+
         [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {

@@ -57,12 +57,9 @@ namespace CarRepairShop.Services
 
         public List<Part> GetAllParts(RepairCard repairCard)
         {
-            List<Part> Parts = new();
-            foreach (RepairCardPart rpc in repairCard.Parts)
-            {
-                Parts.Add(_context.Parts.FirstOrDefault(p => p.PartId == rpc.PartId));
-            }
-
+            var SearchedParts = repairCard.Parts.Select(p => p.PartId).ToList();
+            
+            var Parts =_context.Parts.Where(p => SearchedParts.Contains(p.PartId)).ToList();
             return Parts;
         }
 
@@ -124,7 +121,8 @@ namespace CarRepairShop.Services
                 Description = descpription,
                 TypeOfRepair = typeOfRepair,
                 Price = CalculatePrice(selectedParts),
-                Mechanic = selectedMechanic
+                Mechanic = selectedMechanic,
+                MechanicId = selectedMechanic.Id,
             };
 
             
@@ -134,22 +132,22 @@ namespace CarRepairShop.Services
                 part.Quantity++;
             }
 
-            repairCardToEdit.Parts.Clear();
+            //repairCardToEdit.Parts.Clear();
 
-            foreach (var part in selectedParts)
-            {
-                var partToEnter = _context.Parts.FirstOrDefault(p => p.PartId == part.PartId);
-                repairCardToEdit.Parts.Add(new RepairCardPart()
-                {
-                    PartId = partToEnter.PartId,
-                    RepairCardId = repairCardToEdit.RepairCardId
-                });
-            }
+            ////foreach (var part in selectedParts)
+            ////{
+            ////    var partToEnter = _context.Parts.FirstOrDefault(p => p.PartId == part.PartId);
+            ////    repairCardToEdit.Parts.Add(new RepairCardPart()
+            ////    {
+            ////        PartId = partToEnter.PartId,
+            ////        RepairCardId = repairCardToEdit.RepairCardId
+            ////    });
+            ////}
 
-            foreach (Part part in selectedParts)
-            {
-                part.Quantity--;
-            }
+            //foreach (Part part in selectedParts)
+            //{
+            //    part.Quantity--;
+            //}
 
             _context.Update(repairCardToEdit);
             _context.SaveChanges();
