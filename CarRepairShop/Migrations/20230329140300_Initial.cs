@@ -66,7 +66,7 @@ namespace CarRepairShop.Migrations
                     WorkingVolume = table.Column<double>(type: "float", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Owner = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    OwnerPhoneNum = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false)
+                    OwnerPhoneNum = table.Column<string>(type: "nvarchar(11)", maxLength: 11, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -245,8 +245,7 @@ namespace CarRepairShop.Migrations
                 columns: table => new
                 {
                     RepairCardId = table.Column<int>(type: "int", nullable: false),
-                    PartId = table.Column<int>(type: "int", nullable: false),
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    PartId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {

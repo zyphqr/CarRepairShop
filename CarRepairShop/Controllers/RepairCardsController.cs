@@ -174,13 +174,13 @@ namespace CarRepairShop.Controllers
         public IActionResult Create(RepairCardVM createRepairCard)
         {
 
-            foreach (Part part in selectedParts)
-            {
-                if (part.Quantity <= 0)
-                {
-                    //TODO: return alert also add it in edit
-                }
-            }
+            //foreach (Part part in selectedParts)
+            //{
+            //    if (part.Quantity <= 0)
+            //    {
+            //        //TODO: return alert also add it in edit
+            //    }
+            //}
 
             Car selectedCarReg = _repairCardsService.GetCars().Single(c => c.CarId == createRepairCard.SelectedCarId);
             //List<PartVM> selectedParts = createRepairCard.partVMs.Where(part=>part.IsSelected == true).ToList();

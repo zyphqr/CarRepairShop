@@ -22,9 +22,6 @@ namespace CarRepairShop.Models
         [Required]
         public YearsOfManifacture YearOfManifacture { get; set; }
 
-        //TODO: [RegularExpression("/^\\+?[1-9][0-9]{7,14}$/")]
-        //public int YearOfManifacture { get; set; } 
-
         [Required]
         public string EngineNum { get; set; }
 
@@ -44,7 +41,7 @@ namespace CarRepairShop.Models
         public string Owner { get; set; }
 
         [Required]
-        [MaxLength(10)]
+        [MaxLength(11)]
         [RegularExpression("/^\\+?[1-9][0-9]{10,13}$/")]
         public string OwnerPhoneNum { get; set; }
 

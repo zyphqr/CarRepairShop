@@ -4,6 +4,7 @@ using CarRepairShop.Areas.Identity.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarRepairShop.Migrations
 {
     [DbContext(typeof(MEchanicDataContext))]
-    partial class MEchanicDataContextModelSnapshot : ModelSnapshot
+    [Migration("20230329140300_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -248,153 +250,6 @@ namespace CarRepairShop.Migrations
                     b.HasKey("TownId");
 
                     b.ToTable("Towns");
-
-                    b.HasData(
-                        new
-                        {
-                            TownId = 1,
-                            TownCode = "E"
-                        },
-                        new
-                        {
-                            TownId = 2,
-                            TownCode = "A"
-                        },
-                        new
-                        {
-                            TownId = 3,
-                            TownCode = "B"
-                        },
-                        new
-                        {
-                            TownId = 4,
-                            TownCode = "BT"
-                        },
-                        new
-                        {
-                            TownId = 5,
-                            TownCode = "BH"
-                        },
-                        new
-                        {
-                            TownId = 6,
-                            TownCode = "BP"
-                        },
-                        new
-                        {
-                            TownId = 7,
-                            TownCode = "EB"
-                        },
-                        new
-                        {
-                            TownId = 8,
-                            TownCode = "TX"
-                        },
-                        new
-                        {
-                            TownId = 9,
-                            TownCode = "K"
-                        },
-                        new
-                        {
-                            TownId = 10,
-                            TownCode = "KH"
-                        },
-                        new
-                        {
-                            TownId = 11,
-                            TownCode = "OB"
-                        },
-                        new
-                        {
-                            TownId = 12,
-                            TownCode = "M"
-                        },
-                        new
-                        {
-                            TownId = 13,
-                            TownCode = "PA"
-                        },
-                        new
-                        {
-                            TownId = 14,
-                            TownCode = "PK"
-                        },
-                        new
-                        {
-                            TownId = 15,
-                            TownCode = "EH"
-                        },
-                        new
-                        {
-                            TownId = 16,
-                            TownCode = "PB"
-                        },
-                        new
-                        {
-                            TownId = 17,
-                            TownCode = "PP"
-                        },
-                        new
-                        {
-                            TownId = 18,
-                            TownCode = "P"
-                        },
-                        new
-                        {
-                            TownId = 19,
-                            TownCode = "CC"
-                        },
-                        new
-                        {
-                            TownId = 20,
-                            TownCode = "CH"
-                        },
-                        new
-                        {
-                            TownId = 21,
-                            TownCode = "CM"
-                        },
-                        new
-                        {
-                            TownId = 22,
-                            TownCode = "CO"
-                        },
-                        new
-                        {
-                            TownId = 23,
-                            TownCode = "CA"
-                        },
-                        new
-                        {
-                            TownId = 24,
-                            TownCode = "CB"
-                        },
-                        new
-                        {
-                            TownId = 25,
-                            TownCode = "CT"
-                        },
-                        new
-                        {
-                            TownId = 26,
-                            TownCode = "T"
-                        },
-                        new
-                        {
-                            TownId = 27,
-                            TownCode = "X"
-                        },
-                        new
-                        {
-                            TownId = 28,
-                            TownCode = "H"
-                        },
-                        new
-                        {
-                            TownId = 29,
-                            TownCode = "Y"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
