@@ -4,46 +4,46 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>All cars</h1>
 
 <p>
     <a asp-action="Create">Add new car</a>
 </p>
-<table class="table">
+<table class="table table-hover">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.CarRegistration)
+                Car registration
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CarBrand)
+                Brand
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CarModel)
+                Model
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.YearOfManifacture)
+                Year of manifacture
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.EngineNum)
+                Engine number
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.FrameNum)
+                VIN
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Color)
+                Color
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.WorkingVolume)
+                Working volume
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Description)
+                Description
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Owner)
+                Owner
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.OwnerPhoneNum)
+                Owner's phone number
             </th>
             <th></th>
         </tr>
@@ -85,8 +85,8 @@
                 @Html.DisplayFor(modelItem => item.OwnerPhoneNum)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.CarId">Edit</a> |
-                <a asp-action="Delete" asp-route-id="@item.CarId">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@item.CarId" class="btn btn-warning">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@item.CarId" class="btn btn-danger">Delete</a>
             </td>
         </tr>
 }
