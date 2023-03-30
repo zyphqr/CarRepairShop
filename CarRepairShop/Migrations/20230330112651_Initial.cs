@@ -244,24 +244,60 @@ namespace CarRepairShop.Migrations
                 name: "RepairCardParts",
                 columns: table => new
                 {
-                    RepairCardId = table.Column<int>(type: "int", nullable: false),
-                    PartId = table.Column<int>(type: "int", nullable: false)
+                    PartsPartId = table.Column<int>(type: "int", nullable: false),
+                    RepairCardsRepairCardId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RepairCardParts", x => new { x.RepairCardId, x.PartId });
+                    table.PrimaryKey("PK_RepairCardParts", x => new { x.PartsPartId, x.RepairCardsRepairCardId });
                     table.ForeignKey(
-                        name: "FK_RepairCardParts_Parts_PartId",
-                        column: x => x.PartId,
+                        name: "FK_RepairCardParts_Parts_PartsPartId",
+                        column: x => x.PartsPartId,
                         principalTable: "Parts",
                         principalColumn: "PartId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_RepairCardParts_Repair_Cards_RepairCardId",
-                        column: x => x.RepairCardId,
+                        name: "FK_RepairCardParts_Repair_Cards_RepairCardsRepairCardId",
+                        column: x => x.RepairCardsRepairCardId,
                         principalTable: "Repair_Cards",
                         principalColumn: "RepairCardId",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "Towns",
+                columns: new[] { "TownId", "TownCode" },
+                values: new object[,]
+                {
+                    { 1, "E" },
+                    { 2, "A" },
+                    { 3, "B" },
+                    { 4, "BT" },
+                    { 5, "BH" },
+                    { 6, "BP" },
+                    { 7, "EB" },
+                    { 8, "TX" },
+                    { 9, "K" },
+                    { 10, "KH" },
+                    { 11, "OB" },
+                    { 12, "M" },
+                    { 13, "PA" },
+                    { 14, "PK" },
+                    { 15, "EH" },
+                    { 16, "PB" },
+                    { 17, "PP" },
+                    { 18, "P" },
+                    { 19, "CC" },
+                    { 20, "CH" },
+                    { 21, "CM" },
+                    { 22, "CO" },
+                    { 23, "CA" },
+                    { 24, "CB" },
+                    { 25, "CT" },
+                    { 26, "T" },
+                    { 27, "X" },
+                    { 28, "H" },
+                    { 29, "Y" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -314,9 +350,9 @@ namespace CarRepairShop.Migrations
                 column: "MechanicId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RepairCardParts_PartId",
+                name: "IX_RepairCardParts_RepairCardsRepairCardId",
                 table: "RepairCardParts",
-                column: "PartId");
+                column: "RepairCardsRepairCardId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

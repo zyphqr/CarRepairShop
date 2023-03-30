@@ -14,7 +14,6 @@ namespace CarRepairShop.ViewModels
         [Required]
         public DateTime StartDate { get; set; } 
 
-        [Required]
         public DateTime? EndDate { get; set; } 
 
         public int SelectedCarId { get; set; }
@@ -26,6 +25,7 @@ namespace CarRepairShop.ViewModels
 
         public List<int> SelectedPartIds { get; set; }
         public IEnumerable<SelectListItem> Parts { get; set; }
+        public List<Part> CurrentParts { get; set; }
 
         [Required]
         public decimal Price { get; set; }

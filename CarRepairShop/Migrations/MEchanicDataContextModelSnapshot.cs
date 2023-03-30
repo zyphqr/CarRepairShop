@@ -218,21 +218,6 @@ namespace CarRepairShop.Migrations
                     b.ToTable("Repair_Cards");
                 });
 
-            modelBuilder.Entity("CarRepairShop.Models.RepairCardPart", b =>
-                {
-                    b.Property<int>("RepairCardId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PartId")
-                        .HasColumnType("int");
-
-                    b.HasKey("RepairCardId", "PartId");
-
-                    b.HasIndex("PartId");
-
-                    b.ToTable("RepairCardParts");
-                });
-
             modelBuilder.Entity("CarRepairShop.Models.Town", b =>
                 {
                     b.Property<int>("TownId")
@@ -534,6 +519,21 @@ namespace CarRepairShop.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("PartRepairCard", b =>
+                {
+                    b.Property<int>("PartsPartId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RepairCardsRepairCardId")
+                        .HasColumnType("int");
+
+                    b.HasKey("PartsPartId", "RepairCardsRepairCardId");
+
+                    b.HasIndex("RepairCardsRepairCardId");
+
+                    b.ToTable("RepairCardParts", (string)null);
+                });
+
             modelBuilder.Entity("CarRepairShop.Models.RepairCard", b =>
                 {
                     b.HasOne("CarRepairShop.Models.Car", "Car")
@@ -551,25 +551,6 @@ namespace CarRepairShop.Migrations
                     b.Navigation("Car");
 
                     b.Navigation("Mechanic");
-                });
-
-            modelBuilder.Entity("CarRepairShop.Models.RepairCardPart", b =>
-                {
-                    b.HasOne("CarRepairShop.Models.Part", "Part")
-                        .WithMany("RepairCards")
-                        .HasForeignKey("PartId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CarRepairShop.Models.RepairCard", "RepairCard")
-                        .WithMany("Parts")
-                        .HasForeignKey("RepairCardId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Part");
-
-                    b.Navigation("RepairCard");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -623,6 +604,21 @@ namespace CarRepairShop.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("PartRepairCard", b =>
+                {
+                    b.HasOne("CarRepairShop.Models.Part", null)
+                        .WithMany()
+                        .HasForeignKey("PartsPartId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CarRepairShop.Models.RepairCard", null)
+                        .WithMany()
+                        .HasForeignKey("RepairCardsRepairCardId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("CarRepairShop.Areas.Identity.Data.Mechanic", b =>
                 {
                     b.Navigation("RepairCards");
@@ -631,16 +627,6 @@ namespace CarRepairShop.Migrations
             modelBuilder.Entity("CarRepairShop.Models.Car", b =>
                 {
                     b.Navigation("RepairCards");
-                });
-
-            modelBuilder.Entity("CarRepairShop.Models.Part", b =>
-                {
-                    b.Navigation("RepairCards");
-                });
-
-            modelBuilder.Entity("CarRepairShop.Models.RepairCard", b =>
-                {
-                    b.Navigation("Parts");
                 });
 #pragma warning restore 612, 618
         }
