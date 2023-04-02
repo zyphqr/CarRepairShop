@@ -7,6 +7,8 @@ namespace CarRepairShop.ViewModels
     {
         public IEnumerable<RepairCardIndexVM> RepairCardsVM { get; set; }
 
+        public TypeOfRepairs TypeOfRepair { get; set; }
+
         public Criteria? Criteria { get; set; }
 
         public StartEndDate? StartEndDate { get; set; }
@@ -15,7 +17,5 @@ namespace CarRepairShop.ViewModels
 
         public int? SelectedCarId { get; set; }
         public IEnumerable<SelectListItem> CarRegistrations { get; set; }
-
-
     }
 }

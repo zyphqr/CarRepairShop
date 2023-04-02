@@ -1,4 +1,5 @@
 ﻿using CarRepairShop.Areas.Identity.Data;
+using CarRepairShop.Common;
 using CarRepairShop.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -31,6 +32,170 @@ public class MEchanicDataContext : IdentityDbContext<Mechanic>
             .HasMany<Part>(u => u.Parts)
             .WithMany(r => r.RepairCards)
             .UsingEntity(t => t.ToTable("RepairCardParts"));
+
+
+        builder.Entity<Part>()
+            .HasData(
+                new Part() {
+                    PartId = 1,
+                    PartName = "Engine block",
+                    Price = 2000,
+                    Quantity = 10,
+                    TypeOfRepair = TypeOfRepairs.EngineRepair,
+                    WorkingHours = 8 
+                },
+                new Part() {
+                    PartId = 2,
+                    PartName = "Oil filer",
+                    Price = 35,
+                    Quantity = 10,
+                    TypeOfRepair = TypeOfRepairs.EngineRepair,
+                    WorkingHours = 2 
+                },
+                new Part() {
+                    PartId = 3,
+                    PartName = "Oil pump",
+                    Price = 45,
+                    Quantity = 10,
+                    TypeOfRepair = TypeOfRepairs.EngineRepair, 
+                    WorkingHours = 2 
+                },
+                new Part() {
+                    PartId = 4, 
+                    PartName = "Serpentine belt",
+                    Price = 20,
+                    Quantity = 10,
+                    TypeOfRepair = TypeOfRepairs.EngineRepair,
+                    WorkingHours = 2 
+                },
+                new Part() {
+                    PartId = 5,
+                    PartName = "Water pump",
+                    Price = 40,
+                    Quantity = 10,
+                    TypeOfRepair = TypeOfRepairs.CoolingSystemRepair,
+                    WorkingHours = 2 
+                },
+                new Part() {
+                    PartId = 6,
+                    PartName = "Radiator",
+                    Price = 50,
+                    Quantity = 10,
+                    TypeOfRepair = TypeOfRepairs.CoolingSystemRepair,
+                    WorkingHours = 2
+                },
+                new Part() {
+                    PartId = 7,
+                    PartName = "Coolong fan",
+                    Price = 42,
+                    Quantity = 10, 
+                    TypeOfRepair = TypeOfRepairs.CoolingSystemRepair,
+                    WorkingHours = 2 
+                },
+                new Part() {
+                    PartId = 8,
+                    PartName = "Catalytic converter",
+                    Price = 170,
+                    Quantity = 10, 
+                    TypeOfRepair = TypeOfRepairs.ExhaustSystemRepair,
+                    WorkingHours = 2 
+                },
+                new Part() {
+                    PartId = 9,
+                    PartName = "Muffler",
+                    Price = 40,
+                    Quantity = 10,
+                    TypeOfRepair = TypeOfRepairs.ExhaustSystemRepair,
+                    WorkingHours = 2 
+                },
+                new Part() {
+                    PartId = 10,
+                    PartName = "Exhaust pipe",
+                    Price = 18,
+                    Quantity = 10, 
+                    TypeOfRepair = TypeOfRepairs.ExhaustSystemRepair,
+                    WorkingHours = 4 
+                },
+                new Part() {
+                    PartId = 11, 
+                    PartName = "Fuel pump",
+                    Price = 63,
+                    Quantity = 10,
+                    TypeOfRepair = TypeOfRepairs.FuelSystemRepair, 
+                    WorkingHours = 2 
+                },
+                new Part() {
+                    PartId = 12,
+                    PartName = "Fuel filter",
+                    Price = 57, 
+                    Quantity = 10, 
+                    TypeOfRepair = TypeOfRepairs.FuelSystemRepair, 
+                    WorkingHours = 2 
+                },
+                new Part() {
+                    PartId = 13,
+                    PartName = "Fuel tank",
+                    Price = 200,
+                    Quantity = 10,
+                    TypeOfRepair = TypeOfRepairs.FuelSystemRepair,
+                    WorkingHours = 2
+                },
+                new Part() {
+                    PartId = 14,
+                    PartName = "Wiring and cables",
+                    Price = 12,
+                    Quantity = 10,
+                    TypeOfRepair = TypeOfRepairs.ElectricSystemRepair,
+                    WorkingHours = 2 
+                },
+                new Part() {
+                    PartId = 15,
+                    PartName = "Starter",
+                    Price = 56,
+                    Quantity = 10,
+                    TypeOfRepair = TypeOfRepairs.ElectricSystemRepair,
+                    WorkingHours = 2 
+                },
+                new Part() {
+                    PartId = 16,
+                    PartName = "Battery",
+                    Price = 48, 
+                    Quantity = 10, 
+                    TypeOfRepair = TypeOfRepairs.ElectricSystemRepair, 
+                    WorkingHours = 2 
+                },
+                new Part() {
+                    PartId = 17,
+                    PartName = "Control buttons",
+                    Price = 10,
+                    Quantity = 10,
+                    TypeOfRepair = TypeOfRepairs.ElectricSystemRepair, 
+                    WorkingHours = 2 
+                },
+                new Part() {
+                    PartId = 18,
+                    PartName = "Brake rotors",
+                    Price = 60, 
+                    Quantity = 10,
+                    TypeOfRepair = TypeOfRepairs.BrakingSystemRepair,
+                    WorkingHours = 2 
+                },
+                new Part() {
+                    PartId = 19,
+                    PartName = "ABS system parts", 
+                    Price = 39, 
+                    Quantity = 10,
+                    TypeOfRepair = TypeOfRepairs.BrakingSystemRepair,
+                    WorkingHours = 2 
+                },
+                new Part() {
+                    PartId = 20,
+                    PartName = "Braking plate",
+                    Price = 28,
+                    Quantity = 10, 
+                    TypeOfRepair = TypeOfRepairs.BrakingSystemRepair,
+                    WorkingHours = 3
+                });
 
 
 

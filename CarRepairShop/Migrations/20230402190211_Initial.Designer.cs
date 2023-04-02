@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarRepairShop.Migrations
 {
     [DbContext(typeof(MEchanicDataContext))]
-    [Migration("20230330112651_Initial")]
+    [Migration("20230402190211_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -178,6 +178,188 @@ namespace CarRepairShop.Migrations
                     b.HasKey("PartId");
 
                     b.ToTable("Parts");
+
+                    b.HasData(
+                        new
+                        {
+                            PartId = 1,
+                            PartName = "Engine block",
+                            Price = 2000m,
+                            Quantity = 10,
+                            TypeOfRepair = 1,
+                            WorkingHours = 8
+                        },
+                        new
+                        {
+                            PartId = 2,
+                            PartName = "Oil filer",
+                            Price = 35m,
+                            Quantity = 10,
+                            TypeOfRepair = 1,
+                            WorkingHours = 2
+                        },
+                        new
+                        {
+                            PartId = 3,
+                            PartName = "Oil pump",
+                            Price = 45m,
+                            Quantity = 10,
+                            TypeOfRepair = 1,
+                            WorkingHours = 2
+                        },
+                        new
+                        {
+                            PartId = 4,
+                            PartName = "Serpentine belt",
+                            Price = 20m,
+                            Quantity = 10,
+                            TypeOfRepair = 1,
+                            WorkingHours = 2
+                        },
+                        new
+                        {
+                            PartId = 5,
+                            PartName = "Water pump",
+                            Price = 40m,
+                            Quantity = 10,
+                            TypeOfRepair = 2,
+                            WorkingHours = 2
+                        },
+                        new
+                        {
+                            PartId = 6,
+                            PartName = "Radiator",
+                            Price = 50m,
+                            Quantity = 10,
+                            TypeOfRepair = 2,
+                            WorkingHours = 2
+                        },
+                        new
+                        {
+                            PartId = 7,
+                            PartName = "Coolong fan",
+                            Price = 42m,
+                            Quantity = 10,
+                            TypeOfRepair = 2,
+                            WorkingHours = 2
+                        },
+                        new
+                        {
+                            PartId = 8,
+                            PartName = "Catalytic converter",
+                            Price = 170m,
+                            Quantity = 10,
+                            TypeOfRepair = 3,
+                            WorkingHours = 2
+                        },
+                        new
+                        {
+                            PartId = 9,
+                            PartName = "Muffler",
+                            Price = 40m,
+                            Quantity = 10,
+                            TypeOfRepair = 3,
+                            WorkingHours = 2
+                        },
+                        new
+                        {
+                            PartId = 10,
+                            PartName = "Exhaust pipe",
+                            Price = 18m,
+                            Quantity = 10,
+                            TypeOfRepair = 3,
+                            WorkingHours = 4
+                        },
+                        new
+                        {
+                            PartId = 11,
+                            PartName = "Fuel pump",
+                            Price = 63m,
+                            Quantity = 10,
+                            TypeOfRepair = 4,
+                            WorkingHours = 2
+                        },
+                        new
+                        {
+                            PartId = 12,
+                            PartName = "Fuel filter",
+                            Price = 57m,
+                            Quantity = 10,
+                            TypeOfRepair = 4,
+                            WorkingHours = 2
+                        },
+                        new
+                        {
+                            PartId = 13,
+                            PartName = "Fuel tank",
+                            Price = 200m,
+                            Quantity = 10,
+                            TypeOfRepair = 4,
+                            WorkingHours = 2
+                        },
+                        new
+                        {
+                            PartId = 14,
+                            PartName = "Wiring and cables",
+                            Price = 12m,
+                            Quantity = 10,
+                            TypeOfRepair = 5,
+                            WorkingHours = 2
+                        },
+                        new
+                        {
+                            PartId = 15,
+                            PartName = "Starter",
+                            Price = 56m,
+                            Quantity = 10,
+                            TypeOfRepair = 5,
+                            WorkingHours = 2
+                        },
+                        new
+                        {
+                            PartId = 16,
+                            PartName = "Battery",
+                            Price = 48m,
+                            Quantity = 10,
+                            TypeOfRepair = 5,
+                            WorkingHours = 2
+                        },
+                        new
+                        {
+                            PartId = 17,
+                            PartName = "Control buttons",
+                            Price = 10m,
+                            Quantity = 10,
+                            TypeOfRepair = 5,
+                            WorkingHours = 2
+                        },
+                        new
+                        {
+                            PartId = 18,
+                            PartName = "Brake rotors",
+                            Price = 60m,
+                            Quantity = 10,
+                            TypeOfRepair = 6,
+                            WorkingHours = 2
+                        },
+                        new
+                        {
+                            PartId = 19,
+                            PartName = "ABS system parts",
+                            Price = 39m,
+                            Quantity = 10,
+                            TypeOfRepair = 6,
+                            WorkingHours = 2
+                        },
+                        new
+                        {
+                            PartId = 20,
+                            PartName = "Braking plate",
+                            Price = 28m,
+                            Quantity = 10,
+                            TypeOfRepair = 6,
+                            WorkingHours = 3
+                        });
                 });
 
             modelBuilder.Entity("CarRepairShop.Models.RepairCard", b =>

@@ -79,9 +79,8 @@ namespace CarRepairShop.Services
                 TypeOfRepair = typeOfRepair,
                 Price = CalculatePrice(selectedParts),
                 Mechanic = selectedMechanic,
+                Parts = selectedParts
             };
-
-            newRepairCard.Parts = selectedParts;
 
             foreach (Part part in selectedParts)
             {
@@ -111,9 +110,8 @@ namespace CarRepairShop.Services
                 TypeOfRepair = typeOfRepair,
                 Price = CalculatePrice(selectedParts),
                 Mechanic = selectedMechanic,
-                MechanicId = selectedMechanic.Id,
+                Parts = selectedParts
             };
-
 
             foreach (Part part in SearchedParts(repairCardToEdit))
             {

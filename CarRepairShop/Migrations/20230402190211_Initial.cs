@@ -265,6 +265,33 @@ namespace CarRepairShop.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Parts",
+                columns: new[] { "PartId", "PartName", "Price", "Quantity", "TypeOfRepair", "WorkingHours" },
+                values: new object[,]
+                {
+                    { 1, "Engine block", 2000m, 10, 1, 8 },
+                    { 2, "Oil filer", 35m, 10, 1, 2 },
+                    { 3, "Oil pump", 45m, 10, 1, 2 },
+                    { 4, "Serpentine belt", 20m, 10, 1, 2 },
+                    { 5, "Water pump", 40m, 10, 2, 2 },
+                    { 6, "Radiator", 50m, 10, 2, 2 },
+                    { 7, "Coolong fan", 42m, 10, 2, 2 },
+                    { 8, "Catalytic converter", 170m, 10, 3, 2 },
+                    { 9, "Muffler", 40m, 10, 3, 2 },
+                    { 10, "Exhaust pipe", 18m, 10, 3, 4 },
+                    { 11, "Fuel pump", 63m, 10, 4, 2 },
+                    { 12, "Fuel filter", 57m, 10, 4, 2 },
+                    { 13, "Fuel tank", 200m, 10, 4, 2 },
+                    { 14, "Wiring and cables", 12m, 10, 5, 2 },
+                    { 15, "Starter", 56m, 10, 5, 2 },
+                    { 16, "Battery", 48m, 10, 5, 2 },
+                    { 17, "Control buttons", 10m, 10, 5, 2 },
+                    { 18, "Brake rotors", 60m, 10, 6, 2 },
+                    { 19, "ABS system parts", 39m, 10, 6, 2 },
+                    { 20, "Braking plate", 28m, 10, 6, 3 }
+                });
+
+            migrationBuilder.InsertData(
                 table: "Towns",
                 columns: new[] { "TownId", "TownCode" },
                 values: new object[,]
@@ -290,7 +317,14 @@ namespace CarRepairShop.Migrations
                     { 19, "CC" },
                     { 20, "CH" },
                     { 21, "CM" },
-                    { 22, "CO" },
+                    { 22, "CO" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Towns",
+                columns: new[] { "TownId", "TownCode" },
+                values: new object[,]
+                {
                     { 23, "CA" },
                     { 24, "CB" },
                     { 25, "CT" },

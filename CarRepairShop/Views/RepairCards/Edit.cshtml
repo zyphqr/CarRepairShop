@@ -8,47 +8,89 @@
 
 <h3>Edit repair card @Model.RepairCardId</h3>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            @Html.HiddenFor(m => m.RepairCardId)
-            <div class="form-group">
-                <label asp-for="StartDate" class="control-label"></label>
-                <input asp-for="StartDate" class="form-control" />
-                <span asp-validation-for="StartDate" class="text-danger"></span>
+<form asp-action="Edit" class="card">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    @Html.HiddenFor(m => m.RepairCardId)
+    <br />
+    <div class="container">
+        <div class="row">
+            <div class="col-2">
+                <div class="form-group">
+                    <label asp-for="CarRegistrations">Select the car's registration</label>
+                    <select class="form-select" asp-items="Model.CarRegistrations" asp-for="SelectedCarId"></select>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="EndDate" class="control-label"></label>
-                <input asp-for="EndDate" class="form-control" />
-                <span asp-validation-for="EndDate" class="text-danger"></span>
+            <div class="col-10"></div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-2">
+                <label>Started on:</label>
             </div>
-            <div class="form-group">
-                <select class="form-select" asp-items="Model.CarRegistrations" asp-for="SelectedCarId"></select>
+            <div class="col-2">
+                <div class="form-group">
+                    <input asp-for="StartDate" class="form-control" />
+                    <span asp-validation-for="StartDate" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
+            <div class="col-3">
+                <label>Ended on:</label>
+                <label>(can be selected later)</label>
             </div>
-            <div class="form-group">
-                @Model.TypeOfRepair
+            <div class="col-2">
+                <div class="form-group">
+                    <input asp-for="EndDate" class="form-control" />
+                    <span asp-validation-for="EndDate" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <select class="form-select" asp-items="Model.Parts" asp-for="SelectedPartIds" multiple></select>
+            <div class="col-6"></div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <div class="form-outline w-100">
+                        <p>Current type of repair is: @Model.TypeOfRepair, to change it go back!</p>
+                        <textarea asp-for="Description" class="form-control" placeholder="Enter more information: (optional)" rows="4"></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <select class="form-select" asp-items="Model.Mechanics" asp-for="SelectedMechanicId"></select>
+            <div class="col">
+                <div class="form-group">
+                    <select class="form-select" asp-items="Model.Parts" asp-for="SelectedPartIds" multiple>
+                        <option value="" disabled>To select more parts hold crtl</option>
+                        <option value="" disabled>or hold left mouse button when selecting!</option>
+                    </select>
+                </div>
             </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-2">
+                <div class="form-group">
+                    <label asp-for="Mechanics">Select the machanic in charge</label>
+                    <select class="form-select" asp-items="Model.Mechanics" asp-for="SelectedMechanicId"></select>
+                </div>
+            </div>
+            <div class="col-10"></div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-5"></div>
+        <div class="col-2 align-items-center">
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
-        </form>
+        </div>
+        <div class="col-5"></div>
     </div>
-</div>
+    <br />
+</form>
 
 <div>
-    <a asp-action="Index">Back to all repair cards.</a>
+    <a asp-action="Index" class="btn btn-info">Back to all repair cards.</a>
 </div>
 
 @section Scripts {

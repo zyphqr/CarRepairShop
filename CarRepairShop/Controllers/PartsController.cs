@@ -136,10 +136,5 @@ namespace CarRepairShop.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-
-        private bool PartExists(int id)
-        {
-          return _context.Parts.Any(e => e.PartId == id);
-        }
     }
 }

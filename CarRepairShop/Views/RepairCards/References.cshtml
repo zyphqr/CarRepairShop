@@ -1,0 +1,114 @@
+﻿@using CarRepairShop.Common;
+@using CarRepairShop.ViewModels;
+@model IndexVMs;
+
+
+<form class="card" asp-action="References">
+    <div class="container">
+        <div class="row-align-items-start">
+            <div class="col-2">
+                <div class="form-group">
+                    <label asp-for="Criteria">Choose criteria</label>
+                    <select asp-for="Criteria" class="form-select" asp-items="@Html.GetEnumSelectList(typeof(Criteria))">
+                        <option value="" selected disabled>Select criteria</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-10"></div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-3">
+                <div class="form-group">
+                    <label asp-for="StartEndDate">Choose start or end date</label>
+                    <select asp-for="StartEndDate" class="form-select" asp-items="@Html.GetEnumSelectList(typeof(StartEndDate))">
+                        <option value="" selected disabled>Select start or end date</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="form-group">
+                    <label asp-for="Date" class="control-label">Choose date</label>
+                    <input asp-for="Date" class="form-control" />
+                    <span asp-validation-for="Date" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-6"></div>
+        </div>
+        <br />
+        <div class="row-align-items-start">
+            <div class="col-2">
+                <div class="form-group">
+                    <label>Choose car registration</label>
+                    <select class="form-select" asp-items="Model.CarRegistrations" asp-for="SelectedCarId">
+                        <option value="" selected disabled>Select car registration</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-10"></div>
+        </div>
+        <br />
+        <div class="row-align-items-start">
+            <div class="col-2">
+                <input type="submit" value="Filter" class="btn btn-primary" />
+            </div>
+            <div class="col-10"></div>
+        </div>
+    </div>
+    <br />
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Car Registration</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Type Of Repair</th>
+            <th>Part Names</th>
+            <th>Mechanic Name</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (RepairCardIndexVM item in Model.RepairCardsVM)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CarRegistration)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StartDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EndDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price+"lv")
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TypeOfRepair)
+                </td>
+                <td>
+                    @foreach (Part part in item.Parts)
+                    {
+                        <ul>
+                            <li>@part.PartName</li>
+                        </ul>
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MechanicName)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.RepairCardId" class="btn btn-warning">Edit</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

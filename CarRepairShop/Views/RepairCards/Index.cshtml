@@ -3,65 +3,15 @@
 @model IndexVMs;
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "RepairCards";
 }
 
-<h1>Index</h1>
+<h1>All repair cards</h1>
 
 <p>
-    <a asp-action="SelectRepair">Create New</a>
+    <a asp-action="SelectRepair" class="btn btn-success">Create new repair card</a>
+    <a asp-action="References" class="btn btn-success">Create reference</a>
 </p>
-
-<form class="card" asp-action="References">
-    <div class="container">
-        <div class="row-align-items-start">
-            <div class="col-2">
-                <div class="form-group">
-                    <label asp-for="Criteria">Choose criteria</label>
-                    <select asp-for="Criteria" class="form-select" asp-items="@Html.GetEnumSelectList(typeof(Criteria))">
-                    </select>
-                </div>
-            </div>
-            <div class="col-10"></div>
-        </div>
-        <br />
-        <div class="row">
-            <div class="col-3">
-                <div class="form-group">
-                    <label asp-for="StartEndDate">Choose start or end date</label>
-                    <select asp-for="StartEndDate" class="form-select" asp-items="@Html.GetEnumSelectList(typeof(StartEndDate))">
-                    </select>
-                </div>
-            </div>
-            <div class="col-3">
-                <div class="form-group">
-                    <label asp-for="Date" class="control-label">Choose date</label>
-                    <input asp-for="Date" class="form-control" />
-                    <span asp-validation-for="Date" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="col-6"></div>
-        </div>
-        <br />
-        <div class="row-align-items-start">
-            <div class="col-2">
-                <div class="form-group">
-                    <label>Choose car registration</label>
-                    <select class="form-select" asp-items="Model.CarRegistrations" asp-for="SelectedCarId"></select>
-                </div>
-            </div>
-            <div class="col-10"></div>
-        </div>
-        <br />
-        <div class="row-align-items-start">
-            <div class="col-2">
-                <input type="submit" value="Filter" class="btn btn-primary" />
-            </div>
-            <div class="col-10"></div>
-        </div>
-    </div>
-    <br />
-</form>
 
 <br/>
 
@@ -96,7 +46,7 @@
                     @Html.DisplayFor(modelItem => item.Description)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Price)
+                    @Html.DisplayFor(modelItem => item.Price+"lv")
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.TypeOfRepair)
@@ -113,8 +63,8 @@
                     @Html.DisplayFor(modelItem => item.MechanicName)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.RepairCardId">Edit</a> |
-                    <a asp-action="Delete" asp-route-id="@item.RepairCardId">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@item.RepairCardId" class="btn btn-warning">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@item.RepairCardId" class="btn btn-danger">Delete</a>
                 </td>
             </tr>
         }

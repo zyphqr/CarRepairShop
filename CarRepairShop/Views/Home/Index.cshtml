@@ -1,4 +1,7 @@
 ﻿@using CarRepairShop.ViewModels;
+@using CarRepairShop.Common;
+@model IndexVMs;
+
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -10,14 +13,56 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-    @if (User.Identity.Name != null)
-    {
-        
-    }
-    else
-    {
-        <h1>Please log in or register in the system.</h1>
-    }
+    <br />
+    <div class="container">
+        <h3>Create new!</h3>
+        <br />
+        <div class="row">
+            <div class="col-4">
+                <a asp-controller="Cars" asp-action="Create" class="btn btn-primary btn-rounded">Add new car</a>
+            </div>
+            <div class="col-4">
+                <a asp-controller="Parts" asp-action="Create" class="btn btn-primary btn-rounded">Add new part</a>
+            </div>
+            <div class="col-4">
+                <a asp-controller="RepairCards" asp-action="SelectRepair" class="btn btn-primary btn-rounded">Create new repair card</a>
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <a asp-controller="RepairCards" asp-action="References" class="btn btn-primary btn-rounded">Create reference</a>
+        </div>
+        <br />
+        <h3>Create new repair card for:</h3>
+        <br />
+        <div class="row">
+            <div class="col-4">
+                <form method="post" asp-controller="RepairCards" asp-action="CreateFromHome">
+                    <input type="hidden" asp-for="@Model.TypeOfRepair = TypeOfRepairs.EngineRepair" />
+                    <input type="submit" class="btn btn-primary btn-rounded" value="Engine repair" />
+                </form>
+            </div>
+            <div class="col-4">
+                <a asp-controller="RepairCards" asp-action="Create" class="btn btn-primary btn-rounded">Cooling system repair</a>
+            </div>
+            <div class="col-4">
+                <a asp-controller="RepairCards" asp-action="Create" class="btn btn-primary btn-rounded">Exhaust system repair</a>
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-4">
+                <a asp-controller="RepairCards" asp-action="Create" class="btn btn-primary btn-rounded">Fuel system repair</a>
+            </div>
+            <div class="col-4">
+                <a asp-controller="RepairCards" asp-action="Create" class="btn btn-primary btn-rounded">Electric system repair</a>
+            </div>
+            <div class="col-4">
+                <a asp-controller="RepairCards" asp-action="Create" class="btn btn-primary btn-rounded">Braking system repair</a>
+            </div>
+        </div>
+    </div>
+
     <script src="~/lib/jquery/dist/jquery.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajax-unobtrusive/3.2.6/jquery.unobtrusive-ajax.js" integrity="sha512-f04GBpoqEZhbyjlRTuXeg8FIHDb+xfCJ0LVdqiN1fEl5B3jz3Z0SPe9IxDumOVdTeeXmKMcMJhb26VuGf1Laqw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>

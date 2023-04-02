@@ -19,8 +19,6 @@ namespace CarRepairShop.ViewModels
         public int SelectedCarId { get; set; }
         public IEnumerable<SelectListItem> CarRegistrations { get; set; }
         public Car Car { get; set; }
-
-        [Required]
         public string Description { get; set; }
 
         public List<int> SelectedPartIds { get; set; }
@@ -36,7 +34,5 @@ namespace CarRepairShop.ViewModels
         public string SelectedMechanicId { get; set; }
         public IEnumerable<SelectListItem> Mechanics { get; set; } 
         public Mechanic Mechanic { get; set; }
-
-        //public IEnumerable<PartVM> partVMs { get; set; }
     }
 }
