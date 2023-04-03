@@ -15,17 +15,17 @@
 <body>
     <br />
     <div class="container">
-        <h3>Create new!</h3>
+        <h3>Create new:</h3>
         <br />
         <div class="row">
             <div class="col-4">
-                <a asp-controller="Cars" asp-action="Create" class="btn btn-primary btn-rounded">Add new car</a>
+                <a asp-controller="Cars" asp-action="Create" class="btn btn-primary btn-rounded">car</a>
             </div>
             <div class="col-4">
-                <a asp-controller="Parts" asp-action="Create" class="btn btn-primary btn-rounded">Add new part</a>
+                <a asp-controller="Parts" asp-action="Create" class="btn btn-primary btn-rounded">part</a>
             </div>
             <div class="col-4">
-                <a asp-controller="RepairCards" asp-action="SelectRepair" class="btn btn-primary btn-rounded">Create new repair card</a>
+                <a asp-controller="RepairCards" asp-action="SelectRepair" class="btn btn-primary btn-rounded">repair card</a>
             </div>
         </div>
         <br />
@@ -37,10 +37,13 @@
         <br />
         <div class="row">
             <div class="col-4">
-                <form method="post" asp-controller="RepairCards" asp-action="CreateFromHome">
-                    <input type="hidden" asp-for="@Model.TypeOfRepair = TypeOfRepairs.EngineRepair" />
+                @*<form asp-controller="RepairCards" asp-action="CreateFromHome">
+                    <input type="hidden" @Html.HiddenFor(m => m.TypeOfRepair = TypeOfRepairs.EngineRepair) />
                     <input type="submit" class="btn btn-primary btn-rounded" value="Engine repair" />
-                </form>
+                </form>*@
+
+@*                <button class="btn btn-primary btn-rounded" id="press" type="button" onclick="">click here</button>
+*@
             </div>
             <div class="col-4">
                 <a asp-controller="RepairCards" asp-action="Create" class="btn btn-primary btn-rounded">Cooling system repair</a>

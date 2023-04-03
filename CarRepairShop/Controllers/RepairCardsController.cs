@@ -55,7 +55,7 @@ namespace CarRepairShop.Controllers
                     Price = repairCard.Price,
                     TypeOfRepair = repairCard.TypeOfRepair,
                     MechanicName = repairCard.Mechanic.FirstName + " " + repairCard.Mechanic.LastName,
-                    Parts = _repairCardsService.SearchedParts(currentRepairCard),
+                    Parts = repairCard.Parts.ToList(),
                 }),
                 CarRegistrations = selectListCars,
                 SelectedCarId = cars.ToList()[0].CarId,
@@ -84,20 +84,12 @@ namespace CarRepairShop.Controllers
 
             var parts = _repairCardsService.GetParts();
             parts = parts.Where(part => part.TypeOfRepair == vm.TypeOfRepair).ToList();
-
+            parts = parts.Where(part => part.Quantity > 0).ToList();
 
             var selectListParts = parts
                 .Select(parts => new SelectListItem(
                     parts.PartName + "-" + parts.Price + "lv",
                     parts.PartId.ToString()));
-
-            //foreach (Part part in parts)
-            //{
-            //    if (part.Quantity <= 0)
-            //    {
-
-            //    }
-            //}
 
             var mechanics = _repairCardsService.GetMechanics();
             var selectListMechanics = mechanics
@@ -131,19 +123,12 @@ namespace CarRepairShop.Controllers
 
             var parts = _repairCardsService.GetParts();
             parts = parts.Where(part => part.TypeOfRepair == vm.TypeOfRepair).ToList();
+            parts = parts.Where(part => part.Quantity > 0).ToList();
 
             var selectListParts = parts
                 .Select(parts => new SelectListItem(
                     parts.PartName + "-" + parts.Price + "lv",
                     parts.PartId.ToString()));
-
-            //foreach (Part part in parts)
-            //{
-            //    if (part.Quantity <= 0)
-            //    {
-
-            //    }
-            //}
 
             var mechanics = _repairCardsService.GetMechanics();
             var selectListMechanics = mechanics
@@ -299,19 +284,13 @@ namespace CarRepairShop.Controllers
             List<Part> CurrentParts = new();
 
             List<Part> parts = _context.Parts.Where(p => p.TypeOfRepair == toBeEdited.TypeOfRepair).ToList();
+            parts = parts.Where(part => part.Quantity > 0).ToList();
 
             foreach (var partId in CurrentPartIds)
             {
                 CurrentParts.Add(_context.Parts.FirstOrDefault(p => p.PartId == partId));
             }
 
-            //foreach (Part part in parts)
-            //{
-            //    if (part.Quantity <= 0)
-            //    {
-
-            //    }
-            //}
 
             var selectListParts = parts
                 .Select(parts => new SelectListItem(
