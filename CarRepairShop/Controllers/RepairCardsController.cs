@@ -43,9 +43,9 @@ namespace CarRepairShop.Controllers
             //ToDo:broken
             RepairCard currentRepairCard = _context.RepairCards.Include(x => x.Parts).FirstOrDefault(rc => rc.RepairCardId == 1);
 
-            var indexVM = new IndexVMs
+            var indexVM = new IndexVM
             {
-                RepairCardsVM = repairCards.Select(repairCard => new RepairCardIndexVM
+                RepairCardIndexVM = repairCards.Select(repairCard => new RepairCardIndexVM
                 {
                     RepairCardId = repairCard.RepairCardId,
                     StartDate = repairCard.StartDate,
@@ -111,8 +111,8 @@ namespace CarRepairShop.Controllers
         }
 
         [Authorize]
-        [HttpPost]
-        public IActionResult CreateFromHome(RepairCardVM vm)
+        [HttpGet]
+        public IActionResult CreateFromHome(TypeOfRepairs TypeOfRepair)
         {
 
             var cars = _repairCardsService.GetCars();
@@ -122,7 +122,7 @@ namespace CarRepairShop.Controllers
                     cars.CarId.ToString()));
 
             var parts = _repairCardsService.GetParts();
-            parts = parts.Where(part => part.TypeOfRepair == vm.TypeOfRepair).ToList();
+            parts = parts.Where(part => part.TypeOfRepair == TypeOfRepair).ToList();
             parts = parts.Where(part => part.Quantity > 0).ToList();
 
             var selectListParts = parts
@@ -142,7 +142,7 @@ namespace CarRepairShop.Controllers
                 EndDate = DateTime.Now,
                 CarRegistrations = selectListCars,
                 SelectedCarId = cars.ToList()[0].CarId,
-                TypeOfRepair = vm.TypeOfRepair,
+                TypeOfRepair = TypeOfRepair,
                 Parts = selectListParts,
                 Mechanics = selectListMechanics,
                 SelectedMechanicId = mechanics.ToList()[0].Id
@@ -180,7 +180,7 @@ namespace CarRepairShop.Controllers
         }
 
         [Authorize]
-        public IActionResult References(IndexVMs vm)
+        public IActionResult References(IndexVM vm)
         {
             var repairCards = _repairCardsService.GetAllRepairCards();
 
@@ -190,14 +190,14 @@ namespace CarRepairShop.Controllers
                     cars.CarRegistration,
                     cars.CarId.ToString()));
 
-            var newVm = new IndexVMs
+            var indexVM = new IndexVM
             {
                 Criteria = vm.Criteria,
                 StartEndDate = vm.StartEndDate,
                 SelectedCarId = vm.SelectedCarId,
                 CarRegistrations = selectListCars,
                 Date = vm.Date,
-                RepairCardsVM = repairCards.Select(repairCard => new RepairCardIndexVM
+                RepairCardIndexVM = repairCards.Select(repairCard => new RepairCardIndexVM
                 {
                     RepairCardId = repairCard.RepairCardId,
                     StartDate = repairCard.StartDate,
@@ -212,12 +212,12 @@ namespace CarRepairShop.Controllers
 
             };
 
-            if (newVm.Criteria != null)
+            if (indexVM.Criteria != null)
             {
-                switch (newVm.Criteria)
+                switch (indexVM.Criteria)
                 {
                     case Criteria.All:
-                        newVm.RepairCardsVM = repairCards.Select(repairCard => new RepairCardIndexVM
+                        indexVM.RepairCardIndexVM = repairCards.Select(repairCard => new RepairCardIndexVM
                         {
                             RepairCardId = repairCard.RepairCardId,
                             StartDate = repairCard.StartDate,
@@ -230,30 +230,30 @@ namespace CarRepairShop.Controllers
                             Parts = _repairCardsService.SearchedParts(_context.RepairCards.FirstOrDefault(rc => rc.RepairCardId == repairCard.RepairCardId))
                         }); break;
                     case Criteria.Finished:
-                        newVm.RepairCardsVM = newVm.RepairCardsVM.Where(rc => rc.EndDate != null); break;
+                        indexVM.RepairCardIndexVM = indexVM.RepairCardIndexVM.Where(rc => rc.EndDate != null); break;
                     case Criteria.Unfinished:
-                        newVm.RepairCardsVM = newVm.RepairCardsVM.Where(rc => rc.EndDate == null); break;
+                        indexVM.RepairCardIndexVM = indexVM.RepairCardIndexVM.Where(rc => rc.EndDate == null); break;
 
                 }
             }
-            if (newVm.StartEndDate != null)
+            if (indexVM.StartEndDate != null)
             {
-                if (newVm.StartEndDate == StartEndDate.StartDate)
+                if (indexVM.StartEndDate == StartEndDate.StartDate)
                 {
-                    newVm.RepairCardsVM = newVm.RepairCardsVM.Where(rc => rc.StartDate >= newVm.Date);
+                    indexVM.RepairCardIndexVM = indexVM.RepairCardIndexVM.Where(rc => rc.StartDate >= indexVM.Date);
                 }
                 else
                 {
-                    newVm.RepairCardsVM = newVm.RepairCardsVM.Where(rc => rc.EndDate <= newVm.Date);
+                    indexVM.RepairCardIndexVM = indexVM.RepairCardIndexVM.Where(rc => rc.EndDate <= indexVM.Date);
                 }
             }
-            if (newVm.SelectedCarId != null)
+            if (indexVM.SelectedCarId != null)
             {
                 Car CarToSearch = _context.Cars.FirstOrDefault(car => car.CarId == vm.SelectedCarId);
-                newVm.RepairCardsVM = newVm.RepairCardsVM.Where(rc => rc.CarRegistration == CarToSearch.CarRegistration);
+                indexVM.RepairCardIndexVM = indexVM.RepairCardIndexVM.Where(rc => rc.CarRegistration == CarToSearch.CarRegistration);
             }
 
-            return View("Views/RepairCards/References.cshtml", newVm);
+            return View("Views/RepairCards/References.cshtml", indexVM);
         }
 
         [HttpGet]

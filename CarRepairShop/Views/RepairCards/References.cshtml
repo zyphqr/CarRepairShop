@@ -1,6 +1,6 @@
 ﻿@using CarRepairShop.Common;
 @using CarRepairShop.ViewModels;
-@model IndexVMs;
+@model IndexVM;
 
 
 <form class="card" asp-action="References">
@@ -73,7 +73,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (RepairCardIndexVM item in Model.RepairCardsVM)
+        @foreach (RepairCardIndexVM item in Model.RepairCardIndexVM)
         {
             <tr>
                 <td>
@@ -89,7 +89,7 @@
                     @Html.DisplayFor(modelItem => item.Description)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Price+"lv")
+                    @Html.DisplayFor(modelItem => item.Price)lv
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.TypeOfRepair)

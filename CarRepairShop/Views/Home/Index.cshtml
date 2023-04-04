@@ -1,6 +1,6 @@
 ﻿@using CarRepairShop.ViewModels;
 @using CarRepairShop.Common;
-@model IndexVMs;
+@model IndexVM;
 
 @{
     ViewData["Title"] = "Home Page";
@@ -19,49 +19,55 @@
         <br />
         <div class="row">
             <div class="col-4">
-                <a asp-controller="Cars" asp-action="Create" class="btn btn-primary btn-rounded">car</a>
+                <a asp-controller="Cars" asp-action="Create" class="btn btn-success btn-rounded">Car</a>
             </div>
             <div class="col-4">
-                <a asp-controller="Parts" asp-action="Create" class="btn btn-primary btn-rounded">part</a>
+                <a asp-controller="Parts" asp-action="Create" class="btn btn-success btn-rounded">Part</a>
             </div>
             <div class="col-4">
-                <a asp-controller="RepairCards" asp-action="SelectRepair" class="btn btn-primary btn-rounded">repair card</a>
+                <a asp-controller="RepairCards" asp-action="SelectRepair" class="btn btn-success btn-rounded">Repair card</a>
             </div>
         </div>
         <br />
         <div class="row">
-            <a asp-controller="RepairCards" asp-action="References" class="btn btn-primary btn-rounded">Create reference</a>
+            <a asp-controller="RepairCards" asp-action="References" class="btn btn-primary btn-rounded">Create a reference</a>
         </div>
         <br />
         <h3>Create new repair card for:</h3>
         <br />
         <div class="row">
             <div class="col-4">
-                @*<form asp-controller="RepairCards" asp-action="CreateFromHome">
-                    <input type="hidden" @Html.HiddenFor(m => m.TypeOfRepair = TypeOfRepairs.EngineRepair) />
-                    <input type="submit" class="btn btn-primary btn-rounded" value="Engine repair" />
-                </form>*@
-
-@*                <button class="btn btn-primary btn-rounded" id="press" type="button" onclick="">click here</button>
-*@
+                <a href="@Url.Action("CreateFromHome","RepairCards", new{TypeOfRepair = TypeOfRepairs.EngineRepair})">
+                    <span class="btn btn-primary btn-rounded">Engine repair</span>
+                </a>
             </div>
             <div class="col-4">
-                <a asp-controller="RepairCards" asp-action="Create" class="btn btn-primary btn-rounded">Cooling system repair</a>
+                <a href="@Url.Action("CreateFromHome","RepairCards", new{TypeOfRepair = TypeOfRepairs.CoolingSystemRepair})">
+                    <span class="btn btn-primary btn-rounded">Cooling system repair</span>
+                </a>
             </div>
             <div class="col-4">
-                <a asp-controller="RepairCards" asp-action="Create" class="btn btn-primary btn-rounded">Exhaust system repair</a>
+                <a href="@Url.Action("CreateFromHome","RepairCards", new{TypeOfRepair = TypeOfRepairs.ExhaustSystemRepair})">
+                    <span class="btn btn-primary btn-rounded">Exhaust system repair</span>
+                </a>
             </div>
         </div>
         <br />
         <div class="row">
             <div class="col-4">
-                <a asp-controller="RepairCards" asp-action="Create" class="btn btn-primary btn-rounded">Fuel system repair</a>
+                <a href="@Url.Action("CreateFromHome","RepairCards", new{TypeOfRepair = TypeOfRepairs.FuelSystemRepair})">
+                    <span class="btn btn-primary btn-rounded">Fuel system repair</span>
+                </a>
             </div>
             <div class="col-4">
-                <a asp-controller="RepairCards" asp-action="Create" class="btn btn-primary btn-rounded">Electric system repair</a>
+                <a href="@Url.Action("CreateFromHome","RepairCards", new{TypeOfRepair = TypeOfRepairs.ElectricSystemRepair})">
+                    <span class="btn btn-primary btn-rounded">Electric system repair</span>
+                </a>
             </div>
             <div class="col-4">
-                <a asp-controller="RepairCards" asp-action="Create" class="btn btn-primary btn-rounded">Braking system repair</a>
+                <a href="@Url.Action("CreateFromHome","RepairCards", new{TypeOfRepair = TypeOfRepairs.BrakingSystemRepair})">
+                    <span class="btn btn-primary btn-rounded">Braking system repair</span>
+                </a>
             </div>
         </div>
     </div>

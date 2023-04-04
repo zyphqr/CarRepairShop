@@ -3,11 +3,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace CarRepairShop.ViewModels
 {
-    public class IndexVMs
+    public class IndexVM
     {
-        public IEnumerable<RepairCardIndexVM> RepairCardsVM { get; set; }
-
-        public TypeOfRepairs TypeOfRepair { get; set; }
+        public IEnumerable<RepairCardIndexVM> RepairCardIndexVM { get; set; }
 
         public Criteria? Criteria { get; set; }
 

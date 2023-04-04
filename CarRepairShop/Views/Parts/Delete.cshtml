@@ -4,47 +4,42 @@
     ViewData["Title"] = "Delete";
 }
 
-
-<h3>Are you sure deleting @Model.PartName</h3>
-<div>
-    <h4>@Model.PartName</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PartName)
-        </dt>
-        <dd class = "col-sm-10">
+<h3>Are you sure you want to delete part @Model.PartName?</h3>
+<br />
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <label>Name: </label>
             @Html.DisplayFor(model => model.PartName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Quantity)
-        </dt>
-        <dd class = "col-sm-10">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3">
+            <label>Quantity: </label>
             @Html.DisplayFor(model => model.Quantity)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Price)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Price)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.WorkingHours)
-        </dt>
-        <dd class = "col-sm-10">
+        </div>
+        <div class="col-3">
+            <label>Price: </label>
+            @Html.DisplayFor(model => model.Price) lv
+        </div>
+        <div class="col-6"></div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <label>Working hours: </label>
             @Html.DisplayFor(model => model.WorkingHours)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TypeOfRepair)
-        </dt>
-        <dd class = "col-sm-10">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <label>Type of repair: </label>
             @Html.DisplayFor(model => model.TypeOfRepair)
-        </dd>
-    </dl>
-    
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="PartId" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index" class="btn btn-info">Back to all parts.</a>
-    </form>
+        </div>
+    </div>
 </div>
+<br />
+<form asp-action="Delete">
+    <input type="hidden" asp-for="PartId" />
+    <input type="submit" value="Delete" class="btn btn-danger" />
+    <a asp-action="Index" class="btn btn-info">Back to all parts</a>
+</form>

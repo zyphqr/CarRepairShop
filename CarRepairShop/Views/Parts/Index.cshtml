@@ -7,25 +7,25 @@
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Add new part</a>
+    <a asp-action="Create" class="btn btn-success">Add new part</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.PartName)
+                PartName
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Quantity)
+                Quantity
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Price)
+                Price
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.WorkingHours)
+                Working hours
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.TypeOfRepair)
+                Type of repair
             </th>
             <th></th>
         </tr>
@@ -40,7 +40,7 @@
                 @Html.DisplayFor(modelItem => item.Quantity)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Price)
+                @Html.DisplayFor(modelItem => item.Price)lv
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.WorkingHours)
