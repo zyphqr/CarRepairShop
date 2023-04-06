@@ -4,84 +4,79 @@
     ViewData["Title"] = "Delete";
 }
 
-<h3>Are you sure deleting car @Model.CarRegistration</h3>
 
-
-<div>
-    <h4>Car @Model.CarRegistration</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CarRegistration)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CarRegistration)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CarBrand)
-        </dt>
-        <dd class = "col-sm-10">
+<h3>Are you sure you want to delete Car @Model.CarRegistration?</h3>
+<br />
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <label>Car registation: </label>
+            @Html.DisplayFor(model => model.CarId)
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3">
+            <label>Brand: </label>
             @Html.DisplayFor(model => model.CarBrand)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CarModel)
-        </dt>
-        <dd class = "col-sm-10">
+        </div>
+        <div class="col-3">
+            <label>Model: </label>
             @Html.DisplayFor(model => model.CarModel)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.YearOfManifacture)
-        </dt>
-        <dd class = "col-sm-10">
+        </div>
+        <div class="col-6"></div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <label>Year of manifacture: </label>
             @Html.DisplayFor(model => model.YearOfManifacture)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.EngineNum)
-        </dt>
-        <dd class = "col-sm-10">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <label>EngineNum: </label>
             @Html.DisplayFor(model => model.EngineNum)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FrameNum)
-        </dt>
-        <dd class = "col-sm-10">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <label>FrameNum: </label>
             @Html.DisplayFor(model => model.FrameNum)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Color)
-        </dt>
-        <dd class = "col-sm-10">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <label>Color: </label>
             @Html.DisplayFor(model => model.Color)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.WorkingVolume)
-        </dt>
-        <dd class = "col-sm-10">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <label>WorkingVolume: </label>
             @Html.DisplayFor(model => model.WorkingVolume)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <label>Description: </label>
             @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Owner)
-        </dt>
-        <dd class = "col-sm-10">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <label>Owner's name: </label>
             @Html.DisplayFor(model => model.Owner)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.OwnerPhoneNum)
-        </dt>
-        <dd class = "col-sm-10">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <label>Owner phone num: </label>
             @Html.DisplayFor(model => model.OwnerPhoneNum)
-        </dd>
-    </dl>
-    
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="CarId" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index" class="btn btn-info">Back to all cars.</a>
-    </form>
+        </div>
+    </div>
 </div>
+<br />
+<form asp-action="Delete">
+    <input type="hidden" asp-for="CarId" />
+    <input type="submit" value="Delete" class="btn btn-danger" />
+    <a asp-action="Index" class="btn btn-info">Back to all cars</a>
+</form>
