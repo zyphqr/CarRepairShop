@@ -114,6 +114,11 @@ namespace CarRepairShop.Controllers
                 return NotFound();
             }
 
+            if (part.RepairCards.Count!=0)
+            {
+                return NotFound();
+            }
+
             return View(part);
         }
 

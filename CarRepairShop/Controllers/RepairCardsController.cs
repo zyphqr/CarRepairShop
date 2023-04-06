@@ -39,10 +39,6 @@ namespace CarRepairShop.Controllers
                     cars.CarRegistration,
                     cars.CarId.ToString()));
 
-
-            //ToDo:broken
-            RepairCard currentRepairCard = _context.RepairCards.Include(x => x.Parts).FirstOrDefault(rc => rc.RepairCardId == 1);
-
             var indexVM = new IndexVMs
             {
                 RepairCardsVM = repairCards.Select(repairCard => new RepairCardIndexVM
@@ -55,7 +51,7 @@ namespace CarRepairShop.Controllers
                     Price = repairCard.Price,
                     TypeOfRepair = repairCard.TypeOfRepair,
                     MechanicName = repairCard.Mechanic.FirstName + " " + repairCard.Mechanic.LastName,
-                    Parts = repairCard.Parts.ToList(),
+                    Parts = _repairCardsService.SearchedParts(_context.RepairCards.Include(x => x.Parts).FirstOrDefault(rc => rc.RepairCardId == repairCard.RepairCardId)),
                 }),
                 CarRegistrations = selectListCars,
                 SelectedCarId = cars.ToList()[0].CarId,
@@ -258,14 +254,14 @@ namespace CarRepairShop.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int? id)
         {
             if (id == null || _context.RepairCards == null)
             {
                 return NotFound();
             }
 
-            var repairCard = await _context.RepairCards.FindAsync(id);
+            var repairCard = _context.RepairCards.FirstOrDefault(rc=> rc.RepairCardId == id);
             if (repairCard == null)
             {
                 return NotFound();
@@ -279,18 +275,8 @@ namespace CarRepairShop.Controllers
 
             RepairCard toBeEdited = _context.RepairCards.Include(p => p.Parts).FirstOrDefault(p => p.RepairCardId == id);
 
-            var CurrentPartIds = toBeEdited.Parts.Select(p => p.PartId).ToList();
-
-            List<Part> CurrentParts = new();
-
             List<Part> parts = _context.Parts.Where(p => p.TypeOfRepair == toBeEdited.TypeOfRepair).ToList();
             parts = parts.Where(part => part.Quantity > 0).ToList();
-
-            foreach (var partId in CurrentPartIds)
-            {
-                CurrentParts.Add(_context.Parts.FirstOrDefault(p => p.PartId == partId));
-            }
-
 
             var selectListParts = parts
                 .Select(parts => new SelectListItem(
@@ -312,9 +298,7 @@ namespace CarRepairShop.Controllers
                 CarRegistrations = selectListCars,
                 Car = repairCard.Car,
                 Description = repairCard.Description,
-                SelectedPartIds = repairCard.Parts.Select(rc => rc.PartId).ToList(),
                 Parts = selectListParts,
-                CurrentParts = CurrentParts,
                 Price = repairCard.Price,
                 TypeOfRepair = repairCard.TypeOfRepair,
                 SelectedMechanicId = repairCard.MechanicId,

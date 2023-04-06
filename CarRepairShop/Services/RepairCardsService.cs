@@ -100,6 +100,37 @@ namespace CarRepairShop.Services
                                     List<Part> selectedParts,
                                     Mechanic selectedMechanic)
         {
+            //_context.RepairCards.FirstOrDefault(rc => rc.RepairCardId == repairCardId).Parts.Clear();
+
+            //RepairCard repairCard = _context.RepairCards.Include(rc => rc.Parts)
+            //                                            .AsNoTracking()
+            //                                            .Single(rc => rc.RepairCardId == repairCardId);
+            //_context.Entry(repairCard).State = EntityState.Detached;
+
+            var NewPartIds = selectedParts.Select(p => p.PartId).ToList();
+
+            //foreach (var Part in repairCard.Parts.ToList())
+            //{
+            //    if(!NewPartIds.Contains(Part.PartId))
+            //    {
+            //        repairCard.Parts.Remove(Part);
+            //    }
+            //}
+            //foreach(var newid in NewPartIds)
+            //{
+            //    if (!repairCard.Parts.Any(p => p.PartId == newid))
+            //    {
+            //        var newPart = new Part
+            //        {
+            //            PartId = newid,
+            //        };
+            //        _context.Parts.Attach(newPart);
+            //        repairCard.Parts.Add(newPart);
+            //    }
+            //}
+
+            
+
             RepairCard repairCardToEdit = new()
             {
                 RepairCardId = repairCardId,
@@ -110,8 +141,23 @@ namespace CarRepairShop.Services
                 TypeOfRepair = typeOfRepair,
                 Price = CalculatePrice(selectedParts),
                 Mechanic = selectedMechanic,
-                Parts = selectedParts
             };
+
+            var newParts = _context.Parts
+                                 .Where(p => NewPartIds.Contains(p.PartId))
+                                 .ToList();
+            repairCardToEdit.Parts.Clear();
+
+            foreach(Part part in repairCardToEdit.Parts.ToList())
+            {
+                repairCardToEdit.Parts.Remove(part);
+            }
+            _context.SaveChanges();
+
+            foreach (var Part in newParts)
+            {
+                repairCardToEdit.Parts.Add(Part);
+            }
 
             foreach (Part part in SearchedParts(repairCardToEdit))
             {
@@ -122,7 +168,7 @@ namespace CarRepairShop.Services
             {
                 part.Quantity--;
             }
-
+            //_context.Entry(repairCard).State = EntityState.Modified;
             _context.Update(repairCardToEdit);
             _context.SaveChanges();
 
