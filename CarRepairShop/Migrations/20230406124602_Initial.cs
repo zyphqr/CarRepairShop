@@ -265,6 +265,11 @@ namespace CarRepairShop.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Cars",
+                columns: new[] { "CarId", "CarBrand", "CarModel", "CarRegistration", "Color", "Description", "EngineNum", "FrameNum", "Owner", "OwnerPhoneNum", "WorkingVolume", "YearOfManifacture" },
+                values: new object[] { 1, 1, "A3", "A5656KH", 1, "no description", "1234567891", "12345678912345678", "Pesho", "0888888888", 500.0, 1 });
+
+            migrationBuilder.InsertData(
                 table: "Parts",
                 columns: new[] { "PartId", "PartName", "Price", "Quantity", "TypeOfRepair", "WorkingHours" },
                 values: new object[,]
@@ -316,8 +321,7 @@ namespace CarRepairShop.Migrations
                     { 18, "P" },
                     { 19, "CC" },
                     { 20, "CH" },
-                    { 21, "CM" },
-                    { 22, "CO" }
+                    { 21, "CM" }
                 });
 
             migrationBuilder.InsertData(
@@ -325,6 +329,7 @@ namespace CarRepairShop.Migrations
                 columns: new[] { "TownId", "TownCode" },
                 values: new object[,]
                 {
+                    { 22, "CO" },
                     { 23, "CA" },
                     { 24, "CB" },
                     { 25, "CT" },

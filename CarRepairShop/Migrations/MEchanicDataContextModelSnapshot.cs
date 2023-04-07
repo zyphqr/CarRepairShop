@@ -147,6 +147,23 @@ namespace CarRepairShop.Migrations
                     b.HasKey("CarId");
 
                     b.ToTable("Cars");
+
+                    b.HasData(
+                        new
+                        {
+                            CarId = 1,
+                            CarBrand = 1,
+                            CarModel = "A3",
+                            CarRegistration = "A5656KH",
+                            Color = 1,
+                            Description = "no description",
+                            EngineNum = "1234567891",
+                            FrameNum = "12345678912345678",
+                            Owner = "Pesho",
+                            OwnerPhoneNum = "0888888888",
+                            WorkingVolume = 500.0,
+                            YearOfManifacture = 1
+                        });
                 });
 
             modelBuilder.Entity("CarRepairShop.Models.Part", b =>

@@ -43,7 +43,7 @@ namespace CarRepairShop.Controllers
             //ToDo:broken
             RepairCard currentRepairCard = _context.RepairCards.Include(x => x.Parts).FirstOrDefault(rc => rc.RepairCardId == 1);
 
-            var indexVM = new IndexVMs
+            var indexVM = new IndexVM
             {
                 RepairCardIndexVM = repairCards.Select(repairCard => new RepairCardIndexVM
                 {

@@ -30,7 +30,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (RepairCardIndexVM item in Model.RepairCRepairCardIndexVMardsVM)
+        @foreach (RepairCardIndexVM item in Model.RepairCardIndexVM)
         {
             <tr>
                 <td>
@@ -46,7 +46,7 @@
                     @Html.DisplayFor(modelItem => item.Description)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Price+"lv")
+                    @Html.DisplayFor(modelItem => item.Price)lv
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.TypeOfRepair)

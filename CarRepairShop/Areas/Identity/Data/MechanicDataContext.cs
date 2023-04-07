@@ -33,6 +33,24 @@ public class MEchanicDataContext : IdentityDbContext<Mechanic>
             .WithMany(r => r.RepairCards)
             .UsingEntity(t => t.ToTable("RepairCardParts"));
 
+        builder.Entity<Car>()
+           .HasData(
+               new Car()
+               {
+                   CarId = 1,
+                   CarRegistration = "A5656KH",
+                   CarBrand = CarBrands.AlfaRomeo,
+                   CarModel = "A3",
+                   YearOfManifacture = YearsOfManifacture.Year1990,
+                   EngineNum = "1234567891",
+                   FrameNum = "12345678912345678",
+                   Color = Colors.Red,
+                   WorkingVolume = 500,
+                   Description = "no description",
+                   Owner = "Pesho",
+                   OwnerPhoneNum = "0888888888"
+               });
+
 
         builder.Entity<Part>()
             .HasData(

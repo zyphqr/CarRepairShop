@@ -107,7 +107,7 @@ namespace CarRepairShop.Services
             //                                            .Single(rc => rc.RepairCardId == repairCardId);
             //_context.Entry(repairCard).State = EntityState.Detached;
 
-            var NewPartIds = selectedParts.Select(p => p.PartId).ToList();
+            //var NewPartIds = selectedParts.Select(p => p.PartId).ToList();
 
             //foreach (var Part in repairCard.Parts.ToList())
             //{
@@ -129,47 +129,62 @@ namespace CarRepairShop.Services
             //    }
             //}
 
-            
 
-            RepairCard repairCardToEdit = new()
-            {
-                RepairCardId = repairCardId,
-                StartDate = startDate,
-                EndDate = endDate,
-                Car = selectedCar,
-                Description = descpription,
-                TypeOfRepair = typeOfRepair,
-                Price = CalculatePrice(selectedParts),
-                Mechanic = selectedMechanic,
-            };
 
-            var newParts = _context.Parts
-                                 .Where(p => NewPartIds.Contains(p.PartId))
-                                 .ToList();
-            repairCardToEdit.Parts.Clear();
+            //RepairCard repairCardToEdit = new()
+            //{
+            //    RepairCardId = repairCardId,
+            //    StartDate = startDate,
+            //    EndDate = endDate,
+            //    Car = selectedCar,
+            //    Description = descpription,
+            //    TypeOfRepair = typeOfRepair,
+            //    Price = CalculatePrice(selectedParts),
+            //    Mechanic = selectedMechanic,
+            //};
 
-            foreach(Part part in repairCardToEdit.Parts.ToList())
-            {
-                repairCardToEdit.Parts.Remove(part);
-            }
-            _context.SaveChanges();
+            //var newParts = _context.Parts
+            //                     .Where(p => NewPartIds.Contains(p.PartId))
+            //                     .ToList();
+            //repairCardToEdit.Parts.Clear();
 
-            foreach (var Part in newParts)
-            {
-                repairCardToEdit.Parts.Add(Part);
-            }
+            //foreach(Part part in repairCardToEdit.Parts.ToList())
+            //{
+            //    repairCardToEdit.Parts.Remove(part);
+            //}
+            //_context.SaveChanges();
 
-            foreach (Part part in SearchedParts(repairCardToEdit))
-            {
-                part.Quantity++;
-            }
+            //foreach (var Part in newParts)
+            //{
+            //    repairCardToEdit.Parts.Add(Part);
+            //}
 
-            foreach (Part part in selectedParts)
-            {
-                part.Quantity--;
-            }
+            //foreach (Part part in SearchedParts(repairCardToEdit))
+            //{
+            //    part.Quantity++;
+            //}
+
+            //foreach (Part part in selectedParts)
+            //{
+            //    part.Quantity--;
+            //}
             //_context.Entry(repairCard).State = EntityState.Modified;
-            _context.Update(repairCardToEdit);
+
+            var findRepairCard = _context.RepairCards.Include(p=>p.Parts).FirstOrDefault(rc => rc.RepairCardId == repairCardId);
+
+            findRepairCard.Parts.Clear();
+
+            findRepairCard.RepairCardId = repairCardId;
+            findRepairCard.StartDate = startDate;
+            findRepairCard.EndDate = endDate;
+            findRepairCard.Car = selectedCar;
+            findRepairCard.Description = descpription;
+            findRepairCard.TypeOfRepair = typeOfRepair;
+            findRepairCard.Price = CalculatePrice(selectedParts);
+            findRepairCard.Mechanic = selectedMechanic;
+            findRepairCard.Parts = selectedParts;
+
+            _context.Update(findRepairCard);
             _context.SaveChanges();
 
         }
