@@ -47,7 +47,6 @@ namespace CarRepairShop.Controllers
             {
                 _partsService.CreatePart(createPart.PartId,
                                              createPart.PartName,
-                                             createPart.Quantity,
                                              createPart.Price,
                                              createPart.WorkingHours,
                                              createPart.TypeOfRepair);
@@ -70,10 +69,9 @@ namespace CarRepairShop.Controllers
             {
                 PartId = part.PartId,
                 PartName = part.PartName,
-                Quantity = part.Quantity,
                 Price = part.Price,
                 WorkingHours = part.WorkingHours,
-                TypeOfRepair = part.TypeOfRepair
+                TypeOfRepair = part.TypeOfRepair,
             };
             return View(editPart);
         }
@@ -88,7 +86,6 @@ namespace CarRepairShop.Controllers
             {
                 _partsService.EditPart(editPart.PartId,
                                           editPart.PartName,
-                                          editPart.Quantity,
                                           editPart.Price,
                                           editPart.WorkingHours,
                                           editPart.TypeOfRepair
@@ -109,7 +106,13 @@ namespace CarRepairShop.Controllers
 
             var part = await _context.Parts
                 .FirstOrDefaultAsync(m => m.PartId == id);
+
             if (part == null)
+            {
+                return NotFound();
+            }
+
+            if (part.RepairCardId != null)
             {
                 return NotFound();
             }

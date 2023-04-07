@@ -26,22 +26,11 @@ namespace CarRepairShop.Controllers
             _repairCardsService = repairCardsService;
         }
 
-        // GET: RepairCards
         [Authorize]
         public IActionResult Index()
         {
             var repairCards = _repairCardsService.GetAllRepairCards();
             var parts = _repairCardsService.GetParts();
-
-            var cars = _repairCardsService.GetCars();
-            var selectListCars = cars
-                .Select(cars => new SelectListItem(
-                    cars.CarRegistration,
-                    cars.CarId.ToString()));
-
-
-            //ToDo:broken
-            RepairCard currentRepairCard = _context.RepairCards.Include(x => x.Parts).FirstOrDefault(rc => rc.RepairCardId == 1);
 
             var indexVM = new IndexVM
             {
@@ -57,8 +46,6 @@ namespace CarRepairShop.Controllers
                     MechanicName = repairCard.Mechanic.FirstName + " " + repairCard.Mechanic.LastName,
                     Parts = repairCard.Parts.ToList(),
                 }),
-                CarRegistrations = selectListCars,
-                SelectedCarId = cars.ToList()[0].CarId,
             };
 
             return View(indexVM);
@@ -84,7 +71,7 @@ namespace CarRepairShop.Controllers
 
             var parts = _repairCardsService.GetParts();
             parts = parts.Where(part => part.TypeOfRepair == vm.TypeOfRepair).ToList();
-            parts = parts.Where(part => part.Quantity > 0).ToList();
+            parts = parts.Where(part => part.RepairCardId == null).ToList();
 
             var selectListParts = parts
                 .Select(parts => new SelectListItem(
@@ -123,7 +110,7 @@ namespace CarRepairShop.Controllers
 
             var parts = _repairCardsService.GetParts();
             parts = parts.Where(part => part.TypeOfRepair == TypeOfRepair).ToList();
-            parts = parts.Where(part => part.Quantity > 0).ToList();
+            parts = parts.Where(part => part.RepairCardId == null).ToList();
 
             var selectListParts = parts
                 .Select(parts => new SelectListItem(
@@ -266,6 +253,7 @@ namespace CarRepairShop.Controllers
             }
 
             var repairCard = await _context.RepairCards.FindAsync(id);
+
             if (repairCard == null)
             {
                 return NotFound();
@@ -277,20 +265,8 @@ namespace CarRepairShop.Controllers
                     cars.CarRegistration,
                     cars.CarId.ToString()));
 
-            RepairCard toBeEdited = _context.RepairCards.Include(p => p.Parts).FirstOrDefault(p => p.RepairCardId == id);
-
-            var CurrentPartIds = toBeEdited.Parts.Select(p => p.PartId).ToList();
-
-            List<Part> CurrentParts = new();
-
-            List<Part> parts = _context.Parts.Where(p => p.TypeOfRepair == toBeEdited.TypeOfRepair).ToList();
-            parts = parts.Where(part => part.Quantity > 0).ToList();
-
-            foreach (var partId in CurrentPartIds)
-            {
-                CurrentParts.Add(_context.Parts.FirstOrDefault(p => p.PartId == partId));
-            }
-
+            List<Part> parts = _context.Parts.Where(p => p.TypeOfRepair == repairCard.TypeOfRepair).ToList();
+            parts = parts.Where(part => part.RepairCardId == null || part.RepairCardId == repairCard.RepairCardId).ToList();
 
             var selectListParts = parts
                 .Select(parts => new SelectListItem(
@@ -312,9 +288,7 @@ namespace CarRepairShop.Controllers
                 CarRegistrations = selectListCars,
                 Car = repairCard.Car,
                 Description = repairCard.Description,
-                SelectedPartIds = repairCard.Parts.Select(rc => rc.PartId).ToList(),
                 Parts = selectListParts,
-                CurrentParts = CurrentParts,
                 Price = repairCard.Price,
                 TypeOfRepair = repairCard.TypeOfRepair,
                 SelectedMechanicId = repairCard.MechanicId,
@@ -366,7 +340,9 @@ namespace CarRepairShop.Controllers
             var repairCard = await _context.RepairCards
                 .Include(r => r.Car)
                 .Include(r => r.Mechanic)
+                .Include(r => r.Parts)
                 .FirstOrDefaultAsync(m => m.RepairCardId == id);
+
             if (repairCard == null)
             {
                 return NotFound();
@@ -378,20 +354,30 @@ namespace CarRepairShop.Controllers
 
         [Authorize]
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int id)
         {
             if (_context.RepairCards == null)
             {
                 return Problem("Entity set 'MEchanicDataContext.RepairCards'  is null.");
             }
-            var repairCard = await _context.RepairCards.FindAsync(id);
+            var repairCard = _context.RepairCards
+                 .Include(r => r.Car)
+                 .Include(r => r.Mechanic)
+                 .Include(r => r.Parts)
+                 .FirstOrDefault(m => m.RepairCardId == id);
+
+            var parts = repairCard.Parts.ToList();
+            foreach (Part part in parts)
+            {
+                part.RepairCard = null;
+                part.RepairCardId = null;
+            }
             if (repairCard != null)
             {
-                _context.RepairCards.Remove(repairCard);
+                _context.Remove(repairCard);
             }
 
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
             return RedirectToAction(nameof(Index));
         }
     }

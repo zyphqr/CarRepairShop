@@ -1,7 +1,6 @@
 ﻿using CarRepairShop.Areas.Identity.Data;
 using CarRepairShop.Common;
 using CarRepairShop.Models;
-using CarRepairShop.ViewModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace CarRepairShop.Services
@@ -22,18 +21,12 @@ namespace CarRepairShop.Services
 
         public List<Part> GetParts()
         {
-            var parts = _context.Parts.Include(p => p.RepairCards).ToList();
-            return parts;
+            return _context.Parts.ToList();
         }
 
         public List<Car> GetCars()
         {
             return _context.Cars.ToList();
-        }
-
-        public List<Town> GetTowns()
-        {
-            return _context.Towns.ToList();
         }
 
         public List<RepairCard> GetAllRepairCards()
@@ -57,8 +50,8 @@ namespace CarRepairShop.Services
 
         public List<Part> SearchedParts(RepairCard repairCard)
         {
-            var Parts = repairCard.Parts.ToList();
-            return Parts;
+            return repairCard.Parts.ToList();
+
         }
 
         public void CreateRepairCard(DateTime startDate,
@@ -82,11 +75,6 @@ namespace CarRepairShop.Services
                 Parts = selectedParts
             };
 
-            foreach (Part part in selectedParts)
-            {
-                part.Quantity--;
-            }
-
             _context.Add(newRepairCard);
             _context.SaveChanges();
         }
@@ -100,30 +88,22 @@ namespace CarRepairShop.Services
                                     List<Part> selectedParts,
                                     Mechanic selectedMechanic)
         {
-            RepairCard repairCardToEdit = new()
-            {
-                RepairCardId = repairCardId,
-                StartDate = startDate,
-                EndDate = endDate,
-                Car = selectedCar,
-                Description = descpription,
-                TypeOfRepair = typeOfRepair,
-                Price = CalculatePrice(selectedParts),
-                Mechanic = selectedMechanic,
-                Parts = selectedParts
-            };
+            var findRepairCard = _context.RepairCards.FirstOrDefault(rc => rc.RepairCardId == repairCardId);
 
-            foreach (Part part in SearchedParts(repairCardToEdit))
-            {
-                part.Quantity++;
-            }
+            findRepairCard.Parts.Clear();
 
-            foreach (Part part in selectedParts)
-            {
-                part.Quantity--;
-            }
+            findRepairCard.RepairCardId = repairCardId;
+            findRepairCard.StartDate = startDate;
+            findRepairCard.EndDate = endDate;
+            findRepairCard.Car = selectedCar;
+            findRepairCard.Description = descpription;
+            findRepairCard.TypeOfRepair = typeOfRepair;
+            findRepairCard.Price = CalculatePrice(selectedParts);
+            findRepairCard.Mechanic = selectedMechanic;
+            findRepairCard.Parts = selectedParts;
+            
 
-            _context.Update(repairCardToEdit);
+            _context.Update(findRepairCard);
             _context.SaveChanges();
 
         }

@@ -14,9 +14,6 @@ namespace CarRepairShop.Models
         public string PartName { get; set; }
 
         [Required]
-        public int Quantity { get; set; }
-
-        [Required]
         [Column(TypeName = "decimal(6,2)")]
         public decimal Price { get; set; }
 

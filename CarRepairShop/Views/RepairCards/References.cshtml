@@ -10,7 +10,7 @@
                 <div class="form-group">
                     <label asp-for="Criteria">Choose criteria</label>
                     <select asp-for="Criteria" class="form-select" asp-items="@Html.GetEnumSelectList(typeof(Criteria))">
-                        <option value="" selected disabled>Select criteria</option>
+                        <option value="" selected>Select criteria</option>
                     </select>
                 </div>
             </div>
@@ -22,7 +22,7 @@
                 <div class="form-group">
                     <label asp-for="StartEndDate">Choose start or end date</label>
                     <select asp-for="StartEndDate" class="form-select" asp-items="@Html.GetEnumSelectList(typeof(StartEndDate))">
-                        <option value="" selected disabled>Select start or end date</option>
+                        <option value="" selected>Select start or end date</option>
                     </select>
                 </div>
             </div>
@@ -41,7 +41,7 @@
                 <div class="form-group">
                     <label>Choose car registration</label>
                     <select class="form-select" asp-items="Model.CarRegistrations" asp-for="SelectedCarId">
-                        <option value="" selected disabled>Select car registration</option>
+                        <option value="" selected>Select car registration</option>
                     </select>
                 </div>
             </div>
