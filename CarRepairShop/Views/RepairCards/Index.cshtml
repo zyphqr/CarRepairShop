@@ -1,6 +1,6 @@
 ﻿@using CarRepairShop.Common;
 @using CarRepairShop.ViewModels;
-@model IndexVMs;
+@model IndexVM;
 
 @{
     ViewData["Title"] = "RepairCards";
@@ -30,7 +30,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (RepairCardIndexVM item in Model.RepairCardsVM)
+        @foreach (RepairCardIndexVM item in Model.RepairCRepairCardIndexVMardsVM)
         {
             <tr>
                 <td>
@@ -46,7 +46,7 @@
                     @Html.DisplayFor(modelItem => item.Description)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Price)
+                    @Html.DisplayFor(modelItem => item.Price+"lv")
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.TypeOfRepair)
