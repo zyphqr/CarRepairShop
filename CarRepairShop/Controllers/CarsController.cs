@@ -16,6 +16,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace CarRepairShop.Controllers
 {
+    [Authorize]
     public class CarsController : Controller
     {
         private readonly MEchanicDataContext _context;

@@ -5,9 +5,11 @@ namespace CarRepairShop.Common
 {
     public enum StartEndDate
     {
+        [Display(Name = "All dates")]
+        All = 1,
         [Display(Name = "Start date")]
-        StartDate = 1,
+        StartDate = 2,
         [Display(Name = "End date")]
-        EndDate = 2,
+        EndDate = 3,
     }
 }

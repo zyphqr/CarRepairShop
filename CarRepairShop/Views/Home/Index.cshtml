@@ -1,6 +1,11 @@
-﻿@using CarRepairShop.ViewModels;
+﻿@using CarRepairShop.Areas.Identity.Data;
+@using Microsoft.AspNetCore.Identity;
+@using CarRepairShop.ViewModels;
 @using CarRepairShop.Common;
-@model IndexVM;
+@model FilteringVM;
+
+@inject SignInManager<Mechanic> SignInManager
+@inject UserManager<Mechanic> UserManager
 
 @{
     ViewData["Title"] = "Home Page";
@@ -13,24 +18,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
+    <h2>Welcome @((await UserManager.FindByNameAsync(User.Identity.Name)).FirstName)!</h2>
     <br />
     <div class="container">
         <h3>Create new:</h3>
         <br />
         <div class="row">
             <div class="col-4">
-                <a asp-controller="Cars" asp-action="Create" class="btn btn-success btn-rounded">Car</a>
+                <a asp-controller="Cars" asp-action="Create" class="btn btn-success btn-rounded">Car!</a>
             </div>
             <div class="col-4">
-                <a asp-controller="Parts" asp-action="Create" class="btn btn-success btn-rounded">Part</a>
+                <a asp-controller="Parts" asp-action="Create" class="btn btn-success btn-rounded">Part!</a>
             </div>
             <div class="col-4">
-                <a asp-controller="RepairCards" asp-action="SelectRepair" class="btn btn-success btn-rounded">Repair card</a>
+                <a asp-controller="RepairCards" asp-action="SelectRepair" class="btn btn-success btn-rounded">Repair card!</a>
             </div>
         </div>
         <br />
         <div class="row">
-            <a asp-controller="RepairCards" asp-action="References" class="btn btn-primary btn-rounded">Create a reference</a>
+            <a asp-controller="RepairCards" asp-action="Filtering" class="btn btn-primary btn-rounded">Filter repair cars!</a>
         </div>
         <br />
         <h3>Create new repair card for:</h3>

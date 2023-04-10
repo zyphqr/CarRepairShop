@@ -10,12 +10,12 @@ namespace CarRepairShop.ViewModels
         public DateTime StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public string CarRegistration { get; set; }
-        public IEnumerable<SelectListItem> CarRegistrations { get; set; }
         public string Description { get; set; }
         public decimal Price { get; set; }
         public TypeOfRepairs TypeOfRepair { get; set; }
         public List<Part> Parts { get; set; }
-        public string MechanicName { get; set; }
-        
+        public string MechanicFirstName { get; set; }
+        public string MechanicLastName { get; set; }
+
     }
 }

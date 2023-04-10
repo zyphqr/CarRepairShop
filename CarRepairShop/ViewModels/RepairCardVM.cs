@@ -19,7 +19,7 @@ namespace CarRepairShop.ViewModels
         public int SelectedCarId { get; set; }
         public IEnumerable<SelectListItem> CarRegistrations { get; set; }
         public Car Car { get; set; }
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         public List<int> SelectedPartIds { get; set; }
         public IEnumerable<SelectListItem> Parts { get; set; }

@@ -4,7 +4,7 @@ namespace CarRepairShop.Common
 {
     public enum Criteria
     {
-        [Display(Name = "All repair cards")]
+        [Display(Name = "All")]
         All = 1,
         [Display(Name = "Finished")]
         Finished = 2,

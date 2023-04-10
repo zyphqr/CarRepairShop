@@ -45,15 +45,6 @@ namespace CarRepairShop.Services
                                    string ownerName,
                                    string ownerPhoneNum)
         {
-            //if (carRegistration.Length == registrationMaxLength)
-            //{
-            //    if (Char.IsDigit(carRegistration, 0) || Char.IsDigit(carRegistration, 1) || Char.IsDigit(carRegistration, 6) || Char.IsDigit(carRegistration, 7))
-            //    {
-            //        throw new Exception("The entered car registration is not valid.");
-            //    }
-            //}
-            //else throw new Exception("The entered car registration length is less or more than 8.");
-
             if (engineNum.Length != engineNumMaxLength)
             {
                 throw new Exception("The entered engine number is not valid.");
@@ -85,51 +76,33 @@ namespace CarRepairShop.Services
         }
 
         public void EditCar(int carId,
-                                   string carRegistration,
-                                   CarBrands brand,
-                                   string model,
-                                   YearsOfManifacture yearOfManifacture,
-                                   string engineNum,
-                                   string frameNum,
-                                   Colors color,
-                                   double workingVolume,
-                                   string description,
-                                   string ownerName,
-                                   string ownerPhoneNum)
+                            string carRegistration,
+                            CarBrands brand,
+                            string model,
+                            YearsOfManifacture yearOfManifacture,
+                            string engineNum,
+                            string frameNum,
+                            Colors color,
+                            double workingVolume,
+                            string description,
+                            string ownerName,
+                            string ownerPhoneNum)
         {
-            //if (carRegistration.Length == registrationMaxLength)
-            //{
-            //    if (Char.IsDigit(carRegistration, 0) || Char.IsDigit(carRegistration, 1) || Char.IsDigit(carRegistration, 6) || Char.IsDigit(carRegistration, 7))
-            //    {
-            //        throw new Exception("The entered car registration is not valid.");
-            //    }
-            //}
-            //else throw new Exception("The entered car registration length is less or more than 8.");
+            var carToBeUpdated = _context.Cars.FirstOrDefault(c => c.CarId == carId);
 
-            if (engineNum.Length != engineNumMaxLength)
-            {
-                throw new Exception("The entered engine number is not valid.");
-            }
-            if (frameNum.Length != frameNumMaxLength)
-            {
-                throw new Exception("The entered frame number is not valid.");
-            }
-
-            Car carToBeUpdated = new()
-            {
-                CarId = carId,
-                CarRegistration = carRegistration.ToUpper(),
-                CarBrand = brand,
-                CarModel = model.ToUpper(),
-                YearOfManifacture = yearOfManifacture,
-                EngineNum = engineNum,
-                FrameNum = frameNum,
-                Color = color,
-                WorkingVolume = workingVolume,
-                Description = description,
-                Owner = ownerName,
-                OwnerPhoneNum = ownerPhoneNum
-            };
+            carToBeUpdated.CarId = carId;
+            carToBeUpdated.CarRegistration = carRegistration.ToUpper();
+            carToBeUpdated.CarBrand = brand;
+            carToBeUpdated.CarModel = model.ToUpper();
+            carToBeUpdated.YearOfManifacture = yearOfManifacture;
+            carToBeUpdated.EngineNum = engineNum;
+            carToBeUpdated.FrameNum = frameNum;
+            carToBeUpdated.Color = color;
+            carToBeUpdated.WorkingVolume = workingVolume;
+            carToBeUpdated.Description = description;
+            carToBeUpdated.Owner = ownerName;
+            carToBeUpdated.OwnerPhoneNum = ownerPhoneNum;
+           
             _context.Update(carToBeUpdated);
             _context.SaveChanges();
         }

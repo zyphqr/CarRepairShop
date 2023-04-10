@@ -1,6 +1,6 @@
 ﻿@using CarRepairShop.Common;
 @using CarRepairShop.ViewModels;
-@model IndexVM;
+@model FilteringVM;
 
 @{
     ViewData["Title"] = "RepairCards";
@@ -60,7 +60,7 @@
                     }
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.MechanicName)
+                    @Html.DisplayFor(modelItem => item.MechanicFirstName)  @Html.DisplayFor(modelItem => item.MechanicLastName)
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.RepairCardId" class="btn btn-warning">Edit</a>

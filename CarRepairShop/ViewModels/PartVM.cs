@@ -10,8 +10,6 @@ namespace CarRepairShop.ViewModels
 
         public string PartName { get; set; }
 
-        public bool IsSelected { get; set; }
-
         public int Quantity { get; set; }
 
         public decimal Price { get; set; }
@@ -19,7 +17,5 @@ namespace CarRepairShop.ViewModels
         public int WorkingHours { get; set; }
 
         public TypeOfRepairs TypeOfRepair { get; set; }
-
-        public RepairCard? RepairCard { get; set; }
     }
 }

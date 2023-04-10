@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace CarRepairShop.Controllers
 {
+    [Authorize]
     public class PartsController : Controller
     {
         private readonly MEchanicDataContext _context;

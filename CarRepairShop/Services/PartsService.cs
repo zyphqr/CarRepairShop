@@ -14,13 +14,6 @@ namespace CarRepairShop.Services
 
         public void CreatePart(int partId, string partName, int quantity, decimal price, int workingHours, TypeOfRepairs typeOfRepair)
         {
-            foreach (Part part in _context.Parts)
-            {
-                if (part.PartId == partId || part.PartName == partName)
-                {
-                    throw new Exception("This part already exists.");
-                }
-            }
 
             Part newPart = new()
             {
@@ -38,16 +31,14 @@ namespace CarRepairShop.Services
 
         public void EditPart(int partId, string partName, int quantity, decimal price, int workingHours, TypeOfRepairs typeOfRepair)
         {
+            var partToBeUpdated = _context.Parts.FirstOrDefault(c => c.PartId == partId);
 
-            Part partToBeUpdated = new()
-            {
-                PartId = partId,
-                PartName = partName,
-                Quantity = quantity,
-                Price = price,
-                WorkingHours = workingHours,
-                TypeOfRepair = typeOfRepair
-            };
+            partToBeUpdated.PartId = partId;
+            partToBeUpdated.PartName = partName;
+            partToBeUpdated.Quantity = quantity;
+            partToBeUpdated.Price = price;
+            partToBeUpdated.WorkingHours = workingHours;
+            partToBeUpdated.TypeOfRepair = typeOfRepair;
 
             _context.Update(partToBeUpdated);
             _context.SaveChanges();

@@ -15,6 +15,7 @@ using System.IO;
 
 namespace CarRepairShop.Controllers
 {
+    [Authorize]
     public class RepairCardsController : Controller
     {
         private readonly MEchanicDataContext _context;
@@ -26,24 +27,11 @@ namespace CarRepairShop.Controllers
             _repairCardsService = repairCardsService;
         }
 
-        // GET: RepairCards
-        [Authorize]
         public IActionResult Index()
         {
             var repairCards = _repairCardsService.GetAllRepairCards();
-            var parts = _repairCardsService.GetParts();
 
-            var cars = _repairCardsService.GetCars();
-            var selectListCars = cars
-                .Select(cars => new SelectListItem(
-                    cars.CarRegistration,
-                    cars.CarId.ToString()));
-
-
-            //ToDo:broken
-            RepairCard currentRepairCard = _context.RepairCards.Include(x => x.Parts).FirstOrDefault(rc => rc.RepairCardId == 1);
-
-            var indexVM = new IndexVM
+            var indexVM = new FilteringVM
             {
                 RepairCardIndexVM = repairCards.Select(repairCard => new RepairCardIndexVM
                 {
@@ -54,25 +42,20 @@ namespace CarRepairShop.Controllers
                     Description = repairCard.Description,
                     Price = repairCard.Price,
                     TypeOfRepair = repairCard.TypeOfRepair,
-                    MechanicName = repairCard.Mechanic.FirstName + " " + repairCard.Mechanic.LastName,
+                    MechanicFirstName = repairCard.Mechanic.FirstName,
+                    MechanicLastName = repairCard.Mechanic.LastName,
                     Parts = _repairCardsService.SearchedParts(_context.RepairCards.Include(x => x.Parts).FirstOrDefault(rc => rc.RepairCardId == repairCard.RepairCardId)),
-                }),
-                CarRegistrations = selectListCars,
-                SelectedCarId = cars.ToList()[0].CarId,
+                })
             };
-
             return View(indexVM);
         }
 
-
-        [Authorize]
         [HttpGet]
         public IActionResult SelectRepair()
         {
             return View("Views/RepairCards/TypeOfRepairForm.cshtml", new RepairCardVM());
         }
 
-        [Authorize]
         [HttpPost]
         public IActionResult SelectRepair(RepairCardVM vm)
         {
@@ -88,7 +71,7 @@ namespace CarRepairShop.Controllers
 
             var selectListParts = parts
                 .Select(parts => new SelectListItem(
-                    parts.PartName + "-" + parts.Price + "lv",
+                    $"{parts.PartName} - {parts.Price}lv, quantity: {parts.Quantity}",
                     parts.PartId.ToString()));
 
             var mechanics = _repairCardsService.GetMechanics();
@@ -110,7 +93,6 @@ namespace CarRepairShop.Controllers
             });
         }
 
-        [Authorize]
         [HttpGet]
         public IActionResult CreateFromHome(TypeOfRepairs TypeOfRepair)
         {
@@ -127,7 +109,7 @@ namespace CarRepairShop.Controllers
 
             var selectListParts = parts
                 .Select(parts => new SelectListItem(
-                    parts.PartName + "-" + parts.Price + "lv",
+                    $"{parts.PartName} - {parts.Price}lv, quantity: {parts.Quantity}",
                     parts.PartId.ToString()));
 
             var mechanics = _repairCardsService.GetMechanics();
@@ -149,12 +131,13 @@ namespace CarRepairShop.Controllers
             });
         }
 
-        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(RepairCardVM createRepairCard)
         {
-            Car selectedCarReg = _repairCardsService.GetCars().Single(c => c.CarId == createRepairCard.SelectedCarId);
+            Car selectedCarReg = _repairCardsService
+                                    .GetCars()
+                                    .Single(c => c.CarId == createRepairCard.SelectedCarId);
 
             List<Part> SelectedParts = new();
 
@@ -163,24 +146,26 @@ namespace CarRepairShop.Controllers
                 SelectedParts.Add(_repairCardsService.GetParts().Single(c => c.PartId == partId));
             }
 
-            Mechanic selectedMechanicId = _repairCardsService.GetMechanics().Single(m => m.Id == createRepairCard.SelectedMechanicId);
+            Mechanic selectedMechanicId = _repairCardsService
+                                            .GetMechanics()
+                                            .Single(m => m.Id == createRepairCard.SelectedMechanicId);
 
             createRepairCard.TypeOfRepair = SelectedParts[0].TypeOfRepair;//TODO: FIx  is scuffed
 
             _repairCardsService.CreateRepairCard(
-                createRepairCard.StartDate,
-                createRepairCard.EndDate,
-                selectedCarReg,
-                createRepairCard.Description,
-                createRepairCard.TypeOfRepair,
-                SelectedParts,
-                selectedMechanicId
-                );
+                                    createRepairCard.StartDate,
+                                    createRepairCard.EndDate,
+                                    selectedCarReg,
+                                    createRepairCard.Description,
+                                    createRepairCard.TypeOfRepair,
+                                    SelectedParts,
+                                    selectedMechanicId
+                                    );
             return RedirectToAction(nameof(Index));
         }
 
         [Authorize]
-        public IActionResult References(IndexVM vm)
+        public IActionResult Filtering(FilteringVM vm)
         {
             var repairCards = _repairCardsService.GetAllRepairCards();
 
@@ -190,12 +175,21 @@ namespace CarRepairShop.Controllers
                     cars.CarRegistration,
                     cars.CarId.ToString()));
 
-            var indexVM = new IndexVM
+            var mechanics = _repairCardsService.GetMechanics();
+            var selectListMechanics = mechanics
+                .Select(mechanics => new SelectListItem(
+                    mechanics.FirstName + " " + mechanics.LastName,
+                    mechanics.Id.ToString()));
+
+            var indexVM = new FilteringVM
             {
                 Criteria = vm.Criteria,
+                TypeOfRepair = vm.TypeOfRepair,
                 StartEndDate = vm.StartEndDate,
-                SelectedCarId = vm.SelectedCarId,
+                SelectedCarId = 0,
                 CarRegistrations = selectListCars,
+                SelectedMechanicId = "All",
+                Mechanics = selectListMechanics,
                 Date = vm.Date,
                 RepairCardIndexVM = repairCards.Select(repairCard => new RepairCardIndexVM
                 {
@@ -206,7 +200,8 @@ namespace CarRepairShop.Controllers
                     Description = repairCard.Description,
                     Price = repairCard.Price,
                     TypeOfRepair = repairCard.TypeOfRepair,
-                    MechanicName = repairCard.Mechanic.FirstName + " " + repairCard.Mechanic.LastName,
+                    MechanicFirstName = repairCard.Mechanic.FirstName,
+                    MechanicLastName = repairCard.Mechanic.LastName,
                     Parts = _repairCardsService.SearchedParts(_context.RepairCards.FirstOrDefault(rc => rc.RepairCardId == repairCard.RepairCardId))
                 }),
 
@@ -214,50 +209,238 @@ namespace CarRepairShop.Controllers
 
             if (indexVM.Criteria != null)
             {
-                switch (indexVM.Criteria)
+                if (indexVM.Criteria == Criteria.All)
                 {
-                    case Criteria.All:
-                        indexVM.RepairCardIndexVM = repairCards.Select(repairCard => new RepairCardIndexVM
-                        {
-                            RepairCardId = repairCard.RepairCardId,
-                            StartDate = repairCard.StartDate,
-                            EndDate = repairCard.EndDate,
-                            CarRegistration = repairCard.Car.CarRegistration,
-                            Description = repairCard.Description,
-                            Price = repairCard.Price,
-                            TypeOfRepair = repairCard.TypeOfRepair,
-                            MechanicName = repairCard.Mechanic.FirstName + " " + repairCard.Mechanic.LastName,
-                            Parts = _repairCardsService.SearchedParts(_context.RepairCards.FirstOrDefault(rc => rc.RepairCardId == repairCard.RepairCardId))
-                        }); break;
-                    case Criteria.Finished:
-                        indexVM.RepairCardIndexVM = indexVM.RepairCardIndexVM.Where(rc => rc.EndDate != null); break;
-                    case Criteria.Unfinished:
-                        indexVM.RepairCardIndexVM = indexVM.RepairCardIndexVM.Where(rc => rc.EndDate == null); break;
+                    indexVM.RepairCardIndexVM = repairCards.Select(repairCard => new RepairCardIndexVM
+                    {
+                        RepairCardId = repairCard.RepairCardId,
+                        StartDate = repairCard.StartDate,
+                        EndDate = repairCard.EndDate,
+                        CarRegistration = repairCard.Car.CarRegistration,
+                        Description = repairCard.Description,
+                        Price = repairCard.Price,
+                        TypeOfRepair = repairCard.TypeOfRepair,
+                        MechanicFirstName = repairCard.Mechanic.FirstName,
+                        MechanicLastName = repairCard.Mechanic.LastName,
+                        Parts = _repairCardsService.SearchedParts(_context.RepairCards.FirstOrDefault(rc => rc.RepairCardId == repairCard.RepairCardId))
+                    });
+                }
+                else if (indexVM.Criteria == Criteria.Finished)
+                {
+                    indexVM.RepairCardIndexVM = indexVM.RepairCardIndexVM
+                                                    .Where(rc => rc.EndDate != null);
+                }
+                else if (indexVM.Criteria == Criteria.Unfinished)
+                {
+                    indexVM.RepairCardIndexVM = indexVM.RepairCardIndexVM
+                                                    .Where(rc => rc.EndDate == null);
+                }
+
+                //switch (indexVM.Criteria)
+                //{
+                //    case Criteria.All:
+                //        indexVM.RepairCardIndexVM = repairCards.Select(repairCard => new RepairCardIndexVM
+                //        {
+                //            RepairCardId = repairCard.RepairCardId,
+                //            StartDate = repairCard.StartDate,
+                //            EndDate = repairCard.EndDate,
+                //            CarRegistration = repairCard.Car.CarRegistration,
+                //            Description = repairCard.Description,
+                //            Price = repairCard.Price,
+                //            TypeOfRepair = repairCard.TypeOfRepair,
+                //            MechanicFirstName = repairCard.Mechanic.FirstName,
+                //            MechanicLastName = repairCard.Mechanic.LastName,
+                //            Parts = _repairCardsService.SearchedParts(_context.RepairCards.FirstOrDefault(rc => rc.RepairCardId == repairCard.RepairCardId))
+                //        }); break;
+
+                //    case Criteria.Finished:
+                //        indexVM.RepairCardIndexVM = indexVM.RepairCardIndexVM
+                //                                    .Where(rc => rc.EndDate != null); break;
+
+                //    case Criteria.Unfinished:
+                //        indexVM.RepairCardIndexVM = indexVM.RepairCardIndexVM
+                //                                    .Where(rc => rc.EndDate == null); break;
+                //}
+            }
+            if (indexVM.TypeOfRepair != null)
+            {
+                if (indexVM.TypeOfRepair == TypeOfRepairs.All)
+                {
+                    indexVM.RepairCardIndexVM = repairCards.Select(repairCard => new RepairCardIndexVM
+                    {
+                        RepairCardId = repairCard.RepairCardId,
+                        StartDate = repairCard.StartDate,
+                        EndDate = repairCard.EndDate,
+                        CarRegistration = repairCard.Car.CarRegistration,
+                        Description = repairCard.Description,
+                        Price = repairCard.Price,
+                        TypeOfRepair = repairCard.TypeOfRepair,
+                        MechanicFirstName = repairCard.Mechanic.FirstName,
+                        MechanicLastName = repairCard.Mechanic.LastName,
+                        Parts = _repairCardsService.SearchedParts(_context.RepairCards.FirstOrDefault(rc => rc.RepairCardId == repairCard.RepairCardId))
+                    });
+                }
+                else if (indexVM.TypeOfRepair == TypeOfRepairs.EngineRepair)
+                {
+                    indexVM.RepairCardIndexVM = indexVM.RepairCardIndexVM
+                                                    .Where(rc => rc.TypeOfRepair == TypeOfRepairs.EngineRepair);
+                }
+                else if (indexVM.TypeOfRepair == TypeOfRepairs.CoolingSystemRepair)
+                {
+                    indexVM.RepairCardIndexVM = indexVM.RepairCardIndexVM
+                                                    .Where(rc => rc.TypeOfRepair == TypeOfRepairs.CoolingSystemRepair);
+                }
+                else if (indexVM.TypeOfRepair == TypeOfRepairs.ExhaustSystemRepair)
+                {
+                    indexVM.RepairCardIndexVM = indexVM.RepairCardIndexVM
+                                                    .Where(rc => rc.TypeOfRepair == TypeOfRepairs.ExhaustSystemRepair);
+                }
+                else if (indexVM.TypeOfRepair == TypeOfRepairs.FuelSystemRepair)
+                {
+                    indexVM.RepairCardIndexVM = indexVM.RepairCardIndexVM
+                                                    .Where(rc => rc.TypeOfRepair == TypeOfRepairs.FuelSystemRepair);
+                }
+                else if (indexVM.TypeOfRepair == TypeOfRepairs.ElectricSystemRepair)
+                {
+                    indexVM.RepairCardIndexVM = indexVM.RepairCardIndexVM
+                                                    .Where(rc => rc.TypeOfRepair == TypeOfRepairs.ElectricSystemRepair);
+                }
+                else if (indexVM.TypeOfRepair == TypeOfRepairs.BrakingSystemRepair)
+                {
+                    indexVM.RepairCardIndexVM = indexVM.RepairCardIndexVM
+                                                    .Where(rc => rc.TypeOfRepair == TypeOfRepairs.BrakingSystemRepair);
+                }
+                //switch (indexVM.TypeOfRepair)
+                //{
+                //    case TypeOfRepairs.All:
+                //        indexVM.RepairCardIndexVM = repairCards.Select(repairCard => new RepairCardIndexVM
+                //        {
+                //            RepairCardId = repairCard.RepairCardId,
+                //            StartDate = repairCard.StartDate,
+                //            EndDate = repairCard.EndDate,
+                //            CarRegistration = repairCard.Car.CarRegistration,
+                //            Description = repairCard.Description,
+                //            Price = repairCard.Price,
+                //            TypeOfRepair = repairCard.TypeOfRepair,
+                //            MechanicFirstName = repairCard.Mechanic.FirstName,
+                //            MechanicLastName = repairCard.Mechanic.LastName,
+                //            Parts = _repairCardsService.SearchedParts(_context.RepairCards.FirstOrDefault(rc => rc.RepairCardId == repairCard.RepairCardId))
+                //        }); break;
+
+                //    case TypeOfRepairs.EngineRepair:
+                //        indexVM.RepairCardIndexVM = indexVM.RepairCardIndexVM
+                //                                    .Where(rc => rc.TypeOfRepair == TypeOfRepairs.EngineRepair); break;
+
+                //    case TypeOfRepairs.CoolingSystemRepair:
+                //        indexVM.RepairCardIndexVM = indexVM.RepairCardIndexVM
+                //                                    .Where(rc => rc.TypeOfRepair == TypeOfRepairs.CoolingSystemRepair); break;
+
+                //    case TypeOfRepairs.ExhaustSystemRepair:
+                //        indexVM.RepairCardIndexVM = indexVM.RepairCardIndexVM
+                //                                    .Where(rc => rc.TypeOfRepair == TypeOfRepairs.ExhaustSystemRepair); break;
+
+                //    case TypeOfRepairs.FuelSystemRepair:
+                //        indexVM.RepairCardIndexVM = indexVM.RepairCardIndexVM
+                //                                    .Where(rc => rc.TypeOfRepair == TypeOfRepairs.FuelSystemRepair); break;
+
+                //    case TypeOfRepairs.ElectricSystemRepair:
+                //        indexVM.RepairCardIndexVM = indexVM.RepairCardIndexVM
+                //                                    .Where(rc => rc.TypeOfRepair == TypeOfRepairs.ElectricSystemRepair); break;
+
+                //    case TypeOfRepairs.BrakingSystemRepair:
+                //        indexVM.RepairCardIndexVM = indexVM.RepairCardIndexVM
+                //                                    .Where(rc => rc.TypeOfRepair == TypeOfRepairs.BrakingSystemRepair); break;
+                //}
+            }
+            if(indexVM.StartEndDate != null)
+            {
+                if(indexVM.StartEndDate == StartEndDate.All)
+                {
+                    indexVM.RepairCardIndexVM = repairCards.Select(repairCard => new RepairCardIndexVM
+                    {
+                        RepairCardId = repairCard.RepairCardId,
+                        StartDate = repairCard.StartDate,
+                        EndDate = repairCard.EndDate,
+                        CarRegistration = repairCard.Car.CarRegistration,
+                        Description = repairCard.Description,
+                        Price = repairCard.Price,
+                        TypeOfRepair = repairCard.TypeOfRepair,
+                        MechanicFirstName = repairCard.Mechanic.FirstName,
+                        MechanicLastName = repairCard.Mechanic.LastName,
+                        Parts = _repairCardsService.SearchedParts(_context.RepairCards.FirstOrDefault(rc => rc.RepairCardId == repairCard.RepairCardId))
+                    });
 
                 }
-            }
-            if (indexVM.StartEndDate != null)
-            {
-                if (indexVM.StartEndDate == StartEndDate.StartDate)
+                else if(indexVM.StartEndDate == StartEndDate.StartDate)
                 {
-                    indexVM.RepairCardIndexVM = indexVM.RepairCardIndexVM.Where(rc => rc.StartDate >= indexVM.Date);
+                    indexVM.RepairCardIndexVM = indexVM.RepairCardIndexVM
+                                                .Where(rc => rc.StartDate >= indexVM.Date);
                 }
                 else
                 {
-                    indexVM.RepairCardIndexVM = indexVM.RepairCardIndexVM.Where(rc => rc.EndDate <= indexVM.Date);
+                    indexVM.RepairCardIndexVM = indexVM.RepairCardIndexVM
+                                                .Where(rc => rc.EndDate <= indexVM.Date);
                 }
             }
-            if (indexVM.SelectedCarId != null)
+            if (indexVM.SelectedCarId != null)//ToDo ; fucked
             {
-                Car CarToSearch = _context.Cars.FirstOrDefault(car => car.CarId == vm.SelectedCarId);
-                indexVM.RepairCardIndexVM = indexVM.RepairCardIndexVM.Where(rc => rc.CarRegistration == CarToSearch.CarRegistration);
-            }
+                if (indexVM.SelectedCarId == 1)
+                {
+                    indexVM.RepairCardIndexVM = repairCards.Select(repairCard => new RepairCardIndexVM
+                    {
+                        RepairCardId = repairCard.RepairCardId,
+                        StartDate = repairCard.StartDate,
+                        EndDate = repairCard.EndDate,
+                        CarRegistration = repairCard.Car.CarRegistration,
+                        Description = repairCard.Description,
+                        Price = repairCard.Price,
+                        TypeOfRepair = repairCard.TypeOfRepair,
+                        MechanicFirstName = repairCard.Mechanic.FirstName,
+                        MechanicLastName = repairCard.Mechanic.LastName,
+                        Parts = _repairCardsService.SearchedParts(_context.RepairCards.FirstOrDefault(rc => rc.RepairCardId == repairCard.RepairCardId))
+                    });
+                }
+                else
+                {
+                    Car CarToSearch = _context.Cars.FirstOrDefault(car => car.CarId == vm.SelectedCarId);
 
-            return View("Views/RepairCards/References.cshtml", indexVM);
+                    indexVM.RepairCardIndexVM = indexVM.RepairCardIndexVM
+                                                .Where(rc => rc.CarRegistration == CarToSearch.CarRegistration);
+                }
+
+            }
+            if (indexVM.SelectedMechanicId != null)//ToDo also fucked
+            {
+                if (indexVM.SelectedMechanicId == "All")
+                {
+                    indexVM.RepairCardIndexVM = repairCards.Select(repairCard => new RepairCardIndexVM
+                    {
+                        RepairCardId = repairCard.RepairCardId,
+                        StartDate = repairCard.StartDate,
+                        EndDate = repairCard.EndDate,
+                        CarRegistration = repairCard.Car.CarRegistration,
+                        Description = repairCard.Description,
+                        Price = repairCard.Price,
+                        TypeOfRepair = repairCard.TypeOfRepair,
+                        MechanicFirstName = repairCard.Mechanic.FirstName,
+                        MechanicLastName = repairCard.Mechanic.LastName,
+                        Parts = _repairCardsService.SearchedParts(_context.RepairCards.FirstOrDefault(rc => rc.RepairCardId == repairCard.RepairCardId))
+                    });
+                }
+                else
+                {
+                    Mechanic MechanicToSearch = _context.Mechanics.FirstOrDefault(m => m.Id == vm.SelectedMechanicId);
+
+                    indexVM.RepairCardIndexVM = indexVM.RepairCardIndexVM
+                                                .Where(rc => rc.MechanicFirstName == MechanicToSearch.FirstName
+                                                          && rc.MechanicLastName == MechanicToSearch.LastName);
+                }
+
+            }
+            return View("Views/RepairCards/Filtering.cshtml", indexVM);
         }
 
         [HttpGet]
-        [Authorize]
         public IActionResult Edit(int? id)
         {
             if (id == null || _context.RepairCards == null)
@@ -265,7 +448,9 @@ namespace CarRepairShop.Controllers
                 return NotFound();
             }
 
-            var repairCard = _context.RepairCards.FirstOrDefault(rc=> rc.RepairCardId == id);
+            var repairCard = _context.RepairCards
+                             .FirstOrDefault(rc => rc.RepairCardId == id);
+
             if (repairCard == null)
             {
                 return NotFound();
@@ -279,12 +464,15 @@ namespace CarRepairShop.Controllers
 
             RepairCard toBeEdited = _context.RepairCards.Include(p => p.Parts).FirstOrDefault(p => p.RepairCardId == id);
 
-            List<Part> parts = _context.Parts.Where(p => p.TypeOfRepair == toBeEdited.TypeOfRepair).ToList();
+            List<Part> parts = _context.Parts
+                               .Where(p => p.TypeOfRepair == toBeEdited.TypeOfRepair)
+                               .ToList();
+
             parts = parts.Where(part => part.Quantity > 0).ToList();
 
             var selectListParts = parts
                 .Select(parts => new SelectListItem(
-                    parts.PartName + "-" + parts.Price + "lv",
+                    $"{parts.PartName} - {parts.Price}lv, quantity: {parts.Quantity}",
                     parts.PartId.ToString()));
 
             var mechanics = _repairCardsService.GetMechanics();
@@ -302,6 +490,7 @@ namespace CarRepairShop.Controllers
                 CarRegistrations = selectListCars,
                 Car = repairCard.Car,
                 Description = repairCard.Description,
+                SelectedPartIds = repairCard.Parts.Select(p => p.PartId).ToList(),
                 Parts = selectListParts,
                 Price = repairCard.Price,
                 TypeOfRepair = repairCard.TypeOfRepair,
@@ -317,11 +506,15 @@ namespace CarRepairShop.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(RepairCardVM editRepairCard)
         {
-            Car selectedCarReg = _repairCardsService.GetCars().Single(c => c.CarId == editRepairCard.SelectedCarId);
+            Car selectedCarReg = _repairCardsService
+                                 .GetCars()
+                                 .Single(c => c.CarId == editRepairCard.SelectedCarId);
 
             List<Part> SelectedParts = new();
 
-            Mechanic selectedMechanicId = _repairCardsService.GetMechanics().Single(m => m.Id == editRepairCard.SelectedMechanicId);
+            Mechanic selectedMechanicId = _repairCardsService
+                                          .GetMechanics()
+                                          .Single(m => m.Id == editRepairCard.SelectedMechanicId);
 
             foreach (var id in editRepairCard.SelectedPartIds)
             {
@@ -342,19 +535,17 @@ namespace CarRepairShop.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-
-        [Authorize]
-        public async Task<IActionResult> Delete(int? id)
+        public IActionResult Delete(int? id)
         {
             if (id == null || _context.RepairCards == null)
             {
                 return NotFound();
             }
 
-            var repairCard = await _context.RepairCards
-                .Include(r => r.Car)
-                .Include(r => r.Mechanic)
-                .FirstOrDefaultAsync(m => m.RepairCardId == id);
+            var repairCard = _context.RepairCards
+                             .Include(r => r.Car)
+                             .Include(r => r.Mechanic)
+                             .FirstOrDefault(m => m.RepairCardId == id);
             if (repairCard == null)
             {
                 return NotFound();
@@ -363,23 +554,21 @@ namespace CarRepairShop.Controllers
             return View(repairCard);
         }
 
-
-        [Authorize]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int id)
         {
             if (_context.RepairCards == null)
             {
                 return Problem("Entity set 'MEchanicDataContext.RepairCards'  is null.");
             }
-            var repairCard = await _context.RepairCards.FindAsync(id);
+            var repairCard = _context.RepairCards.Find(id);
             if (repairCard != null)
             {
                 _context.RepairCards.Remove(repairCard);
             }
 
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
             return RedirectToAction(nameof(Index));
         }
     }

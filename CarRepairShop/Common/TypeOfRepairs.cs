@@ -5,6 +5,8 @@ namespace CarRepairShop.Common
 {
     public enum TypeOfRepairs
     {
+        [Display(Name = "All repairs")]
+        All = 0,
         [Display(Name = "Engine repair")]
         EngineRepair = 1,
         [Display(Name = "Cooling system repair")]
