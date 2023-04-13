@@ -45,6 +45,6 @@ namespace CarRepairShop.Models
         [RegularExpression("/^\\+?[1-9][0-9]{10,13}$/")]
         public string OwnerPhoneNum { get; set; }
 
-        public ICollection<RepairCard>? RepairCards { get; set; }
+        public ICollection<RepairCard>? RepairCards { get; set; } = new List<RepairCard>();
     }
 }

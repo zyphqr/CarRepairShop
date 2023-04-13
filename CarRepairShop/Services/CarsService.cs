@@ -10,8 +10,8 @@ namespace CarRepairShop.Services
         private const int engineNumMaxLength = 10;
         private const int frameNumMaxLength = 17;
 
-        private readonly MEchanicDataContext _context;
-        public CarsService(MEchanicDataContext context)
+        private readonly ShopDataContext _context;
+        public CarsService(ShopDataContext context)
         {
             _context = context;
         }
@@ -31,19 +31,19 @@ namespace CarRepairShop.Services
         }
 
         public void CreateCar(int carId,
-                                   Town selectedTown,
-                                   string carRegNumbers,
-                                   string CarRegLastDigits,
-                                   CarBrands brand,
-                                   string model,
-                                   YearsOfManifacture yearOfManifacture,
-                                   string engineNum,
-                                   string frameNum,
-                                   Colors color,
-                                   double workingVolume,
-                                   string description,
-                                   string ownerName,
-                                   string ownerPhoneNum)
+                              Town selectedTown,
+                              string carRegNumbers,
+                              string CarRegLastDigits,
+                              CarBrands brand,
+                              string model,
+                              YearsOfManifacture yearOfManifacture,
+                              string engineNum,
+                              string frameNum,
+                              Colors color,
+                              double workingVolume,
+                              string description,
+                              string ownerName,
+                              string ownerPhoneNum)
         {
             if (engineNum.Length != engineNumMaxLength)
             {
@@ -91,7 +91,7 @@ namespace CarRepairShop.Services
             var carToBeUpdated = _context.Cars.FirstOrDefault(c => c.CarId == carId);
 
             carToBeUpdated.CarId = carId;
-            carToBeUpdated.CarRegistration = carRegistration.ToUpper();
+            carToBeUpdated.CarRegistration = carRegistration;
             carToBeUpdated.CarBrand = brand;
             carToBeUpdated.CarModel = model.ToUpper();
             carToBeUpdated.YearOfManifacture = yearOfManifacture;

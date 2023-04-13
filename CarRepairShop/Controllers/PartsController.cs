@@ -17,10 +17,10 @@ namespace CarRepairShop.Controllers
     [Authorize]
     public class PartsController : Controller
     {
-        private readonly MEchanicDataContext _context;
+        private readonly ShopDataContext _context;
         private readonly PartsService _partsService;
 
-        public PartsController(MEchanicDataContext context, PartsService partsService)
+        public PartsController(ShopDataContext context, PartsService partsService)
         {
             _context = context;
             _partsService = partsService;
@@ -41,7 +41,6 @@ namespace CarRepairShop.Controllers
 
         [HttpPost]
         [Authorize]
-        [ValidateAntiForgeryToken]
         public IActionResult Create(PartVM createPart)
         {
             if (ModelState.IsValid)
@@ -82,7 +81,6 @@ namespace CarRepairShop.Controllers
 
         [HttpPost]
         [Authorize]
-        [ValidateAntiForgeryToken]
         public IActionResult Edit(PartVM editPart)
         {
             if (ModelState.IsValid)
@@ -126,7 +124,6 @@ namespace CarRepairShop.Controllers
         
         [HttpPost, ActionName("Delete")]
         [Authorize]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Parts == null)

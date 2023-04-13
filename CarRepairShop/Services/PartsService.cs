@@ -6,8 +6,8 @@ namespace CarRepairShop.Services
 {
     public class PartsService
     {
-        private readonly MEchanicDataContext _context;
-        public PartsService(MEchanicDataContext context)
+        private readonly ShopDataContext _context;
+        public PartsService(ShopDataContext context)
         {
             _context = context;
         }

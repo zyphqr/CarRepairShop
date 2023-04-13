@@ -10,8 +10,8 @@ namespace CarRepairShop.Services
     {
         private const int workHourPrice = 2;
 
-        private readonly MEchanicDataContext _context;
-        public RepairCardsService(MEchanicDataContext context)
+        private readonly ShopDataContext _context;
+        public RepairCardsService(ShopDataContext context)
         {
             _context = context;
         }

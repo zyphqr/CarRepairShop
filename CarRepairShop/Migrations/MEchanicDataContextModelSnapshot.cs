@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CarRepairShop.Migrations
 {
-    [DbContext(typeof(MEchanicDataContext))]
+    [DbContext(typeof(ShopDataContext))]
     partial class MEchanicDataContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

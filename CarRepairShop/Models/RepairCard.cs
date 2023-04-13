@@ -6,7 +6,7 @@ using System.IO;
 
 namespace CarRepairShop.Models
 {
-    [Table("Repair_Cards")]
+    [Table("RepairCards")]
     public class RepairCard
     {
         [Key]

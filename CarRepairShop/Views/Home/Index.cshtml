@@ -1,10 +1,7 @@
 ﻿@using CarRepairShop.Areas.Identity.Data;
 @using Microsoft.AspNetCore.Identity;
-@using CarRepairShop.ViewModels;
 @using CarRepairShop.Common;
-@model FilteringVM;
 
-@inject SignInManager<Mechanic> SignInManager
 @inject UserManager<Mechanic> UserManager
 
 @{
@@ -25,18 +22,26 @@
         <br />
         <div class="row">
             <div class="col-4">
-                <a asp-controller="Cars" asp-action="Create" class="btn btn-success btn-rounded">Car!</a>
+                <a asp-controller="Cars" asp-action="Create" class="btn btn-success btn-rounded">
+                    Car!
+                </a>
             </div>
             <div class="col-4">
-                <a asp-controller="Parts" asp-action="Create" class="btn btn-success btn-rounded">Part!</a>
+                <a asp-controller="Parts" asp-action="Create" class="btn btn-success btn-rounded">
+                    Part!
+                </a>
             </div>
             <div class="col-4">
-                <a asp-controller="RepairCards" asp-action="SelectRepair" class="btn btn-success btn-rounded">Repair card!</a>
+                <a asp-controller="RepairCards" asp-action="SelectRepair" class="btn btn-success btn-rounded">
+                    Repair card!
+                </a>
             </div>
         </div>
         <br />
         <div class="row">
-            <a asp-controller="RepairCards" asp-action="Filtering" class="btn btn-primary btn-rounded">Filter repair cars!</a>
+            <a asp-controller="RepairCards" asp-action="Filtering" class="btn btn-primary btn-rounded">
+                Filter repair cars!
+            </a>
         </div>
         <br />
         <h3>Create new repair card for:</h3>

@@ -7,9 +7,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CarRepairShop.Areas.Identity.Data;
 
-public class MEchanicDataContext : IdentityDbContext<Mechanic>
+public class ShopDataContext : IdentityDbContext<Mechanic>
 {
-    public MEchanicDataContext(DbContextOptions<MEchanicDataContext> options)
+    public ShopDataContext(DbContextOptions<ShopDataContext> options)
         : base(options)
     {
     }

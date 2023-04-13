@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CarRepairShop.Migrations
 {
-    [DbContext(typeof(MEchanicDataContext))]
+    [DbContext(typeof(ShopDataContext))]
     [Migration("20230406124602_Initial")]
     partial class Initial
     {

@@ -18,10 +18,11 @@ namespace CarRepairShop.Controllers
     [Authorize]
     public class RepairCardsController : Controller
     {
-        private readonly MEchanicDataContext _context;
+        private readonly ShopDataContext _context;
         private readonly RepairCardsService _repairCardsService;
 
-        public RepairCardsController(MEchanicDataContext context, RepairCardsService repairCardsService)
+        public RepairCardsController(ShopDataContext context,
+                                     RepairCardsService repairCardsService)
         {
             _context = context;
             _repairCardsService = repairCardsService;

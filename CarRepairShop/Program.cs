@@ -6,11 +6,11 @@ using CarRepairShop.Services;
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("EmployeeDataContextConnection") ?? throw new InvalidOperationException("Connection string 'EmployeeDataContextConnection' not found.");
 
-builder.Services.AddDbContext<MEchanicDataContext>(options =>
+builder.Services.AddDbContext<ShopDataContext>(options =>
     options.UseSqlServer(connectionString));
 
 builder.Services.AddDefaultIdentity<Mechanic>(options => options.SignIn.RequireConfirmedAccount = false)
-    .AddEntityFrameworkStores<MEchanicDataContext>();
+    .AddEntityFrameworkStores<ShopDataContext>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
