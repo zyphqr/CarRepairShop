@@ -29,15 +29,12 @@ namespace CarRepairShop.Controllers
             _carsService = carsService;
         }
 
-        // GET: Cars
-        [Authorize]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await _context.Cars.ToListAsync());
+            return View(_context.Cars.ToList());
         }
 
         [HttpGet]
-        [Authorize]
         public IActionResult Create()
         {
             var towns = _carsService.GetTowns();
@@ -54,10 +51,11 @@ namespace CarRepairShop.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         public IActionResult Create(CarVM createCar)
         {
-            Town selectedTown = _carsService.GetTowns().Single(t => t.TownId == createCar.SelectedTownId);
+            Town selectedTown = _carsService
+                                .GetTowns()
+                                .Single(t => t.TownId == createCar.SelectedTownId);
 
                 _carsService.CreateCar(
                                     createCar.CarId,
@@ -78,7 +76,6 @@ namespace CarRepairShop.Controllers
                 return RedirectToAction(nameof(Index));
         }
 
-        [Authorize]
         public IActionResult Edit(int? id)
         {
             if (id == null || _context.Cars == null)
@@ -105,7 +102,6 @@ namespace CarRepairShop.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         public IActionResult Edit(CarVM editCar)
         {
             if (ModelState.IsValid)
@@ -129,16 +125,15 @@ namespace CarRepairShop.Controllers
             return View("Views/Cars/Edit.cshtml", editCar);
         }
 
-        [Authorize]
-        public async Task<IActionResult> Delete(int? id)
+        public IActionResult Delete(int? id)
         {
             if (id == null || _context.Cars == null)
             {
                 return NotFound();
             }
 
-            var car = await _context.Cars
-                .FirstOrDefaultAsync(m => m.CarId == id);
+            var car =  _context.Cars
+                .FirstOrDefault(m => m.CarId == id);
             if (car == null)
             {
                 return NotFound();
@@ -147,18 +142,17 @@ namespace CarRepairShop.Controllers
             return View(car);
         }
 
-        [Authorize]
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int id)
         {
             if (_context.Cars == null)
             {
-                return Problem("Entity set 'MEchanicDataContext.Cars'  is null.");
+                return NotFound();
             }
-            var car = await _context.Cars.FindAsync(id);
+            var car = _context.Cars.Find(id);
             var allRepairCards = _carsService.GetAllRepairCards();
-            var repairCardsToBeRemoved = allRepairCards.Where(c => c.CarId == id);
+            var repairCardsToBeRemoved = allRepairCards
+                                        .Where(c => c.CarId == id);
 
             if (car != null)
             {
@@ -167,10 +161,10 @@ namespace CarRepairShop.Controllers
                     _context.RepairCards.Remove(cardToBeRemoved);
                 }
 
-                _context.Cars.Remove(car);                
+                _context.Cars.Remove(car);
             }
 
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
             return RedirectToAction(nameof(Index));
         }
     }

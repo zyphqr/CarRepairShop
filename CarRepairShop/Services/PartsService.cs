@@ -12,7 +12,12 @@ namespace CarRepairShop.Services
             _context = context;
         }
 
-        public void CreatePart(int partId, string partName, int quantity, decimal price, int workingHours, TypeOfRepairs typeOfRepair)
+        public void CreatePart(int partId, 
+                               string partName, 
+                               int quantity, 
+                               decimal price, 
+                               int workingHours, 
+                               TypeOfRepairs typeOfRepair)
         {
 
             Part newPart = new()
@@ -29,9 +34,15 @@ namespace CarRepairShop.Services
             _context.SaveChanges();
         }
 
-        public void EditPart(int partId, string partName, int quantity, decimal price, int workingHours, TypeOfRepairs typeOfRepair)
+        public void EditPart(int partId, 
+                             string partName, 
+                             int quantity, 
+                             decimal price, 
+                             int workingHours, 
+                             TypeOfRepairs typeOfRepair)
         {
-            var partToBeUpdated = _context.Parts.FirstOrDefault(c => c.PartId == partId);
+            var partToBeUpdated = _context.Parts
+                                  .FirstOrDefault(c => c.PartId == partId);
 
             partToBeUpdated.PartId = partId;
             partToBeUpdated.PartName = partName;

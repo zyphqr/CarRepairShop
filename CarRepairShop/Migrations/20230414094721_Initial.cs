@@ -210,7 +210,7 @@ namespace CarRepairShop.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Repair_Cards",
+                name: "RepairCards",
                 columns: table => new
                 {
                     RepairCardId = table.Column<int>(type: "int", nullable: false)
@@ -225,15 +225,15 @@ namespace CarRepairShop.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Repair_Cards", x => x.RepairCardId);
+                    table.PrimaryKey("PK_RepairCards", x => x.RepairCardId);
                     table.ForeignKey(
-                        name: "FK_Repair_Cards_AspNetUsers_MechanicId",
+                        name: "FK_RepairCards_AspNetUsers_MechanicId",
                         column: x => x.MechanicId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Repair_Cards_Cars_CarId",
+                        name: "FK_RepairCards_Cars_CarId",
                         column: x => x.CarId,
                         principalTable: "Cars",
                         principalColumn: "CarId",
@@ -257,9 +257,9 @@ namespace CarRepairShop.Migrations
                         principalColumn: "PartId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_RepairCardParts_Repair_Cards_RepairCardsRepairCardId",
+                        name: "FK_RepairCardParts_RepairCards_RepairCardsRepairCardId",
                         column: x => x.RepairCardsRepairCardId,
-                        principalTable: "Repair_Cards",
+                        principalTable: "RepairCards",
                         principalColumn: "RepairCardId",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -379,19 +379,19 @@ namespace CarRepairShop.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Repair_Cards_CarId",
-                table: "Repair_Cards",
-                column: "CarId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Repair_Cards_MechanicId",
-                table: "Repair_Cards",
-                column: "MechanicId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_RepairCardParts_RepairCardsRepairCardId",
                 table: "RepairCardParts",
                 column: "RepairCardsRepairCardId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RepairCards_CarId",
+                table: "RepairCards",
+                column: "CarId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RepairCards_MechanicId",
+                table: "RepairCards",
+                column: "MechanicId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -424,7 +424,7 @@ namespace CarRepairShop.Migrations
                 name: "Parts");
 
             migrationBuilder.DropTable(
-                name: "Repair_Cards");
+                name: "RepairCards");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

@@ -26,21 +26,18 @@ namespace CarRepairShop.Controllers
             _partsService = partsService;
         }
 
-        [Authorize]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-              return View(await _context.Parts.ToListAsync());
+              return View(_context.Parts.ToList());
         }
 
         [HttpGet]
-        [Authorize]
         public IActionResult Create()
         {
             return View("Views/Parts/Create.cshtml", new PartVM());
         }
 
         [HttpPost]
-        [Authorize]
         public IActionResult Create(PartVM createPart)
         {
             if (ModelState.IsValid)
@@ -57,15 +54,14 @@ namespace CarRepairShop.Controllers
             return View("Views/Parts/Create.cshtml", createPart);
         }
 
-        [Authorize]
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int? id)
         {
             if (id == null || _context.Parts == null)
             {
                 return NotFound();
             }
 
-            var part = await _context.Parts.FindAsync(id);
+            var part = _context.Parts.Find(id);
             PartVM editPart = new()
             {
                 PartId = part.PartId,
@@ -80,7 +76,6 @@ namespace CarRepairShop.Controllers
 
 
         [HttpPost]
-        [Authorize]
         public IActionResult Edit(PartVM editPart)
         {
             if (ModelState.IsValid)
@@ -98,16 +93,15 @@ namespace CarRepairShop.Controllers
             return View("Views/Parts/Edit.cshtml", editPart);
         }
 
-        [Authorize]
-        public async Task<IActionResult> Delete(int? id)
+        public IActionResult Delete(int? id)
         {
             if (id == null || _context.Parts == null)
             {
                 return NotFound();
             }
 
-            var part = await _context.Parts
-                .FirstOrDefaultAsync(m => m.PartId == id);
+            var part = _context.Parts
+                .FirstOrDefault(m => m.PartId == id);
             if (part == null)
             {
                 return NotFound();
@@ -123,20 +117,19 @@ namespace CarRepairShop.Controllers
 
         
         [HttpPost, ActionName("Delete")]
-        [Authorize]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int id)
         {
             if (_context.Parts == null)
             {
-                return Problem("Entity set 'MEchanicDataContext.Parts'  is null.");
+                return NotFound();
             }
-            var part = await _context.Parts.FindAsync(id);
+            var part =  _context.Parts.Find(id);
             if (part != null)
             {
                 _context.Parts.Remove(part);
             }
             
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
             return RedirectToAction(nameof(Index));
         }
     }

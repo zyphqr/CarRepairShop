@@ -7,9 +7,6 @@ namespace CarRepairShop.Services
 {
     public class CarsService
     {
-        private const int engineNumMaxLength = 10;
-        private const int frameNumMaxLength = 17;
-
         private readonly ShopDataContext _context;
         public CarsService(ShopDataContext context)
         {
@@ -45,14 +42,6 @@ namespace CarRepairShop.Services
                               string ownerName,
                               string ownerPhoneNum)
         {
-            if (engineNum.Length != engineNumMaxLength)
-            {
-                throw new Exception("The entered engine number is not valid.");
-            }
-            if (frameNum.Length != frameNumMaxLength)
-            {
-                throw new Exception("The entered frame number is not valid.");
-            }
 
             Car newCar = new()
             {

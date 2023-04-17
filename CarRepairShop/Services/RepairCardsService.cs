@@ -31,12 +31,7 @@ namespace CarRepairShop.Services
             return _context.Cars.ToList();
         }
 
-        public List<Town> GetTowns()
-        {
-            return _context.Towns.ToList();
-        }
-
-        public List<RepairCard> GetAllRepairCards()
+        public List<RepairCard> GetAllRepairCards() 
         {
             var repairCards = _context.RepairCards
                             .Include(r => r.Car)
@@ -60,13 +55,6 @@ namespace CarRepairShop.Services
             var Parts = repairCard.Parts.ToList();
             return Parts;
         }
-
-        //public string SearchedMechanic(int repairCardId)
-        //{
-        //    RepairCard searchedRepairCard = _context.RepairCards.FirstOrDefault(rc => rc.RepairCardId == repairCardId);
-        //    var mechanicName = $"{searchedRepairCard.Mechanic.FirstName} {searchedRepairCard.Mechanic.LastName}";
-        //    return mechanicName;
-        //}
 
         public void CreateRepairCard(DateTime startDate,
                                     DateTime? endDate,
@@ -101,13 +89,15 @@ namespace CarRepairShop.Services
         public void EditRepairCard(int repairCardId,
                                     DateTime startDate,
                                     DateTime? endDate,
-                                    Car selectedCar,
+                                    Car car,
                                     string descpription,
                                     TypeOfRepairs typeOfRepair,
                                     List<Part> selectedParts,
                                     Mechanic selectedMechanic)
         {
-            var repairCardToBeUpdated = _context.RepairCards.Include(p => p.Parts).FirstOrDefault(rc => rc.RepairCardId == repairCardId);
+            var repairCardToBeUpdated = _context.RepairCards
+                                        .Include(p => p.Parts)
+                                        .FirstOrDefault(rc => rc.RepairCardId == repairCardId);
 
             foreach (Part part in SearchedParts(repairCardToBeUpdated))
             {
@@ -124,7 +114,7 @@ namespace CarRepairShop.Services
             repairCardToBeUpdated.RepairCardId = repairCardId;
             repairCardToBeUpdated.StartDate = startDate;
             repairCardToBeUpdated.EndDate = endDate;
-            repairCardToBeUpdated.Car = selectedCar;
+            repairCardToBeUpdated.Car = car;
             repairCardToBeUpdated.Description = descpription;
             repairCardToBeUpdated.TypeOfRepair = typeOfRepair;
             repairCardToBeUpdated.Price = CalculatePrice(selectedParts);

@@ -32,9 +32,8 @@
             <div class="col-1"></div>
             <div class="col-5">
                 <div class="form-group">
-                    <select asp-for="Brand" class="form-select" asp-items="@Html.GetEnumSelectList(typeof(CarBrands))">
-                        <option value="" selected disabled>Select the car's brand</option>
-                    </select>
+                    <label>Select the car's brand</label>
+                    <select asp-for="Brand" class="form-select" asp-items="@Html.GetEnumSelectList(typeof(CarBrands))"></select>
                 </div>
                 <br />
                 <div class="form-group">
@@ -43,9 +42,8 @@
                 </div>
                 <br />
                 <div class="form-group">
-                    <select asp-for="Color" class="form-select" asp-items="@Html.GetEnumSelectList(typeof(Colors))">
-                        <option value="" selected disabled>Select the car's color</option>
-                    </select>
+                    <label>Select the car's color</label>
+                    <select asp-for="Color" class="form-select" asp-items="@Html.GetEnumSelectList(typeof(Colors))"></select>
                 </div>
             </div>
         </div>
@@ -53,18 +51,17 @@
         <div class="row">
             <div class="col-5">
                 <div class="form-group">
-                    <select asp-for="YearOfManifacture" class="form-select" asp-items="@Html.GetEnumSelectList(typeof(YearsOfManifacture))">
-                        <option value="" selected disabled>Select the year of manifacture of the car</option>
-                    </select>
+                    <label>Select the year of manifacture of the car</label>
+                    <select asp-for="YearOfManifacture" class="form-select" asp-items="@Html.GetEnumSelectList(typeof(YearsOfManifacture))"></select>
                 </div>
                 <br />
                 <div class="form-group">
-                    <input asp-for="EngineNum" class="form-control" placeholder="Enter the car's engine number:" />
+                    <input asp-for="EngineNum" class="form-control" placeholder="Enter the car's engine number:" minlength="10" maxlength="10" />
                     <span asp-validation-for="EngineNum" class="text-danger"></span>
                 </div>
                 <br />
                 <div class="form-group">
-                    <input asp-for="FrameNum" class="form-control" placeholder="Enter the car's VIN:" />
+                    <input asp-for="FrameNum" class="form-control" placeholder="Enter the car's VIN:" minlength="17" maxlength="17" />
                     <span asp-validation-for="FrameNum" class="text-danger"></span>
                 </div>
                 <br />

@@ -19,9 +19,8 @@
             </div>
             <br />
             <div class="form-group">
-                <select asp-for="TypeOfRepair" class="form-select" asp-items="@Html.GetEnumSelectList(typeof(TypeOfRepairs))">
-                    <option value="" selected disabled>Select the part's type of repair</option>
-                </select>
+                <label>Select the type of repair</label>
+                <select asp-for="TypeOfRepair" class="form-select" asp-items="@Html.GetEnumSelectList(typeof(TypeOfRepairs))"></select>
             </div>
             <br />
             <div class="form-group">

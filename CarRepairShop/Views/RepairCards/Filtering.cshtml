@@ -12,7 +12,8 @@
 <h3>Filtering</h3>
 
 <br/>
-<form id="filterForm" class="card" asp-action="Filtering">
+
+<form class="card" asp-action="Filtering">
     <div class="container">
         <div class="row">
             <div class="col-3">
@@ -26,6 +27,7 @@
                 <div class="form-group">
                     <label asp-for="TypeOfRepair">Choose start or end date</label>
                     <select asp-for="TypeOfRepair" class="form-select" asp-items="@Html.GetEnumSelectList(typeof(TypeOfRepairs))">
+                        <option value="0">All repairs</option>
                     </select>
                 </div>
             </div>
@@ -36,7 +38,7 @@
             <div class="col-3">
                 <div class="form-group">
                     <label asp-for="StartEndDate">Choose start or end date</label>
-                    <select asp-for="StartEndDate" class="form-select" asp-items="@Html.GetEnumSelectList(typeof(StartEndDate))">
+                    <select asp-for="StartEndDate" class="form-select" asp-items="@Html.GetEnumSelectList(typeof(StartEndDate))">                      
                     </select>
                 </div>
             </div>
@@ -74,16 +76,13 @@
             <div class="col-2">
                 <input type="submit" value="Filter" class="btn btn-primary" />
             </div>
-            <div class="col-3">
-                <input type="button" value="Clear filters" class="btn btn-primary" onclick="clearFilters()" />
-            </div>
             <div class="col-10"></div>
         </div>
     </div>
     <br />
 </form>
 
-<table class="table">
+<table class="table table-hover">
     <thead>
         <tr>
             <th>Car Registration</th>

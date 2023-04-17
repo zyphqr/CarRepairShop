@@ -13,9 +13,7 @@ namespace CarRepairShop.ViewModels
 
         [Required]
         public DateTime StartDate { get; set; } 
-
-        public DateTime? EndDate { get; set; } 
-
+        public DateTime? EndDate { get; set; }
         public int SelectedCarId { get; set; }
         public IEnumerable<SelectListItem> CarRegistrations { get; set; }
         public Car Car { get; set; }

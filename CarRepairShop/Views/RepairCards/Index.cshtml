@@ -1,6 +1,6 @@
 ﻿@using CarRepairShop.Common;
 @using CarRepairShop.ViewModels;
-@model FilteringVM;
+@model IEnumerable<RepairCardIndexVM>;
 
 @{
     ViewData["Title"] = "RepairCards";
@@ -10,7 +10,7 @@
 
 <p>
     <a asp-action="SelectRepair" class="btn btn-success">Create new repair card</a>
-    <a asp-action="Filtering" class="btn btn-success">Create reference</a>
+    <a asp-action="Filtering" class="btn btn-success">Filter repair cards</a>
 </p>
 
 <br/>
@@ -30,7 +30,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (RepairCardIndexVM item in Model.RepairCardIndexVM)
+        @foreach (RepairCardIndexVM item in Model)
         {
             <tr>
                 <td>

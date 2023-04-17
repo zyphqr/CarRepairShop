@@ -17,7 +17,7 @@
             <div class="col-2">
                 <div class="form-group">
                     <label asp-for="CarRegistrations">Select the car's registration</label>
-                    <select class="form-select" asp-items="Model.CarRegistrations" asp-for="SelectedCarId"></select>
+                    <select class="form-select" asp-items="Model.CarRegistrations" asp-for="SelectedCarId" disabled></select>
                 </div>
             </div>
             <div class="col-10"></div>
@@ -58,10 +58,8 @@
             </div>
             <div class="col">
                 <div class="form-group">
-                    <select class="form-select" asp-items="Model.Parts" asp-for="SelectedPartIds" multiple>
-                        <option value="" disabled>To select more parts hold crtl</option>
-                        <option value="" disabled>or hold left mouse button when selecting!</option>
-                    </select>
+                    <p>To select multiple parts hold crtl or hold left mouse button while selecting!</p>
+                    <select class="form-select" asp-items="Model.Parts" asp-for="SelectedPartIds" multiple></select>
                 </div>
             </div>
         </div>
@@ -81,7 +79,7 @@
         <div class="col-5"></div>
         <div class="col-2 align-items-center">
             <div class="form-group">
-                <input type="submit" value="Edit" class="btn btn-primary" />
+                <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </div>
         <div class="col-5"></div>
