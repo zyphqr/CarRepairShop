@@ -89,7 +89,6 @@ namespace CarRepairShop.Services
         public void EditRepairCard(int repairCardId,
                                     DateTime startDate,
                                     DateTime? endDate,
-                                    Car car,
                                     string descpription,
                                     TypeOfRepairs typeOfRepair,
                                     List<Part> selectedParts,
@@ -114,7 +113,7 @@ namespace CarRepairShop.Services
             repairCardToBeUpdated.RepairCardId = repairCardId;
             repairCardToBeUpdated.StartDate = startDate;
             repairCardToBeUpdated.EndDate = endDate;
-            repairCardToBeUpdated.Car = car;
+            repairCardToBeUpdated.Car = repairCardToBeUpdated.Car;
             repairCardToBeUpdated.Description = descpription;
             repairCardToBeUpdated.TypeOfRepair = typeOfRepair;
             repairCardToBeUpdated.Price = CalculatePrice(selectedParts);

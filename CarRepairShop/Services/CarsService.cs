@@ -65,12 +65,9 @@ namespace CarRepairShop.Services
         }
 
         public void EditCar(int carId,
-                            string carRegistration,
                             CarBrands brand,
                             string model,
                             YearsOfManifacture yearOfManifacture,
-                            string engineNum,
-                            string frameNum,
                             Colors color,
                             double workingVolume,
                             string description,
@@ -80,12 +77,12 @@ namespace CarRepairShop.Services
             var carToBeUpdated = _context.Cars.FirstOrDefault(c => c.CarId == carId);
 
             carToBeUpdated.CarId = carId;
-            carToBeUpdated.CarRegistration = carRegistration;
+            carToBeUpdated.CarRegistration = carToBeUpdated.CarRegistration;
             carToBeUpdated.CarBrand = brand;
             carToBeUpdated.CarModel = model.ToUpper();
             carToBeUpdated.YearOfManifacture = yearOfManifacture;
-            carToBeUpdated.EngineNum = engineNum;
-            carToBeUpdated.FrameNum = frameNum;
+            carToBeUpdated.EngineNum = carToBeUpdated.EngineNum;
+            carToBeUpdated.FrameNum = carToBeUpdated.FrameNum;
             carToBeUpdated.Color = color;
             carToBeUpdated.WorkingVolume = workingVolume;
             carToBeUpdated.Description = description;

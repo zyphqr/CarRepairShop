@@ -31,7 +31,7 @@ namespace CarRepairShop.ViewModels
 
         public double WorkingVolume { get; set; }
 
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         public string OwnerName { get; set; }
 

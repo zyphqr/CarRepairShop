@@ -57,23 +57,23 @@ namespace CarRepairShop.Controllers
                                 .GetTowns()
                                 .Single(t => t.TownId == createCar.SelectedTownId);
 
-                _carsService.CreateCar(
-                                    createCar.CarId,
-                                    selectedTown,
-                                    createCar.CarRegNumbers,
-                                    createCar.CarRegLastDigits,
-                                    createCar.Brand,
-                                    createCar.Model,
-                                    createCar.YearOfManifacture,
-                                    createCar.EngineNum,
-                                    createCar.FrameNum,
-                                    createCar.Color,
-                                    createCar.WorkingVolume,
-                                    createCar.Description,
-                                    createCar.OwnerName,
-                                    createCar.OwnerPhoneNum
-                                 );
-                return RedirectToAction(nameof(Index));
+            _carsService.CreateCar(
+                                createCar.CarId,
+                                selectedTown,
+                                createCar.CarRegNumbers,
+                                createCar.CarRegLastDigits,
+                                createCar.Brand,
+                                createCar.Model,
+                                createCar.YearOfManifacture,
+                                createCar.EngineNum,
+                                createCar.FrameNum,
+                                createCar.Color,
+                                createCar.WorkingVolume,
+                                createCar.Description,
+                                createCar.OwnerName,
+                                createCar.OwnerPhoneNum
+                             );
+            return RedirectToAction(nameof(Index));
         }
 
         public IActionResult Edit(int? id)
@@ -104,25 +104,19 @@ namespace CarRepairShop.Controllers
         [HttpPost]
         public IActionResult Edit(CarVM editCar)
         {
-            if (ModelState.IsValid)
-            {
-                _carsService.EditCar(editCar.CarId,
-                    editCar.CarRegistration,
-                    editCar.Brand,
-                    editCar.Model,
-                    editCar.YearOfManifacture,
-                    editCar.EngineNum,
-                    editCar.FrameNum,
-                    editCar.Color,
-                    editCar.WorkingVolume,
-                    editCar.Description,
-                    editCar.OwnerName,
-                    editCar.OwnerPhoneNum
-                    );
+            _carsService.EditCar(
+                editCar.CarId,
+                editCar.Brand,
+                editCar.Model,
+                editCar.YearOfManifacture,
+                editCar.Color,
+                editCar.WorkingVolume,
+                editCar.Description,
+                editCar.OwnerName,
+                editCar.OwnerPhoneNum
+                );
 
-                return RedirectToAction(nameof(Index));
-            }
-            return View("Views/Cars/Edit.cshtml", editCar);
+            return RedirectToAction(nameof(Index));
         }
 
         public IActionResult Delete(int? id)
@@ -132,7 +126,7 @@ namespace CarRepairShop.Controllers
                 return NotFound();
             }
 
-            var car =  _context.Cars
+            var car = _context.Cars
                 .FirstOrDefault(m => m.CarId == id);
             if (car == null)
             {

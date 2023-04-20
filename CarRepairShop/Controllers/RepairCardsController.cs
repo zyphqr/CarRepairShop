@@ -146,7 +146,7 @@ namespace CarRepairShop.Controllers
                                             .GetMechanics()
                                             .Single(m => m.Id == createRepairCard.SelectedMechanicId);
 
-            createRepairCard.TypeOfRepair = SelectedParts[0].TypeOfRepair;//TODO: FIx  is scuffed
+            createRepairCard.TypeOfRepair = SelectedParts[0].TypeOfRepair;
 
             _repairCardsService.CreateRepairCard(
                                     createRepairCard.StartDate,
@@ -346,10 +346,6 @@ namespace CarRepairShop.Controllers
         [HttpPost]
         public IActionResult Edit(RepairCardVM editRepairCard)
         {
-            Car selectedCarReg = _repairCardsService
-                                 .GetCars()
-                                 .Single(c => c.CarId == editRepairCard.SelectedCarId);
-
             Mechanic selectedMechanicId = _repairCardsService
                                           .GetMechanics()
                                           .Single(m => m.Id == editRepairCard.SelectedMechanicId);
@@ -361,12 +357,11 @@ namespace CarRepairShop.Controllers
                 SelectedParts.Add(_repairCardsService.GetParts().Single(c => c.PartId == partId));
             }
 
-            editRepairCard.TypeOfRepair = SelectedParts[0].TypeOfRepair;//TODO: FIx  is scuffed
+            editRepairCard.TypeOfRepair = SelectedParts[0].TypeOfRepair;
 
             _repairCardsService.EditRepairCard(editRepairCard.RepairCardId,
                                                 editRepairCard.StartDate,
                                                 editRepairCard.EndDate,
-                                                selectedCarReg,
                                                 editRepairCard.Description,
                                                 editRepairCard.TypeOfRepair,
                                                 SelectedParts,
